@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Globalization;
 
 public class DataPlotter : MonoBehaviour
 {
@@ -60,18 +61,23 @@ public class DataPlotter : MonoBehaviour
         float yMin = FindMinValue(yName);
         float zMin = FindMinValue(zName);
 
+        string valueString;
+
         //Loop through Pointlist
         for (var i = 0; i < pointList.Count; i++)
         {
             // Get value in poinList at ith "row", in "column" Name, normalize
+            valueString = pointList[i][xName].ToString();
             float x =
-            (System.Convert.ToSingle(pointList[i][xName]) - xMin) / (xMax - xMin);
+            (Single.Parse(valueString, CultureInfo.InvariantCulture) - xMin) / (xMax - xMin);
 
+            valueString = pointList[i][yName].ToString();
             float y =
-            (System.Convert.ToSingle(pointList[i][yName]) - yMin) / (yMax - yMin);
+            (Single.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
+            valueString = pointList[i][zName].ToString();
             float z =
-            (System.Convert.ToSingle(pointList[i][zName]) - zMin) / (zMax - zMin);
+            (Single.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 
             //instantiate the prefab with coordinates defined above
             GameObject dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z)* plotScale, Quaternion.identity);
@@ -86,13 +92,18 @@ public class DataPlotter : MonoBehaviour
     private float FindMaxValue(string columnName)
     {
         //set initial value to first value
-        float maxValue = Convert.ToSingle(pointList[0][columnName]);
+        string maxValueString = pointList[0][columnName].ToString();
+        float maxValue = Single.Parse(maxValueString, CultureInfo.InvariantCulture);
+
+        //float maxValue = Convert.ToSingle(pointList[0][columnName]);
 
         //Loop through Dictionary, overwrite existing maxValue if new value is larger
         for (var i = 0; i < pointList.Count; i++)
         {
-            if (maxValue < Convert.ToSingle(pointList[i][columnName]))
-                maxValue = Convert.ToSingle(pointList[i][columnName]);
+            string maxValueStringLoop = pointList[i][columnName].ToString();
+
+            if (maxValue < Single.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
+                maxValue = Single.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
         }
 
         //Spit out the max value
@@ -102,13 +113,18 @@ public class DataPlotter : MonoBehaviour
     private float FindMinValue(string columnName)
     {
 
-        float minValue = Convert.ToSingle(pointList[0][columnName]);
+        //float minValue = Convert.ToSingle(pointList[0][columnName]);
+
+        string minValueString = pointList[0][columnName].ToString();
+        float minValue = Single.Parse(minValueString, CultureInfo.InvariantCulture);
 
         //Loop through Dictionary, overwrite existing minValue if new value is smaller
         for (var i = 0; i < pointList.Count; i++)
         {
-            if (Convert.ToSingle(pointList[i][columnName]) < minValue)
-                minValue = Convert.ToSingle(pointList[i][columnName]);
+            string minValueStringLoop = pointList[i][columnName].ToString();
+
+            if (Single.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
+                minValue = Single.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
         }
 
         return minValue;

@@ -21,7 +21,7 @@ public class CameraBehavior : MonoBehaviour {
         {
             float mouseX = Input.GetAxis("Mouse X") * 4;
             float mouseY = -(Input.GetAxis("Mouse Y") * 4);
-            transform.Rotate(0, mouseX, 0, Space.Self);
+            transform.Rotate(0, mouseX, 0, Space.World);
             transform.Rotate(mouseY, 0, 0, Space.Self);
         }
 

@@ -3,49 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetingScript : MonoBehaviour {
-    private Color colorOff;
-    public static GameObject selectedTarget = null;
+	private Color colorOff;
+	public static GameObject selectedTarget = null;
 
-    // Use this for initialization
-    void Start () {
+	// Use this for initialization
+	void Start ()
+	{
 		
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 
-        //Left mouse click. If object is clicked, target it.
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = Physics.RaycastAll(ray);
-            bool missTarget = true;
+		//Left mouse click. If object is clicked, target it.
+		if (Input.GetMouseButtonDown(0))
+		{
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit[] hits = Physics.RaycastAll(ray);
+			bool missTarget = true;
 
 
-            foreach(RaycastHit hit in hits)
-            {
-                missTarget = false;
-                SelectTarget(hit);
-                break;
-            }
-            if(missTarget == true)
-            {
-                selectedTarget.GetComponent<Renderer>().material.color = colorOff;
-                selectedTarget = null;
-            }
+			foreach(RaycastHit hit in hits)
+			{
+				missTarget = false;
+				SelectTarget(hit);
+				break;
+			}
+			if(missTarget == true)
+			{
+				selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+				selectedTarget = null;
+			}
 
-        }
-    }
+		}
+	}
 
-    private void SelectTarget(RaycastHit hit)
-    {
-        if (selectedTarget != null)
-        {
-            selectedTarget.GetComponent<Renderer>().material.color = colorOff;
-        }
+	private void SelectTarget(RaycastHit hit)
+	{
+		if (selectedTarget != null)
+		{
+			selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+		}
 
-        selectedTarget = hit.transform.gameObject;
-        colorOff = selectedTarget.GetComponent<Renderer>().material.color;
-        selectedTarget.GetComponent<Renderer>().material.color = Color.white;
-    }
+		selectedTarget = hit.transform.gameObject;
+		colorOff = selectedTarget.GetComponent<Renderer>().material.color;
+		selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+	}
 }

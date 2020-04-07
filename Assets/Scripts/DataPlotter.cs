@@ -15,9 +15,9 @@ public class DataPlotter : MonoBehaviour
     private List<Dictionary<string, object>> pointList;
 
     // Indices for columns to be assigned
-    public int columnX = 0;
-    public int columnY = 1;
-    public int columnZ = 2;
+    public int columnX = 1;
+    public int columnY = 2;
+    public int columnZ = 3;
 
     // Full column names
     public string xName;

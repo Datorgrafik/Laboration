@@ -42,10 +42,12 @@ public class TargetingScript : MonoBehaviour {
         if (selectedTarget != null)
         {
             selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+            selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
         }
 
         selectedTarget = hit.transform.gameObject;
         colorOff = selectedTarget.GetComponent<Renderer>().material.color;
         selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+        selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
     }
 }

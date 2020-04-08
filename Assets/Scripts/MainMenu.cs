@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
 	public Dropdown renderModeDropdown;
 	private int renderMode = 0;
+	public string filePath;
+	public TMP_Text file;
 
 	private void Start()
 	{
@@ -17,6 +21,12 @@ public class MainMenu : MonoBehaviour
 	public void DropdownValueChanged(Dropdown value)
 	{
 		renderMode = value.value;
+	}
+
+	public void OpenFileExplorer()
+	{
+		filePath = EditorUtility.OpenFilePanel("Overwrite with dataset","","csv");
+		file.text = filePath;
 	}
 
 	public void ScatterPlot()

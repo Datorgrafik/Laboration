@@ -6,7 +6,6 @@ using UnityEngine;
 public class DatasetLoader
 {
 	private List<string[]> datasetList = new List<string[]>();
-
 	private string filePath;
 	
 	public DatasetLoader(string filePath = @"Assets/Datasets/Iris.csv")

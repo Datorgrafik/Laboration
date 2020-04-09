@@ -36,8 +36,8 @@ public class CameraBehavior : MonoBehaviour {
             transform.position = transform.position + Camera.main.transform.right * speed;
 
         if (Input.GetKey(KeyCode.Space))
-            transform.position = transform.position + Camera.main.transform.up * speed;
+            transform.position = new Vector3(transform.position.x, transform.position.y + speed, transform.position.z);
         else if (Input.GetKey(KeyCode.LeftControl))
-            transform.position = transform.position + Camera.main.transform.up * speed * -1;
+            transform.position = new Vector3(transform.position.x, transform.position.y + speed * -1, transform.position.z);
     }
 }

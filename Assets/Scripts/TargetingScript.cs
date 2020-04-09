@@ -13,24 +13,23 @@ public class TargetingScript : MonoBehaviour {
         //Left mouse click. If object is clicked, target it.
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = Physics.RaycastAll(ray);
-            eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+            //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //RaycastHit[] hits = Physics.RaycastAll(ray);
+            //eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
             bool missTarget = true;
 
-            foreach (RaycastHit hit in hits)
-            {
-                missTarget = false;
-                SelectTarget(hit);
-                break;
-            }
-            if(missTarget == true && !eventSys.IsPointerOverGameObject())
+            //foreach (RaycastHit hit in hits)
+            //{
+            //    missTarget = false;
+            //    SelectTarget(hit);
+            //    break;
+            //}
+            if (missTarget == true && !eventSys.IsPointerOverGameObject())
             {
                 selectedTarget.GetComponent<Renderer>().material.color = colorOff;
                 selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
                 selectedTarget = null;
             }
-
         }
     }
 

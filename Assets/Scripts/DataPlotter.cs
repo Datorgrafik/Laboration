@@ -7,11 +7,6 @@ using UnityEngine.UI;
 
 public class DataPlotter : MonoBehaviour
 {
-
-    // Name of the input file, no extension
-    public string inputfile;
-
-
     // List for holding data from CSV reader
     private List<Dictionary<string, object>> pointList;
 
@@ -41,9 +36,9 @@ public class DataPlotter : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
         // Set pointlist to results of function Reader with argument inputfile
-        pointList = CSVläsare.Read(inputfile);
+        Debug.Log(MainMenu.fileData);
+        pointList = CSVläsare.Read(MainMenu.fileData);
 
         //Log to console
         Debug.Log(pointList);
@@ -110,45 +105,45 @@ public class DataPlotter : MonoBehaviour
         zName = columnList[zList.value];
 
         // Get maxes of each axis
-    float xMax = FindMaxValue(xName);
-    float yMax = FindMaxValue(yName);
-    float zMax = FindMaxValue(zName);
+        float xMax = FindMaxValue(xName);
+        float yMax = FindMaxValue(yName);
+        float zMax = FindMaxValue(zName);
 
-    // Get minimums of each axis
-    float xMin = FindMinValue(xName);
-    float yMin = FindMinValue(yName);
-    float zMin = FindMinValue(zName);
-    string valueString;
+        // Get minimums of each axis
+        float xMin = FindMinValue(xName);
+        float yMin = FindMinValue(yName);
+        float zMin = FindMinValue(zName);
+        string valueString;
 
-    //Loop through Pointlist
-    for (var i = 0; i < pointList.Count; i++)
-    {
-        // Get value in poinList at ith "row", in "column" Name, normalize
-        valueString = pointList[i][xName].ToString();
-        float x =
-        (Single.Parse(valueString, CultureInfo.InvariantCulture) - xMin) / (xMax - xMin);
+        //Loop through Pointlist
+        for (var i = 0; i < pointList.Count; i++)
+        {
+            // Get value in poinList at ith "row", in "column" Name, normalize
+            valueString = pointList[i][xName].ToString();
+            float x =
+            (Single.Parse(valueString, CultureInfo.InvariantCulture) - xMin) / (xMax - xMin);
 
-        valueString = pointList[i][yName].ToString();
-        float y =
-        (Single.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
+            valueString = pointList[i][yName].ToString();
+            float y =
+            (Single.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-        valueString = pointList[i][zName].ToString();
-        float z =
-        (Single.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
+            valueString = pointList[i][zName].ToString();
+            float z =
+            (Single.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 
-        //instantiate the prefab with coordinates defined above
-        GameObject dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
+            //instantiate the prefab with coordinates defined above
+            GameObject dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 
-        // Gets material color and sets it to a new RGBA color we define
-        dataPoint.GetComponent<Renderer>().material.color =
-        new Color(x, y, z, 1.0f);
-        dataPoint.transform.parent = PointHolder.transform;
+            // Gets material color and sets it to a new RGBA color we define
+            dataPoint.GetComponent<Renderer>().material.color =
+            new Color(x, y, z, 1.0f);
+            dataPoint.transform.parent = PointHolder.transform;
 
-        string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][yName];
+            string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][yName];
 
-        dataPoint.transform.name = dataPointName;
+            dataPoint.transform.name = dataPointName;
+        }
     }
-}
 
     private float FindMinValue(string columnName)
     {

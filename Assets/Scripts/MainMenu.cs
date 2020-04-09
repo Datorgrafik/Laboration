@@ -9,14 +9,18 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
 	public Dropdown renderModeDropdown;
-	private int renderMode = 0;
+	private static int renderMode = 0;
 	public string filePath;
 	public TMP_Text file;
+    private static string fileText = "";
+    public static string fileData;
 
-	private void Start()
+    private void Start()
 	{
+        renderModeDropdown.value = renderMode;
 		renderModeDropdown.onValueChanged.AddListener(delegate { DropdownValueChanged(renderModeDropdown); });
-	}
+        file.text = fileText;
+    }
 
 	public void DropdownValueChanged(Dropdown value)
 	{
@@ -26,8 +30,13 @@ public class MainMenu : MonoBehaviour
 	public void OpenFileExplorer()
 	{
 		filePath = EditorUtility.OpenFilePanel("Overwrite with dataset","","csv");
-		file.text = filePath.Substring(filePath.LastIndexOf('/')+1);
-	}
+        fileText = filePath.Substring(filePath.LastIndexOf('/') + 1);
+        file.text = fileText;
+        Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Debug.Log(filePath);
+        fileData = System.IO.File.ReadAllText(filePath);
+        Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+    }
 
 	public void ScatterPlot()
 	{

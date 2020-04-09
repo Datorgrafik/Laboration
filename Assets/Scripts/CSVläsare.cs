@@ -18,11 +18,10 @@ public class CSVläsare
 
         var list = new List<Dictionary<string, object>>(); //declare dictionary list
 
-        TextAsset data = Resources.Load(file) as TextAsset; //Loads the TextAsset named in the file argument of the function
-
+        //TextAsset data = Resources.Load(file) as TextAsset; //Loads the TextAsset named in the file argument of the function
         // Debug.Log("Data loaded:" + data); // Print raw data, make sure parsed correctly
 
-        var lines = Regex.Split(data.text, LINE_SPLIT_RE); // Split data.text into lines using LINE_SPLIT_RE characters
+        var lines = Regex.Split(file, LINE_SPLIT_RE); // Split data.text into lines using LINE_SPLIT_RE characters
 
         if (lines.Length <= 1) return list; //Check that there is more than one line
 

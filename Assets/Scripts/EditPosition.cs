@@ -19,6 +19,7 @@ public class EditPosition : MonoBehaviour
     public Button ChangeX;
     public Button ChangeY;
     public Button ChangeZ;
+    private string newValue;
 
     float posX = 0;
     float posY = 0;
@@ -46,22 +47,27 @@ public class EditPosition : MonoBehaviour
         {
             panel.SetActive(false);
         }
+    }
 
-        void OnClick()
+    public void OnClick()
+    {
+        if (inputX.text.Length > 0)
         {
-            if (inputX.text.Length > 0)
-            {
-                X.text = inputX.text;
-                //Change Databalls X position
-            }
-            else if (inputY.text.Length > 0)
-            {
-                Y.text = inputY.text;
-            }
-            else if (inputZ.text.Length > 0)
-            {
-                Z.text = inputZ.text;
-            }
+            newValue = inputX.GetComponent<InputField>().text;
+            X.text = newValue;
+            selectedTarget.transform.position = new Vector3(Convert.ToSingle(X.text), posY, posZ);
+        }
+        else if (inputY.text.Length > 0)
+        {
+            newValue = inputY.GetComponent<InputField>().text;
+            Y.text = newValue;
+            selectedTarget.transform.position = new Vector3(posX, Convert.ToSingle(Y.text), posZ);
+        }
+        else if (inputZ.text.Length > 0)
+        {
+            newValue = inputZ.GetComponent<InputField>().text;
+            Z.text = newValue;
+            selectedTarget.transform.position = new Vector3(posX, posY, Convert.ToSingle(Z.text));
         }
     }
 }

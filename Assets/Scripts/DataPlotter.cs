@@ -62,8 +62,9 @@ public class DataPlotter : MonoBehaviour
         ylist.AddOptions(columnList);
 
         ylist.onValueChanged.AddListener(delegate { DropdownValueChanged(ylist); });
-        zList.AddOptions(columnList);
 
+        if(MainMenu.renderMode == 1)
+            zList.AddOptions(columnList);
         zList.onValueChanged.AddListener(delegate { DropdownValueChanged(zList); });
 
         zList.value = 1;
@@ -141,6 +142,7 @@ public class DataPlotter : MonoBehaviour
             {
                 dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
             }
+
 
             // Gets material color and sets it to a new RGBA color we define
             dataPoint.GetComponent<Renderer>().material.color =

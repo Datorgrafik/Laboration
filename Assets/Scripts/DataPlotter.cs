@@ -131,8 +131,16 @@ public class DataPlotter : MonoBehaviour
             float z =
             (Single.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 
-            //instantiate the prefab with coordinates defined above
-            GameObject dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
+            GameObject dataPoint;
+
+            if (MainMenu.renderMode == 0)
+            {
+                dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
+            }
+            else
+            {
+                dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
+            }
 
             // Gets material color and sets it to a new RGBA color we define
             dataPoint.GetComponent<Renderer>().material.color =

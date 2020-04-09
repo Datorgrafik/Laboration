@@ -9,7 +9,7 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
 	public Dropdown renderModeDropdown;
-	private static int renderMode = 0;
+	public static int renderMode = 0;
 	public string filePath;
 	public TMP_Text file;
     private static string fileText = "";
@@ -32,10 +32,7 @@ public class MainMenu : MonoBehaviour
 		filePath = EditorUtility.OpenFilePanel("Overwrite with dataset","","csv");
         fileText = filePath.Substring(filePath.LastIndexOf('/') + 1);
         file.text = fileText;
-        Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        Debug.Log(filePath);
         fileData = System.IO.File.ReadAllText(filePath);
-        Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
     }
 
 	public void ScatterPlot()

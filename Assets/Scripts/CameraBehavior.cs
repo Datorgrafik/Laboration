@@ -17,7 +17,7 @@ public class CameraBehavior : MonoBehaviour {
     void Update()
     {
         //Camera direction
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && MainMenu.renderMode == 1)
         {
             float mouseX = Input.GetAxis("Mouse X") * 4;
             float mouseY = -(Input.GetAxis("Mouse Y") * 4);

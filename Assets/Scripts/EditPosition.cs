@@ -65,9 +65,12 @@ public class EditPosition : MonoBehaviour
         }
         else if (inputZ.text.Length > 0)
         {
-            newValue = inputZ.GetComponent<InputField>().text;
-            Z.text = newValue;
-            selectedTarget.transform.position = new Vector3(posX, posY, Convert.ToSingle(Z.text));
+            if (MainMenu.renderMode == 1)
+            {
+                newValue = inputZ.GetComponent<InputField>().text;
+                Z.text = newValue;
+                selectedTarget.transform.position = new Vector3(posX, posY, Convert.ToSingle(Z.text));
+            }
         }
     }
 }

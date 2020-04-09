@@ -26,7 +26,7 @@ public class MainMenu : MonoBehaviour
 	public void OpenFileExplorer()
 	{
 		filePath = EditorUtility.OpenFilePanel("Overwrite with dataset","","csv");
-		file.text = filePath;
+		file.text = filePath.Substring(filePath.LastIndexOf('/')+1);
 	}
 
 	public void ScatterPlot()

@@ -7,15 +7,9 @@ public class TargetingScript : MonoBehaviour {
     private Color colorOff;
     public static GameObject selectedTarget = null;
     private EventSystem eventSys;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
-
         //Left mouse click. If object is clicked, target it.
         if (Input.GetMouseButtonDown(0))
         {
@@ -40,17 +34,17 @@ public class TargetingScript : MonoBehaviour {
         }
     }
 
-    private void SelectTarget(RaycastHit hit)
-    {
-        if (selectedTarget != null)
-        {
-            selectedTarget.GetComponent<Renderer>().material.color = colorOff;
-            selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
-        }
+	private void SelectTarget(RaycastHit hit)
+	{
+		if (selectedTarget != null)
+		{
+			selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+			selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+		}
 
-        selectedTarget = hit.transform.gameObject;
-        colorOff = selectedTarget.GetComponent<Renderer>().material.color;
-        selectedTarget.GetComponent<Renderer>().material.color = Color.white;
-        selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
-    }
+		selectedTarget = hit.transform.gameObject;
+		colorOff = selectedTarget.GetComponent<Renderer>().material.color;
+		selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+		selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+	}
 }

@@ -59,14 +59,17 @@ public class DataPlotter : MonoBehaviour
 
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(columnList);
-		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(xList); });
+		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
 		ylist.AddOptions(columnList);
-		ylist.onValueChanged.AddListener(delegate { DropdownValueChanged(ylist); });
-		
-		zList.AddOptions(columnList);
-		zList.onValueChanged.AddListener(delegate { DropdownValueChanged(zList); });
+		ylist.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
+		if (MainMenu.renderMode == 1)
+		{
+			zList.AddOptions(columnList);
+			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		}
+		
 		zList.value = 1;
 		xList.value = 2;
 		ylist.value = 3;
@@ -78,7 +81,7 @@ public class DataPlotter : MonoBehaviour
 	{
 		//set initial value to first value
 		string maxValueString = pointList[0][columnName].ToString();
-		float maxValue = Single.Parse(maxValueString, CultureInfo.InvariantCulture);
+		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
 
 		//float maxValue = Convert.ToSingle(pointList[0][columnName]);
 
@@ -87,8 +90,8 @@ public class DataPlotter : MonoBehaviour
 		{
 			string maxValueStringLoop = pointList[i][columnName].ToString();
 
-			if (maxValue < Single.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
-				maxValue = Single.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
+			if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
+				maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
 		}
 
 		//Spit out the max value
@@ -96,14 +99,17 @@ public class DataPlotter : MonoBehaviour
 	}
 
 	private void PlottData()
-	{ 
+	{
 		xName = columnList[xList.value];
 		yName = columnList[ylist.value];
 		zName = columnList[zList.value];
 
-		xAxisText.text = xName;
-		yAxisText.text = yName;
-		zAxisText.text = zName;
+		if (MainMenu.renderMode == 1)
+		{
+			xAxisText.text = xName;
+			yAxisText.text = yName;
+			zAxisText.text = zName;
+		}
 
 		// Get maxes of each axis
 		float xMax = FindMaxValue(xName);
@@ -121,27 +127,30 @@ public class DataPlotter : MonoBehaviour
 		{
 			// Get value in poinList at ith "row", in "column" Name, normalize
 			valueString = pointList[i][xName].ToString();
-			float x =
-			(Single.Parse(valueString, CultureInfo.InvariantCulture) - xMin) / (xMax - xMin);
+			float x = (float.Parse(valueString, CultureInfo.InvariantCulture) - xMin) / (xMax - xMin);
 
 			valueString = pointList[i][yName].ToString();
-			float y =
-			(Single.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
+			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
 			valueString = pointList[i][zName].ToString();
-			float z =
-			(Single.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
+			float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 
-			//instantiate the prefab with coordinates defined above
-			GameObject dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
+			GameObject dataPoint;
+
+			if (MainMenu.renderMode == 0)
+			{
+				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
+			}
+			else
+			{
+				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
+			}
 
 			// Gets material color and sets it to a new RGBA color we define
 			dataPoint.GetComponent<Renderer>().material.color =
 			new Color(x, y, z, 1.0f);
 			dataPoint.transform.parent = PointHolder.transform;
-
 			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][yName];
-
 			dataPoint.transform.name = dataPointName;
 		}
 	}
@@ -152,21 +161,21 @@ public class DataPlotter : MonoBehaviour
 		//float minValue = Convert.ToSingle(pointList[0][columnName]);
 
 		string minValueString = pointList[0][columnName].ToString();
-		float minValue = Single.Parse(minValueString, CultureInfo.InvariantCulture);
+		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
 
 		//Loop through Dictionary, overwrite existing minValue if new value is smaller
 		for (var i = 0; i < pointList.Count; i++)
 		{
 			string minValueStringLoop = pointList[i][columnName].ToString();
 
-			if (Single.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
-				minValue = Single.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
+			if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
+				minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
 		}
 
 		return minValue;
 	}
 
-	public void DropdownValueChanged(Dropdown value)
+	public void DropdownValueChanged()
 	{
 		GameObject ScatterPlotter = GameObject.Find("Scatterplot");
 

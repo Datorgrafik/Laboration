@@ -7,7 +7,7 @@ public class TargetingScript : MonoBehaviour {
     private Color colorOff;
     public static GameObject selectedTarget = null;
     private EventSystem eventSys;
-	
+
 	// Update is called once per frame
 	void Update () {
         //Left mouse click. If object is clicked, target it.
@@ -20,17 +20,19 @@ public class TargetingScript : MonoBehaviour {
 
             foreach (RaycastHit hit in hits)
             {
-                missTarget = false;
-                SelectTarget(hit);
-                break;
+                if(hit.collider.tag == "DataBall")
+                {
+                    missTarget = false;
+                    SelectTarget(hit);
+                    break;
+                }
             }
-            if(missTarget == true && !eventSys.IsPointerOverGameObject())
+            if (missTarget == true && !eventSys.IsPointerOverGameObject() && selectedTarget != null)
             {
                 selectedTarget.GetComponent<Renderer>().material.color = colorOff;
                 selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
                 selectedTarget = null;
             }
-
         }
     }
 

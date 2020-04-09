@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TargetingScript : MonoBehaviour {
     private Color colorOff;
     public static GameObject selectedTarget = null;
+    private EventSystem eventSys;
 
     // Use this for initialization
     void Start () {
@@ -19,18 +21,19 @@ public class TargetingScript : MonoBehaviour {
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
+            eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
             bool missTarget = true;
 
-
-            foreach(RaycastHit hit in hits)
+            foreach (RaycastHit hit in hits)
             {
                 missTarget = false;
                 SelectTarget(hit);
                 break;
             }
-            if(missTarget == true)
+            if(missTarget == true && !eventSys.IsPointerOverGameObject())
             {
                 selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+                selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
                 selectedTarget = null;
             }
 

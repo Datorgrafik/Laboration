@@ -36,7 +36,7 @@ public class DataPlotter : MonoBehaviour
     public TMP_Text valuePrefab;
 
 	public Dropdown xList;
-	public Dropdown ylist;
+	public Dropdown yList;
 	public Dropdown zList;
 
 	public GameObject PointHolder;
@@ -65,8 +65,8 @@ public class DataPlotter : MonoBehaviour
 		xList.AddOptions(columnList);
 		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
-		ylist.AddOptions(columnList);
-		ylist.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		yList.AddOptions(columnList);
+		yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
 		if (MainMenu.renderMode == 1)
 		{
@@ -74,9 +74,13 @@ public class DataPlotter : MonoBehaviour
 			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 		}
 		
-		zList.value = 1;
-		xList.value = 2;
-		ylist.value = 3;
+		xList.value = 1;
+		yList.value = 2;
+
+		if (MainMenu.renderMode == 1)
+		{
+			zList.value = 3;
+		}
 
 		PlottData();
 	}
@@ -105,56 +109,57 @@ public class DataPlotter : MonoBehaviour
 	private void PlottData()
 	{
 		xName = columnList[xList.value];
-		yName = columnList[ylist.value];
-		zName = columnList[zList.value];
+		yName = columnList[yList.value];
 
-		if (MainMenu.renderMode == 1)
-		{
-			xAxisText.text = xName;
-			yAxisText.text = yName;
-			zAxisText.text = zName;
-		}
-        else
-        {
-            xAxisText.text = xName;
-            yAxisText.text = yName;
-        }
+		xAxisText.text = xName;
+		yAxisText.text = yName;
 
 		// Get maxes of each axis
 		float xMax = FindMaxValue(xName);
 		float yMax = FindMaxValue(yName);
-		float zMax = FindMaxValue(zName);
+		float zMax = float.MinValue;
 
 		// Get minimums of each axis
 		float xMin = FindMinValue(xName);
 		float yMin = FindMinValue(yName);
-		float zMin = FindMinValue(zName);
+		float zMin = float.MinValue;
+
+		if (MainMenu.renderMode == 1)
+		{
+			zName = columnList[zList.value];
+			zAxisText.text = zName;
+			zMax = FindMaxValue(zName);
+			zMin = FindMinValue(zName);
+		}
+
 		string valueString;
 
-        GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
-        foreach (GameObject dataValues in allGameObjects)
-        {
-            GameObject.Destroy(dataValues);
-        }
+		if (MainMenu.renderMode == 0)
+		{
+			GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
+			foreach (GameObject dataValues in allGameObjects)
+			{
+				GameObject.Destroy(dataValues);
+			}
 
-        for (int i = 0; i < 11; i++)
-        {
-            GameObject lineSeparatorX = Instantiate(LineSeparatorPrefab, new Vector3(i, 5.4F, -0.001F), Quaternion.identity);
-            GameObject lineSeparatorY = Instantiate(LineSeparatorPrefab, new Vector3(5, i, -0.001F), Quaternion.identity);
-            lineSeparatorX.transform.rotation = Quaternion.Euler(0, 0, 0);
-            lineSeparatorY.transform.rotation = Quaternion.Euler(0, 0, 90);
+			for (int i = 0; i < 11; i++)
+			{
+				GameObject lineSeparatorX = Instantiate(LineSeparatorPrefab, new Vector3(i, 5.4F, -0.001F), Quaternion.identity);
+				GameObject lineSeparatorY = Instantiate(LineSeparatorPrefab, new Vector3(5, i, -0.001F), Quaternion.identity);
+				lineSeparatorX.transform.rotation = Quaternion.Euler(0, 0, 0);
+				lineSeparatorY.transform.rotation = Quaternion.Euler(0, 0, 90);
 
 
-            TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i + 0.7F, -1, 0), Quaternion.identity);
-            TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1, 0 + i, 0), Quaternion.identity);
+				TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i + 0.7F, -1, 0), Quaternion.identity);
+				TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1, 0 + i, 0), Quaternion.identity);
 
-            float xValue = ((xMax - xMin) / 10) * i + xMin;
-            float yValue = ((yMax - yMin) / 10) * i + yMin;
+				float xValue = ((xMax - xMin) / 10) * i + xMin;
+				float yValue = ((yMax - yMin) / 10) * i + yMin;
 
-            valuePointX.text = Convert.ToString(xValue);
-            valuePointY.text = Convert.ToString(yValue);
-        }
-
+				valuePointX.text = Convert.ToString(xValue);
+				valuePointY.text = Convert.ToString(yValue);
+			}
+		}
 
 
         //Loop through Pointlist

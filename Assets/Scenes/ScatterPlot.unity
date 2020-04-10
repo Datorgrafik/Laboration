@@ -765,7 +765,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -150.09998, y: -14.200012}
+  m_AnchoredPosition: {x: -150.09998, y: -1.1000061}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &216262362
@@ -786,17 +786,21 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'W A S D - Movement
+  m_text: 'ESC - Menu
+
+    W A S D - Movement
 
     Space - Up
 
     CTRL - Down
 
-    Right click - Camera movement
+    Right
+    click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted Databall'
+    E - Move targeted
+    Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -841,7 +845,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 113
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -865,12 +869,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 166.31134}
   m_textInfo:
     textComponent: {fileID: 216262362}
-    characterCount: 128
+    characterCount: 139
     spriteCount: 0
-    spaceCount: 26
-    wordCount: 27
+    spaceCount: 29
+    wordCount: 30
     linkCount: 0
-    lineCount: 6
+    lineCount: 7
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -3209,8 +3213,8 @@ MonoBehaviour:
   xName: 
   yName: 
   zName: 
-  yAxisText: {fileID: 2095429524}
   xAxisText: {fileID: 896174935}
+  yAxisText: {fileID: 2095429524}
   zAxisText: {fileID: 2012355289}
   plotScale: 10
   PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,

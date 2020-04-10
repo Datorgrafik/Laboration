@@ -28,8 +28,12 @@ public class DataPlotter : MonoBehaviour
 	[SerializeField]
 	private TMP_Text zAxisText;
 
-	public float plotScale = 10;
+    public float plotScale = 10;
 	public GameObject PointPrefab;
+    public GameObject LineSeparatorPrefab;
+
+    [SerializeField]
+    public TMP_Text valuePrefab;
 
 	public Dropdown xList;
 	public Dropdown ylist;
@@ -110,6 +114,11 @@ public class DataPlotter : MonoBehaviour
 			yAxisText.text = yName;
 			zAxisText.text = zName;
 		}
+        else
+        {
+            xAxisText.text = xName;
+            yAxisText.text = yName;
+        }
 
 		// Get maxes of each axis
 		float xMax = FindMaxValue(xName);
@@ -122,8 +131,34 @@ public class DataPlotter : MonoBehaviour
 		float zMin = FindMinValue(zName);
 		string valueString;
 
-		//Loop through Pointlist
-		for (var i = 0; i < pointList.Count; i++)
+        GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
+        foreach (GameObject dataValues in allGameObjects)
+        {
+            GameObject.Destroy(dataValues);
+        }
+
+        for (int i = 0; i < 11; i++)
+        {
+            GameObject lineSeparatorX = Instantiate(LineSeparatorPrefab, new Vector3(i, 5.4F, -0.001F), Quaternion.identity);
+            GameObject lineSeparatorY = Instantiate(LineSeparatorPrefab, new Vector3(5, i, -0.001F), Quaternion.identity);
+            lineSeparatorX.transform.rotation = Quaternion.Euler(0, 0, 0);
+            lineSeparatorY.transform.rotation = Quaternion.Euler(0, 0, 90);
+
+
+            TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i + 0.7F, -1, 0), Quaternion.identity);
+            TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1, 0 + i, 0), Quaternion.identity);
+
+            float xValue = ((xMax - xMin) / 10) * i + xMin;
+            float yValue = ((yMax - yMin) / 10) * i + yMin;
+
+            valuePointX.text = Convert.ToString(xValue);
+            valuePointY.text = Convert.ToString(yValue);
+        }
+
+
+
+        //Loop through Pointlist
+        for (var i = 0; i < pointList.Count; i++)
 		{
 			// Get value in poinList at ith "row", in "column" Name, normalize
 			valueString = pointList[i][xName].ToString();
@@ -135,9 +170,9 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][zName].ToString();
 			float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 
-			GameObject dataPoint;
+            GameObject dataPoint;
 
-			if (MainMenu.renderMode == 0)
+            if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
 			}

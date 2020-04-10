@@ -3504,6 +3504,8 @@ MonoBehaviour:
   plotScale: 10
   PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,
     type: 3}
+  LineSeparatorPrefab: {fileID: 6446824239289434332, guid: 1dd147c944520184290a3d3cff40559a,
+    type: 3}
   valuePrefab: {fileID: 1957521861262652421, guid: 2b1a901be47aa0549bd376335453ce17,
     type: 3}
   xList: {fileID: 1374810737}

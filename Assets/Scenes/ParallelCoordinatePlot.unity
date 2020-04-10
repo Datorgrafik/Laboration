@@ -6321,7 +6321,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   columnList: []
   plotScale: 10
-  PointPrefab: {fileID: 0}
+  PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,
+    type: 3}
+  PointHolder: {fileID: 1701465377}
   column1: {fileID: 964748675}
   column2: {fileID: 1205685613}
   column3: {fileID: 309578047}

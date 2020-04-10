@@ -792,8 +792,7 @@ MonoBehaviour:
 
     CTRL - Down
 
-    Right click -
-    Camera movement
+    Right click - Camera movement
 
     Left click - Target DataBalls
 
@@ -3210,6 +3209,9 @@ MonoBehaviour:
   xName: 
   yName: 
   zName: 
+  yAxisText: {fileID: 2095429524}
+  xAxisText: {fileID: 896174935}
+  zAxisText: {fileID: 2012355289}
   plotScale: 10
   PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,
     type: 3}
@@ -3433,7 +3435,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6210,7 +6212,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6701,6 +6703,7 @@ GameObject:
   - component: {fileID: 2083354722}
   - component: {fileID: 2083354721}
   - component: {fileID: 2083354720}
+  - component: {fileID: 2083354724}
   m_Layer: 0
   m_Name: Plane 1
   m_TagString: Untagged
@@ -6783,6 +6786,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!156049354 &2083354724
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083354719}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
 --- !u!1 &2095429523
 GameObject:
   m_ObjectHideFlags: 0
@@ -6855,7 +6870,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0

@@ -9,7 +9,7 @@ using TMPro;
 public class DataPlotter : MonoBehaviour
 {
 	// List for holding data from CSV reader
-	private List<Dictionary<string, object>> pointList;
+	public static List<Dictionary<string, object>> pointList;
 
 	// Indices for columns to be assigned
 	public int columnX = 1;
@@ -17,9 +17,9 @@ public class DataPlotter : MonoBehaviour
 	public int columnZ = 3;
 
 	// Full column names
-	public string xName;
-	public string yName;
-	public string zName;
+	public static string xName;
+	public static string yName;
+	public static string zName;
 
 	[SerializeField]
 	private TMP_Text xAxisText;
@@ -187,10 +187,9 @@ public class DataPlotter : MonoBehaviour
 			}
 
 			// Gets material color and sets it to a new RGBA color we define
-			dataPoint.GetComponent<Renderer>().material.color =
-			new Color(x, y, z, 1.0f);
+			dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 			dataPoint.transform.parent = PointHolder.transform;
-			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][yName];
+			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 			dataPoint.transform.name = dataPointName;
 		}
 	}

@@ -28,12 +28,12 @@ public class DataPlotter : MonoBehaviour
 	[SerializeField]
 	private TMP_Text zAxisText;
 
-    public float plotScale = 10;
+	public float plotScale = 10;
 	public GameObject PointPrefab;
-    public GameObject LineSeparatorPrefab;
+	public GameObject LineSeparatorPrefab;
 
-    [SerializeField]
-    public TMP_Text valuePrefab;
+	[SerializeField]
+	public TMP_Text valuePrefab;
 
 	public Dropdown xList;
 	public Dropdown yList;
@@ -162,8 +162,8 @@ public class DataPlotter : MonoBehaviour
 		}
 
 
-        //Loop through Pointlist
-        for (var i = 0; i < pointList.Count; i++)
+		//Loop through Pointlist
+		for (var i = 0; i < pointList.Count; i++)
 		{
 			// Get value in poinList at ith "row", in "column" Name, normalize
 			valueString = pointList[i][xName].ToString();
@@ -175,9 +175,9 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][zName].ToString();
 			float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 
-            GameObject dataPoint;
+			GameObject dataPoint;
 
-            if (MainMenu.renderMode == 0)
+			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
 			}

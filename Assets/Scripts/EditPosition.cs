@@ -1,54 +1,48 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EditPosition : MonoBehaviour
 {
-	private GameObject selectedTarget;
-
 	public GameObject panel;
 
 	public InputField inputX;
 	public InputField inputY;
 	public InputField inputZ;
 
-	public Text X;
-	public Text Y;
-	public Text Z;
+	public Text Xvalue;
+	public Text Yvalue;
+	public Text Zvalue;
+	public Text Xname;
+	public Text Yname;
+	public Text Zname;
 
 	public Button ChangeX;
-	public Button ChangeY;
-	public Button ChangeZ;
 
 	private string newValue;
-
-	float posX = 0;
-	float posY = 0;
-	float posZ = 0;
 
 	// Update is called once per frame
 	void Update()
 	{
-		selectedTarget = TargetingScript.selectedTarget;
-
-		if (selectedTarget != null)
+		if (TargetingScript.selectedTarget != null)
 		{
 			panel.SetActive(true);
 
-			posX = selectedTarget.transform.position[0];
-			posY = selectedTarget.transform.position[1];
-			posZ = selectedTarget.transform.position[2];
+			Xname.text = DataPlotter.xName;
+			Yname.text = DataPlotter.yName;
+			Zname.text = DataPlotter.zName;
 
-			X.text = Convert.ToString(posX);
-			Y.text = Convert.ToString(posY);
-			Z.text = Convert.ToString(posZ);
+			string[] newName = TargetingScript.selectedTarget.name.Split(' ');
+
+			Xvalue.text = newName[0];
+			Yvalue.text = newName[1];
+			Zvalue.text = newName[2];
 
 			ChangeX.onClick.AddListener(OnClick);
-			ChangeY.onClick.AddListener(OnClick);
-			ChangeZ.onClick.AddListener(OnClick);
 		}
 		else
 		{
@@ -58,25 +52,31 @@ public class EditPosition : MonoBehaviour
 
 	public void OnClick()
 	{
+		//Fullt funktionell, saknas endast normalisering för att få till rätt position vid ändring
 		if (inputX.text.Length > 0)
 		{
 			newValue = inputX.GetComponent<InputField>().text;
-			X.text = newValue;
-			selectedTarget.transform.position = new Vector3(Convert.ToSingle(X.text), posY, posZ);
+
+			TargetingScript.selectedTarget.transform.name = newValue + " " + Yvalue.text + " " + Zvalue.text;
+			TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
 		}
-		else if (inputY.text.Length > 0)
+
+		if (inputY.text.Length > 0)
 		{
 			newValue = inputY.GetComponent<InputField>().text;
-			Y.text = newValue;
-			selectedTarget.transform.position = new Vector3(posX, Convert.ToSingle(Y.text), posZ);
+
+			TargetingScript.selectedTarget.transform.name = Xvalue.text + " " + newValue + " " + Zvalue.text;
+			TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(Xvalue.text, CultureInfo.InvariantCulture), float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
 		}
-		else if (inputZ.text.Length > 0)
+
+		if (inputZ.text.Length > 0)
 		{
 			if (MainMenu.renderMode == 1)
 			{
 				newValue = inputZ.GetComponent<InputField>().text;
-				Z.text = newValue;
-				selectedTarget.transform.position = new Vector3(posX, posY, Convert.ToSingle(Z.text));
+
+				TargetingScript.selectedTarget.transform.name = Xvalue.text + " " + Yvalue.text + " " + newValue;
+				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(Xvalue.text, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), float.Parse(newValue, CultureInfo.InvariantCulture));
 			}
 		}
 	}

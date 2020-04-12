@@ -169,10 +169,23 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][yName].ToString();
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
+<<<<<<< HEAD
+=======
+			float z;
+
+			//Lägger in alla targetfeatures i en lista
+			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
+			{
+				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+			}
+
+			float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+			float colorValue = 1 / (index + 1);
+
+>>>>>>> dd83df2ca1e2904217f1ec408d3b4e59d705ab66
 			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
-				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, 0, 1.0f);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
 				dataPoint.transform.parent = PointHolder.transform;
 			}
@@ -181,27 +194,41 @@ public class DataPlotter : MonoBehaviour
 				valueString = pointList[i][zName].ToString();
 				float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
-				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 				dataPoint.transform.parent = PointHolder.transform;
 			}
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 			// Gets material color and sets it to a new RGBA color we define
 			dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 
 			//Lägger in alla targetfeatures i en lista
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
+=======
+			if (index % 3 == 0)
+>>>>>>> dd83df2ca1e2904217f1ec408d3b4e59d705ab66
 			{
-				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+				dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
 			}
-			//Lägg till färg för varje targetfeature utifrån listan
+			else if (index % 3 == 1)
+			{
+				dataPoint.GetComponent<Renderer>().material.color = new Color(0, 1, colorValue, 1.0f);
 
+			}
+			else if (index % 3 == 2)
+			{
+				dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
+
+<<<<<<< HEAD
 			dataPoint.transform.parent = PointHolder.transform;
 			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 			dataPoint.transform.name = dataPointName;
 =======
 >>>>>>> 4f28cfd31f854a8b9ce2e15e7f3b45d9a7667502
+=======
+			}
+>>>>>>> dd83df2ca1e2904217f1ec408d3b4e59d705ab66
 		}
 	}
 

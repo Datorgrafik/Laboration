@@ -167,10 +167,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		//Loop through Pointlist
 		for (var i = 0; i < pointList.Count; i++)
 		{
-			if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
-				targetColor = new Color(253, 230, 38);
-
-			targetColor = new Color(253, 230, 38);
+			targetColor = SetColors(targetFeatures, i);
 
 			// Column 1
 			// Get original value
@@ -180,7 +177,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Create clone
 			GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos1, column1Y, 0) * plotScale, Quaternion.identity);
 			// Set color
-			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column1Y, 1.0f, 1.0f);
+			dataPoint.GetComponent<Renderer>().material.color = targetColor;
 			// Set parent
 			dataPoint.transform.parent = PointHolder.transform;
 			// Set name
@@ -210,7 +207,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Create clone
 			dataPoint = Instantiate(PointPrefab, new Vector3(xPos2, column2Y, 0) * plotScale, Quaternion.identity);
 			// Set color
-			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column2Y, 1.0f, 1.0f);
+			dataPoint.GetComponent<Renderer>().material.color = targetColor;
 			// Set parent
 			dataPoint.transform.parent = PointHolder.transform;
 			// Set name
@@ -227,7 +224,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Create clone
 			dataPoint = Instantiate(PointPrefab, new Vector3(xPos3, column3Y, 0) * plotScale, Quaternion.identity);
 			// Set color
-			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column3Y, 1.0f, 1.0f);
+			dataPoint.GetComponent<Renderer>().material.color = targetColor;
 			// Set parent
 			dataPoint.transform.parent = PointHolder.transform;
 			// Set name
@@ -244,7 +241,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Create clone
 			dataPoint = Instantiate(PointPrefab, new Vector3(xPos4, column4Y, 0) * plotScale, Quaternion.identity);
 			// Set color
-			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column4Y, 1.0f, 1.0f);
+			dataPoint.GetComponent<Renderer>().material.color = targetColor;
 			// Set parent
 			dataPoint.transform.parent = PointHolder.transform;
 			// Set name
@@ -254,6 +251,21 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 
 		}
+	}
+
+	private Color SetColors(List<string> targetFeatures, int i)
+	{
+		Color targetColor;
+		if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
+			targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
+		else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
+			targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
+		else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
+			targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+		else
+			targetColor = Color.black;
+
+		return targetColor;
 	}
 
 	private float FindMaxValue(string columnName)

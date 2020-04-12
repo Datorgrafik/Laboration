@@ -171,10 +171,18 @@ public class DataPlotter : MonoBehaviour
 
 			float z;
 
+			//Lägger in alla targetfeatures i en lista
+			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
+			{
+				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+			}
+
+			float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+			float colorValue = 1 / (index + 1);
+
 			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
-				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, 0, 1.0f);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
 				dataPoint.transform.parent = PointHolder.transform;
 			}
@@ -183,24 +191,24 @@ public class DataPlotter : MonoBehaviour
 				valueString = pointList[i][zName].ToString();
 				z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
-				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 				dataPoint.transform.parent = PointHolder.transform;
 			}
 
-			// Gets material color and sets it to a new RGBA color we define
-			//dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
-
-			//Lägger in alla targetfeatures i en lista
-			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
+			if (index % 3 == 0)
 			{
-				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+				dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
 			}
-			//Lägg till färg för varje targetfeature utifrån listan
+			else if (index % 3 == 1)
+			{
+				dataPoint.GetComponent<Renderer>().material.color = new Color(0, 1, colorValue, 1.0f);
 
-			dataPoint.transform.parent = PointHolder.transform;
-			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
-			dataPoint.transform.name = dataPointName;
+			}
+			else if (index % 3 == 2)
+			{
+				dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
+
+			}
 		}
 	}
 

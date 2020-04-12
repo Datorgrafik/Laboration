@@ -92,6 +92,143 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			string dataPointName = Convert.ToString(columnName + ": "  + pointList[i][columnName]);
 			dataPoint.transform.name = dataPointName;
 		}
+<<<<<<< HEAD
+=======
+
+		for (int i = 0; i < pointList.Count; i++)
+		{
+			// LineRenderer
+			GameObject line = new GameObject();
+			LineRenderer lineRenderer = line.AddComponent<LineRenderer>();
+			lineRenderer.positionCount = 4;
+		}
+	}
+
+	private void PlotData2()
+	{
+		// Sets the columnName for each column
+		string column1Name = columnList[1];
+		string column2Name = columnList[2];
+		string column3Name = columnList[3];
+		string column4Name = columnList[4];
+
+		// Sets the correct X-Axis position for each column
+		float xPos1 = 0.2f;
+		float xPos2 = 0.6f;
+		float xPos3 = 1.0f;
+		float xPos4 = 1.4f;
+
+		// Get MaxValues
+		float column1Max = FindMaxValue(column1Name);
+		float column2Max = FindMaxValue(column2Name);
+		float column3Max = FindMaxValue(column3Name);
+		float column4Max = FindMaxValue(column4Name);
+		// Get MinValues
+		float column1Min = FindMinValue(column1Name);
+		float column2Min = FindMinValue(column2Name);
+		float column3Min = FindMinValue(column3Name);
+		float column4Min = FindMinValue(column4Name);
+
+		List<string> targetFeatures = new List<string>();
+		for (int i = 0; i < pointList.Count; i++)
+		{
+			targetFeatures.Add(pointList[i][columnList[5]].ToString());
+		}
+
+		targetFeatures = targetFeatures.Distinct().ToList();
+		Color targetColor;
+
+		//Loop through Pointlist
+		for (var i = 0; i < pointList.Count; i++)
+		{
+			if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
+				targetColor = new Color(253, 230, 38);
+
+			targetColor = new Color(253, 230, 38);
+
+			// Column 1
+			// Get original value
+			string column1ValueString = pointList[i][column1Name].ToString();
+			// Set normalized Y-value
+			float column1Y = (float.Parse(column1ValueString, CultureInfo.InvariantCulture) - column1Min) / (column1Max - column1Min);
+			// Create clone
+			GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos1, column1Y, 0) * plotScale, Quaternion.identity);
+			// Set color
+			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column1Y, 1.0f, 1.0f);
+			// Set parent
+			dataPoint.transform.parent = PointHolder.transform;
+			// Set name
+			dataPoint.transform.name = Convert.ToString(pointList[i][column1Name]);
+
+
+			// LineRenderer
+			// Instantiate the line
+			dataLine = Instantiate(dataLine, new Vector3(xPos1, column1Y, -0.001f) * plotScale, Quaternion.identity);
+			// Set parent
+			dataLine.transform.parent = PointHolder.transform;
+			// Set name
+			dataLine.transform.name = Convert.ToString("Line " + (i + 1));
+			// Get the LineRenderer
+			LineRenderer lineRenderer = dataLine.GetComponent<LineRenderer>();
+			// Set line position
+			lineRenderer.SetPosition(0, new Vector3(xPos1, column1Y, -0.001f) * plotScale);
+			// Set line color
+			lineRenderer.material.color = targetColor;
+
+
+			// Column 2
+			// Get original value
+			string column2ValueString = pointList[i][column2Name].ToString();
+			// Set normalized Y-value
+			float column2Y = (float.Parse(column2ValueString, CultureInfo.InvariantCulture) - column2Min) / (column2Max - column2Min);
+			// Create clone
+			dataPoint = Instantiate(PointPrefab, new Vector3(xPos2, column2Y, 0) * plotScale, Quaternion.identity);
+			// Set color
+			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column2Y, 1.0f, 1.0f);
+			// Set parent
+			dataPoint.transform.parent = PointHolder.transform;
+			// Set name
+			dataPoint.transform.name = Convert.ToString(pointList[i][column2Name]);
+			// Set line position
+			lineRenderer.SetPosition(1, new Vector3(xPos2, column2Y, -0.001f) * plotScale);
+
+
+			// Column 3
+			// Get original value
+			string column3ValueString = pointList[i][column3Name].ToString();
+			// Set normalized Y-value
+			float column3Y = (float.Parse(column3ValueString, CultureInfo.InvariantCulture) - column3Min) / (column3Max - column3Min);
+			// Create clone
+			dataPoint = Instantiate(PointPrefab, new Vector3(xPos3, column3Y, 0) * plotScale, Quaternion.identity);
+			// Set color
+			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column3Y, 1.0f, 1.0f);
+			// Set parent
+			dataPoint.transform.parent = PointHolder.transform;
+			// Set name
+			dataPoint.transform.name = Convert.ToString(pointList[i][column3Name]);
+			// Set line position
+			lineRenderer.SetPosition(2, new Vector3(xPos3, column3Y, -0.001f) * plotScale);
+
+
+			// Column 4
+			// Get original value
+			string column4ValueString = pointList[i][column4Name].ToString();
+			// Set normalized Y-value
+			float column4Y = (float.Parse(column4ValueString, CultureInfo.InvariantCulture) - column4Min) / (column4Max - column4Min);
+			// Create clone
+			dataPoint = Instantiate(PointPrefab, new Vector3(xPos4, column4Y, 0) * plotScale, Quaternion.identity);
+			// Set color
+			dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, column4Y, 1.0f, 1.0f);
+			// Set parent
+			dataPoint.transform.parent = PointHolder.transform;
+			// Set name
+			dataPoint.transform.name = Convert.ToString(pointList[i][column4Name]);
+			// Set line position
+			lineRenderer.SetPosition(3, new Vector3(xPos4, column4Y, -0.001f) * plotScale);
+
+
+		}
+>>>>>>> parent of 4f28cfd... PCP Colors
 	}
 
 	private float FindMaxValue(string columnName)

@@ -28,12 +28,12 @@ public class DataPlotter : MonoBehaviour
 	[SerializeField]
 	private TMP_Text zAxisText;
 
-    public float plotScale = 10;
+	public float plotScale = 10;
 	public GameObject PointPrefab;
-    public GameObject LineSeparatorPrefab;
+	public GameObject LineSeparatorPrefab;
 
-    [SerializeField]
-    public TMP_Text valuePrefab;
+	[SerializeField]
+	public TMP_Text valuePrefab;
 
 	public Dropdown xList;
 	public Dropdown yList;
@@ -65,21 +65,16 @@ public class DataPlotter : MonoBehaviour
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(columnList);
 		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		xList.value = 1;
 
 		yList.AddOptions(columnList);
 		yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		yList.value = 2;
 
 		if (MainMenu.renderMode == 1)
 		{
 			zList.AddOptions(columnList);
 			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-		}
-		
-		xList.value = 1;
-		yList.value = 2;
-
-		if (MainMenu.renderMode == 1)
-		{
 			zList.value = 3;
 		}
 
@@ -118,12 +113,12 @@ public class DataPlotter : MonoBehaviour
 		// Get maxes of each axis
 		float xMax = FindMaxValue(xName);
 		float yMax = FindMaxValue(yName);
-		float zMax = float.MinValue;
+		float zMax = 0f;
 
 		// Get minimums of each axis
 		float xMin = FindMinValue(xName);
 		float yMin = FindMinValue(yName);
-		float zMin = float.MinValue;
+		float zMin = 0f;
 
 		if (MainMenu.renderMode == 1)
 		{
@@ -140,7 +135,7 @@ public class DataPlotter : MonoBehaviour
 			GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
 			foreach (GameObject dataValues in allGameObjects)
 			{
-				GameObject.Destroy(dataValues);
+				Destroy(dataValues);
 			}
 
 			for (int i = 0; i < 11; i++)
@@ -149,7 +144,6 @@ public class DataPlotter : MonoBehaviour
 				GameObject lineSeparatorY = Instantiate(LineSeparatorPrefab, new Vector3(5, i, -0.001F), Quaternion.identity);
 				lineSeparatorX.transform.rotation = Quaternion.Euler(0, 0, 0);
 				lineSeparatorY.transform.rotation = Quaternion.Euler(0, 0, 90);
-
 
 				TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i + 0.7F, -1, 0), Quaternion.identity);
 				TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1, 0 + i, 0), Quaternion.identity);
@@ -163,9 +157,11 @@ public class DataPlotter : MonoBehaviour
 		}
 
 
-        //Loop through Pointlist
-        for (var i = 0; i < pointList.Count; i++)
+		//Loop through Pointlist
+		for (var i = 0; i < pointList.Count; i++)
 		{
+			GameObject dataPoint;
+
 			// Get value in poinList at ith "row", in "column" Name, normalize
 			valueString = pointList[i][xName].ToString();
 			float x = (float.Parse(valueString, CultureInfo.InvariantCulture) - xMin) / (xMax - xMin);
@@ -173,19 +169,23 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][yName].ToString();
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-			valueString = pointList[i][zName].ToString();
-			float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
-
-            GameObject dataPoint;
-
-            if (MainMenu.renderMode == 0)
+			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
+				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, 0, 1.0f);
+				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
+				dataPoint.transform.parent = PointHolder.transform;
 			}
-			else
+			else if (MainMenu.renderMode == 1)
 			{
+				valueString = pointList[i][zName].ToString();
+				float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
+				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
+				dataPoint.transform.parent = PointHolder.transform;
 			}
+<<<<<<< HEAD
 
 			// Gets material color and sets it to a new RGBA color we define
 			dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
@@ -200,6 +200,8 @@ public class DataPlotter : MonoBehaviour
 			dataPoint.transform.parent = PointHolder.transform;
 			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 			dataPoint.transform.name = dataPointName;
+=======
+>>>>>>> 4f28cfd31f854a8b9ce2e15e7f3b45d9a7667502
 		}
 	}
 

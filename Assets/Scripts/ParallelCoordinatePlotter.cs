@@ -17,7 +17,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
     public GameObject PointPrefab;
     public GameObject PointHolder;
     public GameObject dataLine;
-    public Material lineColor;
     private string columnName;
 
     // PlotColumns

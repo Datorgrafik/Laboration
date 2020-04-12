@@ -169,8 +169,6 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][yName].ToString();
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-			float z;
-
 			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
@@ -178,18 +176,19 @@ public class DataPlotter : MonoBehaviour
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
 				dataPoint.transform.parent = PointHolder.transform;
 			}
-			else
+			else if (MainMenu.renderMode == 1)
 			{
 				valueString = pointList[i][zName].ToString();
-				z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
+				float z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 				dataPoint.transform.parent = PointHolder.transform;
 			}
+<<<<<<< HEAD
 
 			// Gets material color and sets it to a new RGBA color we define
-			//dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+			dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 
 			//Lägger in alla targetfeatures i en lista
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
@@ -201,6 +200,8 @@ public class DataPlotter : MonoBehaviour
 			dataPoint.transform.parent = PointHolder.transform;
 			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 			dataPoint.transform.name = dataPointName;
+=======
+>>>>>>> 4f28cfd31f854a8b9ce2e15e7f3b45d9a7667502
 		}
 	}
 

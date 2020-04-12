@@ -41,6 +41,7 @@ public class DataPlotter : MonoBehaviour
 
 	public GameObject PointHolder;
 	public List<string> columnList;
+	public List<string> targetFeatures;
 
 	// Use this for initialization
 	void Start()
@@ -188,6 +189,14 @@ public class DataPlotter : MonoBehaviour
 
 			// Gets material color and sets it to a new RGBA color we define
 			dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+
+			//Lägger in alla targetfeatures i en lista
+			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
+			{
+				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+			}
+			//Lägg till färg för varje targetfeature utifrån listan
+
 			dataPoint.transform.parent = PointHolder.transform;
 			string dataPointName = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 			dataPoint.transform.name = dataPointName;
@@ -196,9 +205,6 @@ public class DataPlotter : MonoBehaviour
 
 	private float FindMinValue(string columnName)
 	{
-
-		//float minValue = Convert.ToSingle(pointList[0][columnName]);
-
 		string minValueString = pointList[0][columnName].ToString();
 		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
 

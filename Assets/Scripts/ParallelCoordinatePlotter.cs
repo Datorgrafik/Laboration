@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public float plotScale = 10;
 	public GameObject PointPrefab;
 	public GameObject PointHolder;
+	public GameObject LinePrefab;
+	private Color targetColor;
+	private List<string> targetFeatures = new List<string>();
 	private string columnName;
 
 	// PlotColumns
@@ -27,6 +31,16 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	[SerializeField]
 	private Dropdown column4;
 
+	// Column Text Fields
+	[SerializeField]
+	private TMP_Text column1Text;
+	[SerializeField]
+	private TMP_Text column2Text;
+	[SerializeField]
+	private TMP_Text column3Text;
+	[SerializeField]
+	private TMP_Text column4Text;
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -38,39 +52,57 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Assign column name from columnList to Name variables
 		column1.AddOptions(columnList);
-		column1.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		column1.value = 1;
+		column1.onValueChanged.AddListener(delegate { DropdownValueChanged(1); });
 
 		column2.AddOptions(columnList);
-		column2.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		column2.value = 2;
+		column2.onValueChanged.AddListener(delegate { DropdownValueChanged(2); });
 
 		column3.AddOptions(columnList);
-		column3.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		column3.value = 3;
+		column3.onValueChanged.AddListener(delegate { DropdownValueChanged(3); });
 
 		column4.AddOptions(columnList);
-		column4.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-
-		// Default values for each column at start
-		column1.value = 1;
-		column2.value = 2;
-		column3.value = 3;
 		column4.value = 4;
+		column4.onValueChanged.AddListener(delegate { DropdownValueChanged(4); });
+
+		// Default values for each columntext at start
+		column1Text.text = columnList[1];
+		column2Text.text = columnList[2];
+		column3Text.text = columnList[3];
+		column4Text.text = columnList[4];
+
+		GetDistinctTargetFeatures();
 
 		// Run the default startup plot
 		for (int i = 1; i <= 4; i++)
 		{
 			PlotData(i, i);
 		}
+	}
 
+	private void GetDistinctTargetFeatures()
+	{
+		// Add targetFeatures to a seperate list
+		for (int i = 0; i < pointList.Count; i++)
+		{
+			targetFeatures.Add(pointList[i][columnList[5]].ToString());
+		}
+
+		// Only keep distinct targetFeatures
+		targetFeatures = targetFeatures.Distinct().ToList();
 	}
 
 	private void PlotData(int column, int columnPos)
 	{
 		columnName = columnList[column];
-		float xPos = (float)columnPos/10;
+
+		// Sets the correct X-Axis position for each column
+		float xPos = SetColumnPosition(columnPos);
 
 		// Get MaxValue
 		float columnMax = FindMaxValue(columnName);
-
 		// Get MinValue
 		float columnMin = FindMinValue(columnName);
 
@@ -78,20 +110,74 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		//Loop through Pointlist
 		for (var i = 0; i < pointList.Count; i++)
 		{
-			// Get value in poinList at ith "row", in "column" Name, normalize
+			// Set correct color
+			targetColor = SetColors(targetFeatures, i);
+
+			// Get original value
 			valueString = pointList[i][columnName].ToString();
+			// Set normalized Y-value
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
-
-			GameObject dataPoint;
-
-			dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
-
-			// Gets material color and sets it to a new RGBA color we define
-			//dataPoint.GetComponent<Renderer>().material.color = new Color(1.0f, y, 1.0f, 1.0f);
+			// Create clone
+			GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
+			// Set color
+			dataPoint.GetComponent<Renderer>().material.color = targetColor;
+			// Set parent
 			dataPoint.transform.parent = PointHolder.transform;
-			string dataPointName = Convert.ToString(columnName + ": "  + pointList[i][columnName]);
-			dataPoint.transform.name = dataPointName;
+			// Set name
+			dataPoint.transform.name = Convert.ToString(pointList[i][columnName]);
+
+			GameObject dataLine;
+			// Instantiate LineRenderer at first column for every point
+			if (columnPos == 1)
+			{
+				// Instantiate the line
+				dataLine = Instantiate(LinePrefab, new Vector3(xPos, y, -0.001f) * plotScale, Quaternion.identity);
+				// Set parent
+				dataLine.transform.parent = PointHolder.transform;
+				// Set name
+				dataLine.transform.name = Convert.ToString("Line " + (i + 1));
+			}
+
+			// Find the correct dataLine
+			dataLine = GameObject.Find("Line " + (i + 1));
+
+			// Get the LineRenderer
+			LineRenderer lineRenderer = dataLine.GetComponent<LineRenderer>();
+			// Set line color
+			lineRenderer.material.color = targetColor;
+			// Set line position
+			lineRenderer.SetPosition((columnPos - 1), new Vector3(xPos, y, -0.001f) * plotScale);
 		}
+	}
+
+	private static float SetColumnPosition(int columnPos)
+	{
+		float xPos = float.MinValue;
+		if (columnPos == 1)
+			xPos = 0.2f;
+		else if (columnPos == 2)
+			xPos = 0.6f;
+		else if (columnPos == 3)
+			xPos = 1.0f;
+		else if (columnPos == 4)
+			xPos = 1.4f;
+
+		return xPos;
+	}
+
+	private Color SetColors(List<string> targetFeatures, int i)
+	{
+		Color targetColor;
+		if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
+			targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
+		else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
+			targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
+		else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
+			targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+		else
+			targetColor = Color.black;
+
+		return targetColor;
 	}
 
 	private float FindMaxValue(string columnName)
@@ -134,13 +220,30 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		return minValue;
 	}
 
-	private void DropdownValueChanged()
+	private void DropdownValueChanged(int columnPos)
 	{
-	   // Find the changed column and destroy it.
+		// Find the changed column and destroy it.
+		GameObject parallelCoordinatePlot = GameObject.Find("ParallelCoordinatePlot");
 
-		// Run PlotData() with the newly selected column.
+		foreach (Transform child in parallelCoordinatePlot.transform)
+		{
+			Destroy(child.gameObject);
+		}
 
-		//PlotData(string.Empty);
+		if (columnPos == 1)
+			column1Text.text = columnList[column1.value];
+		else if (columnPos == 2)
+			column2Text.text = columnList[column2.value];
+		else if (columnPos == 3)
+			column3Text.text = columnList[column3.value];
+		else if (columnPos == 4)
+			column4Text.text = columnList[column4.value];
+
+		// Run PlotData() with the selected columns.
+		PlotData(column1.value, 1);
+		PlotData(column2.value, 2);
+		PlotData(column3.value, 3);
+		PlotData(column4.value, 4);
 	}
-
+	
 }

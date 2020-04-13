@@ -7,6 +7,7 @@ TagManager:
   - DataBall
   - dataValues
   - DataLine
+  - TextValues
   layers:
   - Default
   - TransparentFX

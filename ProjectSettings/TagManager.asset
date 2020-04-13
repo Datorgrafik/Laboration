@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DataBall
   - dataValues
+  - TextValues
   layers:
   - Default
   - TransparentFX

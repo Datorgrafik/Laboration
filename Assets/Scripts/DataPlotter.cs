@@ -8,7 +8,6 @@ using TMPro;
 
 public class DataPlotter : MonoBehaviour
 {
-	// List for holding data from CSV reader
 	public static List<Dictionary<string, object>> pointList;
 
 	// Indices for columns to be assigned
@@ -102,7 +101,13 @@ public class DataPlotter : MonoBehaviour
 
 	private void PlottData()
 	{
-		List<List<string>> indexList = new List<List<string>>();
+        GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
+        foreach (GameObject dataValues in allDataBalls)
+        {
+            Destroy(dataValues);
+        }
+
+        List<List<string>> indexList = new List<List<string>>();
 
 		xName = columnList[xList.value];
 		yName = columnList[yList.value];

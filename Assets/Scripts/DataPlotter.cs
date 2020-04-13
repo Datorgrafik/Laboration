@@ -87,8 +87,6 @@ public class DataPlotter : MonoBehaviour
 		string maxValueString = pointList[0][columnName].ToString();
 		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
 
-		//float maxValue = Convert.ToSingle(pointList[0][columnName]);
-
 		//Loop through Dictionary, overwrite existing maxValue if new value is larger
 		for (var i = 0; i < pointList.Count; i++)
 		{
@@ -104,6 +102,8 @@ public class DataPlotter : MonoBehaviour
 
 	private void PlottData()
 	{
+		List<List<string>> indexList = new List<List<string>>();
+
 		xName = columnList[xList.value];
 		yName = columnList[yList.value];
 
@@ -185,6 +185,7 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
 				dataPoint.transform.parent = PointHolder.transform;
+				//indexList[i].Add(new List<string> { Convert.ToString(dataPoint.GetInstanceID()), pointList[i][] };
 			}
 			else
 			{
@@ -193,6 +194,7 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 				dataPoint.transform.parent = PointHolder.transform;
+				//indexList[i].Add(new List<string> { Convert.ToString(dataPoint.GetInstanceID()), pointList[i] };
 			}
 
 			if (index % 3 == 0)

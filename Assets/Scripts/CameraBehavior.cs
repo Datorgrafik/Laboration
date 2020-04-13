@@ -5,7 +5,6 @@ using UnityEngine;
 public class CameraBehavior : MonoBehaviour 
 {
 	public float speed;
-	private Vector3 startPosition;
 
 	// Update is called once per frame
 	void Update()
@@ -29,9 +28,9 @@ public class CameraBehavior : MonoBehaviour
 		else if (Input.GetKey(KeyCode.D))
 			transform.position = transform.position + Camera.main.transform.right * speed;
 
-		if (Input.GetKey(KeyCode.Space))
+		if (Input.GetKey(KeyCode.UpArrow))
 			transform.position = new Vector3(transform.position.x, transform.position.y + speed, transform.position.z);
-		else if (Input.GetKey(KeyCode.LeftControl))
+		else if (Input.GetKey(KeyCode.DownArrow))
 			transform.position = new Vector3(transform.position.x, transform.position.y + speed * -1, transform.position.z);
 	}
 }

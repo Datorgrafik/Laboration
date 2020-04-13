@@ -58,6 +58,7 @@ public class EditPosition : MonoBehaviour
 			newValue = inputX.GetComponent<InputField>().text;
 
 			TargetingScript.selectedTarget.transform.name = newValue + " " + Yvalue.text + " " + Zvalue.text;
+			
 			TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
 		}
 

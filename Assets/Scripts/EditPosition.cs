@@ -34,13 +34,17 @@ public class EditPosition : MonoBehaviour
 
 			Xname.text = DataPlotter.xName;
 			Yname.text = DataPlotter.yName;
-			Zname.text = DataPlotter.zName;
 
 			string[] newName = TargetingScript.selectedTarget.name.Split(' ');
 
 			Xvalue.text = newName[0];
 			Yvalue.text = newName[1];
-			Zvalue.text = newName[2];
+
+			if (MainMenu.renderMode == 1)
+			{
+				Zname.text = DataPlotter.zName;
+				Zvalue.text = newName[2];
+			}
 
 			ChangeX.onClick.AddListener(OnClick);
 		}
@@ -57,22 +61,37 @@ public class EditPosition : MonoBehaviour
 		{
 			newValue = inputX.GetComponent<InputField>().text;
 
-			TargetingScript.selectedTarget.transform.name = newValue + " " + Yvalue.text + " " + Zvalue.text;
-			
-			TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
+			if (MainMenu.renderMode == 0)
+			{
+				TargetingScript.selectedTarget.transform.name = newValue + " " + Yvalue.text;
+				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), (0));
+			}
+			else
+			{
+				TargetingScript.selectedTarget.transform.name = newValue + " " + Yvalue.text + " " + Zvalue.text;
+				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
+			}
 		}
 
 		if (inputY.text.Length > 0)
 		{
 			newValue = inputY.GetComponent<InputField>().text;
 
-			TargetingScript.selectedTarget.transform.name = Xvalue.text + " " + newValue + " " + Zvalue.text;
-			TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(Xvalue.text, CultureInfo.InvariantCulture), float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
+			if (MainMenu.renderMode == 0)
+			{
+				TargetingScript.selectedTarget.transform.name = Xvalue.text + " " + newValue;
+				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(Xvalue.text, CultureInfo.InvariantCulture), float.Parse(newValue, CultureInfo.InvariantCulture), (0));
+			}
+			else
+			{
+				TargetingScript.selectedTarget.transform.name = Xvalue.text + " " + newValue + " " + Zvalue.text;
+				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(Xvalue.text, CultureInfo.InvariantCulture), float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
+			}
 		}
 
-		if (inputZ.text.Length > 0)
+		if (MainMenu.renderMode == 1)
 		{
-			if (MainMenu.renderMode == 1)
+			if (inputZ.text.Length > 0)
 			{
 				newValue = inputZ.GetComponent<InputField>().text;
 

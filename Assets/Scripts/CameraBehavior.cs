@@ -17,7 +17,9 @@ public class CameraBehavior : MonoBehaviour
 			transform.Rotate(0, mouseX, 0, Space.World);
 			transform.Rotate(mouseY, 0, 0, Space.Self);
 		}
-		else if (MainMenu.renderMode == 0)
+
+
+		if (MainMenu.renderMode == 0)
 		{
 			if (Input.GetKey(KeyCode.UpArrow))
 				transform.position = transform.position + Camera.main.transform.forward * speed;

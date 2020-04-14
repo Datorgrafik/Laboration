@@ -766,7 +766,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -150, y: 0}
+  m_AnchoredPosition: {x: -157, y: -2}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &216262362
@@ -791,9 +791,9 @@ MonoBehaviour:
 
     W A S D - Movement
 
-    Space - Up
+    CTRL . Down
 
-    CTRL - Down
+    Space - Up
 
     Right
     click - Camera movement
@@ -846,7 +846,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 113
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -867,13 +867,13 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 166.31134}
+  m_margin: {x: 0, y: 0, z: 0, w: 151.38385}
   m_textInfo:
     textComponent: {fileID: 216262362}
     characterCount: 139
     spriteCount: 0
     spaceCount: 29
-    wordCount: 30
+    wordCount: 29
     linkCount: 0
     lineCount: 7
     pageCount: 1
@@ -3225,6 +3225,7 @@ MonoBehaviour:
   zList: {fileID: 20102336}
   PointHolder: {fileID: 813571230}
   columnList: []
+  targetFeatures: []
 --- !u!4 &813571232
 Transform:
   m_ObjectHideFlags: 0
@@ -3902,8 +3903,6 @@ MonoBehaviour:
   Yname: {fileID: 1714565340}
   Zname: {fileID: 1714565339}
   ChangeX: {fileID: 1828849626}
-  ChangeY: {fileID: 0}
-  ChangeZ: {fileID: 0}
 --- !u!1 &1189454299
 GameObject:
   m_ObjectHideFlags: 0

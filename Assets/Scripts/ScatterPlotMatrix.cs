@@ -82,6 +82,8 @@ public class ScatterPlotMatrix : MonoBehaviour
         features[3] = feature4;
 
         PlottData();
+
+        Camera.main.transform.position = new Vector3(19.3F, 22.5F, -45.7F);
     }
 
     private float FindMaxValue(string columnName)

@@ -71,6 +71,7 @@ public class EditPosition : MonoBehaviour
 				TargetingScript.selectedTarget.transform.name = newValue + " " + Yvalue.text + " " + Zvalue.text;
 				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Yvalue.text, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
 			}
+			Xvalue.text = newValue;
 		}
 
 		if (inputY.text.Length > 0)
@@ -87,6 +88,7 @@ public class EditPosition : MonoBehaviour
 				TargetingScript.selectedTarget.transform.name = Xvalue.text + " " + newValue + " " + Zvalue.text;
 				TargetingScript.selectedTarget.transform.position = new Vector3(float.Parse(Xvalue.text, CultureInfo.InvariantCulture), float.Parse(newValue, CultureInfo.InvariantCulture), float.Parse(Zvalue.text, CultureInfo.InvariantCulture));
 			}
+			Yvalue.text = newValue;
 		}
 
 		if (MainMenu.renderMode == 1)

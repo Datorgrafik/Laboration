@@ -13,6 +13,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private List<Dictionary<string, object>> pointList;
 
 	public List<string> columnList;
+	public List<string> featureList;
 	public float plotScale = 10;
 	public GameObject PointPrefab;
 	public GameObject PointHolder;
@@ -42,42 +43,44 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
 
-		// FeatureList without last index: TargetColumn
-		//List<string> featureList = columnList;
-		//featureList.RemoveAt(columnList.Count - 1);
+		// FeatureList without first or last index: Id / TargetColumn
+		featureList = new List<string>();
+		featureList.AddRange(columnList);
+		featureList.RemoveAt(columnList.Count - 1);
+		featureList.RemoveAt(0);
 		
 		// Assign column name from columnList to Name variables
-		column1.AddOptions(columnList);
-		column1.value = 1;
-		column1.onValueChanged.AddListener(delegate { DropdownValueChanged(1); });
+		column1.AddOptions(featureList);
+		column1.value = 0;
+		column1.onValueChanged.AddListener(delegate { column1Text.text = featureList[column1.value]; });
 
-		column2.AddOptions(columnList);
-		column2.value = 2;
-		column2.onValueChanged.AddListener(delegate { DropdownValueChanged(2); });
+		column2.AddOptions(featureList);
+		column2.value = 1;
+		column2.onValueChanged.AddListener(delegate { column2Text.text = featureList[column2.value]; });
 
-		column3.AddOptions(columnList);
-		column3.value = 3;
-		column3.onValueChanged.AddListener(delegate { DropdownValueChanged(3); });
+		column3.AddOptions(featureList);
+		column3.value = 2;
+		column3.onValueChanged.AddListener(delegate { column3Text.text = featureList[column3.value]; });
 
-		column4.AddOptions(columnList);
-		column4.value = 4;
-		column4.onValueChanged.AddListener(delegate { DropdownValueChanged(4); });
+		column4.AddOptions(featureList);
+		column4.value = 3;
+		column4.onValueChanged.AddListener(delegate { column4Text.text = featureList[column4.value]; });
 
 		// Default values for each columntext at start
-		column1Text.text = columnList[1];
-		column2Text.text = columnList[2];
-		column3Text.text = columnList[3];
-		column4Text.text = columnList[4];
+		column1Text.text = featureList[0];
+		column2Text.text = featureList[1];
+		column3Text.text = featureList[2];
+		column4Text.text = featureList[3];
 
 		GetDistinctTargetFeatures();
 
 		// Run the default startup plot
 		for (int i = 1; i <= 4; i++)
 		{
-			PlotData(i, i);
+			PlotData(i-1, i);
 		}
 	}
-
+	
 	private void GetDistinctTargetFeatures()
 	{
 		// Add targetFeatures to a seperate list
@@ -92,8 +95,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private void PlotData(int column, int columnPos)
 	{
-		Debug.Log("Column: " + column + ", ColumnPos: " + columnPos);
-		columnName = columnList[column];
+		columnName = featureList[column];
 
 		// Sets the correct X-Axis position for each column
 		float xPos = SetColumnPosition(columnPos);
@@ -126,6 +128,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
 		// Set color
 		dataPoint.GetComponent<Renderer>().material.color = targetColor;
+		// Set new scale
+		dataPoint.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 		// Set parent
 		dataPoint.transform.parent = PointHolder.transform;
 		// Set name
@@ -138,8 +142,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		LineRenderer lineRenderer;
 
 		// Instantiate LineRenderer at first column for every point
-		if (columnPos == 1)
-		{	
+		if (columnPos == 1 && GameObject.Find("Line " + (i + 1)) == null)
+		{
 			// Instantiate the line
 			dataLine = Instantiate(LinePrefab, new Vector3(xPos, y, -0.001f) * plotScale, Quaternion.identity);
 			// Set parent
@@ -151,11 +155,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Set line color
 			lineRenderer.material.color = targetColor;
 		}
-
-		// Find the correct dataLine
-		dataLine = GameObject.Find("Line " + (i + 1));
-		// Get the LineRenderer
-		lineRenderer = dataLine.GetComponent<LineRenderer>();
+		else
+		{
+			// Find the correct dataLine
+			dataLine = GameObject.Find("Line " + (i + 1));
+			// Get the LineRenderer
+			lineRenderer = dataLine.GetComponent<LineRenderer>();
+		}
 
 		// Set line position
 		lineRenderer.SetPosition((columnPos - 1), new Vector3(xPos, y, -0.001f) * plotScale);
@@ -194,13 +200,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private float FindMaxValue(string columnName)
 	{
-		//set initial value to first value
 		string maxValueString = pointList[0][columnName].ToString();
 		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
 
-		//float maxValue = Convert.ToSingle(pointList[0][columnName]);
-
-		//Loop through Dictionary, overwrite existing maxValue if new value is larger
 		for (var i = 0; i < pointList.Count; i++)
 		{
 			string maxValueStringLoop = pointList[i][columnName].ToString();
@@ -209,18 +211,14 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 				maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
 		}
 
-		//Spit out the max value
 		return maxValue;
 	}
 
 	private float FindMinValue(string columnName)
 	{
-		//float minValue = Convert.ToSingle(pointList[0][columnName]);
-
 		string minValueString = pointList[0][columnName].ToString();
 		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
 
-		//Loop through Dictionary, overwrite existing minValue if new value is smaller
 		for (var i = 0; i < pointList.Count; i++)
 		{
 			string minValueStringLoop = pointList[i][columnName].ToString();
@@ -232,34 +230,14 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		return minValue;
 	}
 
-	private void DropdownValueChanged(int columnPos)
-	{
-		if (columnPos == 1)
-			column1Text.text = columnList[column1.value];
-		else if (columnPos == 2)
-			column2Text.text = columnList[column2.value];
-		else if (columnPos == 3)
-			column3Text.text = columnList[column3.value];
-		else if (columnPos == 4)
-			column4Text.text = columnList[column4.value];
-	}
-
 	public void ReorderColumns()
 	{
-		// Destroy Datapoints and Datalines and ReRender plot
-		//GameObject parallelCoordinatePlot = GameObject.Find("ParallelCoordinatePlot");
-
+		// Destroy Datapoints
 		GameObject[] databalls = GameObject.FindGameObjectsWithTag("DataBall");
-		GameObject[] datalines = GameObject.FindGameObjectsWithTag("DataLine");
 
 		foreach (var databall in databalls)
 		{
 			Destroy(databall);
-		}
-
-		foreach (var dataline in datalines)
-		{
-			Destroy(dataline);
 		}
 
 		PlotData(column1.value, 1);

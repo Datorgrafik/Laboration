@@ -563,12 +563,13 @@ MonoBehaviour:
   inputX: {fileID: 1861642570}
   inputY: {fileID: 1861642569}
   inputZ: {fileID: 1861642568}
-  X: {fileID: 852922357}
-  Y: {fileID: 595236515}
-  Z: {fileID: 896253714}
+  Xvalue: {fileID: 0}
+  Yvalue: {fileID: 0}
+  Zvalue: {fileID: 0}
+  Xname: {fileID: 0}
+  Yname: {fileID: 0}
+  Zname: {fileID: 0}
   ChangeX: {fileID: 1399720755}
-  ChangeY: {fileID: 847294952}
-  ChangeZ: {fileID: 1353589039}
 --- !u!114 &99230542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2601,9 +2602,6 @@ MonoBehaviour:
   columnX: 1
   columnY: 2
   columnZ: 3
-  xName: 
-  yName: 
-  zName: 
   xAxisText: {fileID: 366026419}
   yAxisText: {fileID: 1650773849}
   zAxisText: {fileID: 0}
@@ -2619,6 +2617,7 @@ MonoBehaviour:
   zList: {fileID: 0}
   PointHolder: {fileID: 1156929269}
   columnList: []
+  targetFeatures: []
 --- !u!4 &1156929271
 Transform:
   m_ObjectHideFlags: 0
@@ -5335,7 +5334,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -150, y: 0}
+  m_AnchoredPosition: {x: -151, y: 22}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2080149274
@@ -5360,17 +5359,17 @@ MonoBehaviour:
 
     W A S D - Movement
 
-    Space - Up
+    UpArrow - Zoom in
 
-    CTRL - Down
+    DownArrow
+    - Zoom out
 
-    Right
-    click - Camera movement
+    Right click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted
-    Databall'
+    Left
+    click and move mouse - Move targeted DataBall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5415,7 +5414,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 113
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -5436,15 +5435,15 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 166.31134}
+  m_margin: {x: 0, y: 0, z: 0, w: 131.12518}
   m_textInfo:
     textComponent: {fileID: 2080149274}
-    characterCount: 139
+    characterCount: 179
     spriteCount: 0
-    spaceCount: 29
-    wordCount: 30
+    spaceCount: 35
+    wordCount: 36
     linkCount: 0
-    lineCount: 7
+    lineCount: 8
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0

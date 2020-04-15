@@ -223,14 +223,24 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private Color SetColors(List<string> targetFeatures, int i)
 	{
 		Color targetColor;
-		if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
-			targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
-		else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
-			targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
-		else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
-			targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+		float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+		float colorValue = 1 / (index + 1);
+
+		if (index % 3 == 0)
+			targetColor = new Color(0, colorValue, 0);
+		else if (index % 3 == 1)
+			targetColor = new Color(0, 0, colorValue);
+		else if (index % 3 == 2)
+			targetColor = new Color(colorValue, 0, 0);
 		else
 			targetColor = Color.black;
+
+		//if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
+		//	targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
+		//else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
+		//	targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
+		//else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
+		//	targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
 
 		return targetColor;
 	}

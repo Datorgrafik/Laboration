@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class DataPlotter : MonoBehaviour
 {
@@ -42,19 +43,23 @@ public class DataPlotter : MonoBehaviour
 	public List<string> columnList;
 	public List<string> targetFeatures;
 
-	// Use this for initialization
-	void Start()
+    public static DataPlotter ThisInstans;
+    public static DataClass dataClass;
+
+    // Use this for initialization
+    void Start()
 	{
 		// Set pointlist to results of function Reader with argument inputfile
 		//Debug.Log(MainMenu.fileData);
-		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+		dataClass = CSVläsare.Read(MainMenu.fileData);
         pointList = dataClass.CSV;
 
-		//Log to console
-		//Debug.Log(pointList);
+        ThisInstans = this;
+        //Log to console
+        //Debug.Log(pointList);
 
-		// Declare list of strings, fill with keys (column names)
-		columnList = new List<string>(pointList[1].Keys);
+        // Declare list of strings, fill with keys (column names)
+        columnList = new List<string>(pointList[1].Keys);
 
 		// Print number of keys (using .count)
 		//Debug.Log("There are " + columnList.Count + " columns in CSV");
@@ -248,4 +253,45 @@ public class DataPlotter : MonoBehaviour
 
 		PlottData();
 	}
+
+    static public void AddDataPoint(List<string> newPoint)
+    {
+        Dictionary<string, object> last = pointList.Last();
+
+        Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
+
+        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture) - 1));
+
+        Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
+
+
+        for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
+        {
+            Debug.Log("Column name is " + ThisInstans.columnList[i + 1]);
+            Debug.Log("value is " + newPoint[i].ToString());
+            newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
+        }
+
+        double[] unknown = new double[newPoint.Count];
+
+        for (int i = 0; i > newPoint.Count; ++i)
+        {
+            unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+            Debug.Log(newPoint[i].ToString());
+        }
+
+
+        var predict = dataClass.Knn(unknown, 3);
+        newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+
+        pointList.Add(newDataPoint);
+        GameObject ScatterPlotter = GameObject.Find("Scatterplot");
+
+        foreach (Transform child in ScatterPlotter.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        ThisInstans.PlottData();
+
+    }
 }

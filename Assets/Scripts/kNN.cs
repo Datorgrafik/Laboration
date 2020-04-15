@@ -7,7 +7,7 @@ using UnityEngine;
 
 //Plagiatvarning här med?
 
-public class kNN : MonoBehaviour
+public class kNN 
 {
     private static List<string> attributes;
 

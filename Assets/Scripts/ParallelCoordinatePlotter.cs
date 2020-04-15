@@ -18,6 +18,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject PointPrefab;
 	public GameObject PointHolder;
 	public GameObject LinePrefab;
+	public GameObject TargetFeatureList;
 	private Color targetColor;
 	private List<string> targetFeatures = new List<string>();
 	private string columnName;
@@ -73,6 +74,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		column4Text.text = featureList[3];
 
 		GetDistinctTargetFeatures();
+
+		// Instantiate a list of targetFeatures to the side of the plot
+		foreach (var targetFeature in targetFeatures)
+		{
+
+		}
 
 		// Run the default startup plot
 		for (int i = 1; i <= 4; i++)

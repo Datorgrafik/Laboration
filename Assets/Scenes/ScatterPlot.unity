@@ -791,7 +791,7 @@ MonoBehaviour:
 
     W A S D - Movement
 
-    CTRL . Down
+    CTRL - Down
 
     Space - Up
 
@@ -873,7 +873,7 @@ MonoBehaviour:
     characterCount: 139
     spriteCount: 0
     spaceCount: 29
-    wordCount: 29
+    wordCount: 30
     linkCount: 0
     lineCount: 7
     pageCount: 1

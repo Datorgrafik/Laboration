@@ -18,7 +18,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject PointPrefab;
 	public GameObject PointHolder;
 	public GameObject LinePrefab;
-	public GameObject TargetFeatureList;
+	public GameObject TargetFeaturePrefab;
 	private Color targetColor;
 	private List<string> targetFeatures = new List<string>();
 	private string columnName;
@@ -50,7 +50,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		featureList.AddRange(columnList);
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
-		
+
 		// Assign column name from columnList to Name variables
 		column1.AddOptions(featureList);
 		column1.value = 0;
@@ -76,19 +76,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		GetDistinctTargetFeatures();
 
-		// Instantiate a list of targetFeatures to the side of the plot
-		foreach (var targetFeature in targetFeatures)
-		{
-
-		}
+		InstantiateTargetFeatureList();
 
 		// Run the default startup plot
 		for (int i = 1; i <= 4; i++)
 		{
-			PlotData(i-1, i);
+			PlotData(i - 1, i);
 		}
 	}
-	
+
 	private void GetDistinctTargetFeatures()
 	{
 		// Add targetFeatures to a seperate list
@@ -99,6 +95,39 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Only keep distinct targetFeatures
 		targetFeatures = targetFeatures.Distinct().ToList();
+	}
+
+	private void InstantiateTargetFeatureList()
+	{
+		float targetXpos = 17f;
+		float targetYpos = 8f;
+		float targetZpos = 0f;
+		Color color = Color.black;
+
+		// Instantiate a list of targetFeatures to the side of the plot
+		foreach (var targetFeature in targetFeatures)
+		{
+			// Instantiate targetFeaturePoint and name it
+			GameObject targetFeaturePoint = Instantiate(TargetFeaturePrefab, new Vector3(targetXpos, targetYpos, targetZpos), Quaternion.identity);
+			targetFeaturePoint.name = targetFeature;
+
+			// Get correct color
+			if (targetFeature == targetFeatures[0])
+				color = new Color(0.9921569f, 0.9058824f, 0.1333333f);
+			else if (targetFeature == targetFeatures[1])
+				color = new Color(0.1333333f, 0.5647059f, 0.5490196f);
+			else if (targetFeature == targetFeatures[2])
+				color = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+
+			// Set color and text
+			targetFeaturePoint.GetComponentInChildren<Renderer>().material.color = color;
+			TextMeshPro text = targetFeaturePoint.GetComponentInChildren<TextMeshPro>();
+			text.text = targetFeature;
+			text.color = color;
+
+			// Change Y-Position for next targetFeature in the loop
+			targetYpos -= 1f;
+		}
 	}
 
 	private void PlotData(int column, int columnPos)

@@ -7,7 +7,7 @@ using UnityEngine;
 
 //Plagiatvarning här med?
 
-public class kNN : MonoBehaviour
+public class kNN 
 {
     private static List<string> attributes;
 
@@ -26,7 +26,6 @@ List<Dictionary<string, object>> trainData, int k)
             curr.dist = dist;
             info[i] = curr;
         }
-
         object result = VoteReg(info, trainData, k);
         return result;
     }
@@ -87,7 +86,6 @@ List<Dictionary<string, object>> trainData, int k)
         }
         return sum / k;
     }
-
 
     static double Distance(double[] unknown,
       Dictionary<string, object> data)

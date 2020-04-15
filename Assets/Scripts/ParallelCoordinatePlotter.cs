@@ -18,6 +18,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject PointPrefab;
 	public GameObject PointHolder;
 	public GameObject LinePrefab;
+	public GameObject TargetFeaturePrefab;
 	private Color targetColor;
 	private List<string> targetFeatures = new List<string>();
 	private string columnName;
@@ -37,18 +38,19 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		// Set pointlist to results of function Reader with argument inputfile
-		pointList = CSVläsare.Read(MainMenu.fileData);
+        // Set pointlist to results of function Reader with argument inputfile
+        DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+        pointList = dataClass.CSV;
 
-		// Declare list of strings, fill with keys (column names)
-		columnList = new List<string>(pointList[1].Keys);
+        // Declare list of strings, fill with keys (column names)
+        columnList = new List<string>(pointList[1].Keys);
 
 		// FeatureList without first or last index: Id / TargetColumn
 		featureList = new List<string>();
 		featureList.AddRange(columnList);
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
-		
+
 		// Assign column name from columnList to Name variables
 		column1.AddOptions(featureList);
 		column1.value = 0;
@@ -74,13 +76,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		GetDistinctTargetFeatures();
 
+		InstantiateTargetFeatureList();
+
 		// Run the default startup plot
 		for (int i = 1; i <= 4; i++)
 		{
-			PlotData(i-1, i);
+			PlotData(i - 1, i);
 		}
 	}
-	
+
 	private void GetDistinctTargetFeatures()
 	{
 		// Add targetFeatures to a seperate list
@@ -91,6 +95,39 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Only keep distinct targetFeatures
 		targetFeatures = targetFeatures.Distinct().ToList();
+	}
+
+	private void InstantiateTargetFeatureList()
+	{
+		float targetXpos = 17f;
+		float targetYpos = 8f;
+		float targetZpos = 0f;
+		Color color = Color.black;
+
+		// Instantiate a list of targetFeatures to the side of the plot
+		foreach (var targetFeature in targetFeatures)
+		{
+			// Instantiate targetFeaturePoint and name it
+			GameObject targetFeaturePoint = Instantiate(TargetFeaturePrefab, new Vector3(targetXpos, targetYpos, targetZpos), Quaternion.identity);
+			targetFeaturePoint.name = targetFeature;
+
+			// Get correct color
+			if (targetFeature == targetFeatures[0])
+				color = new Color(0.9921569f, 0.9058824f, 0.1333333f);
+			else if (targetFeature == targetFeatures[1])
+				color = new Color(0.1333333f, 0.5647059f, 0.5490196f);
+			else if (targetFeature == targetFeatures[2])
+				color = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+
+			// Set color and text
+			targetFeaturePoint.GetComponentInChildren<Renderer>().material.color = color;
+			TextMeshPro text = targetFeaturePoint.GetComponentInChildren<TextMeshPro>();
+			text.text = targetFeature;
+			text.color = color;
+
+			// Change Y-Position for next targetFeature in the loop
+			targetYpos -= 1f;
+		}
 	}
 
 	private void PlotData(int column, int columnPos)
@@ -186,14 +223,24 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private Color SetColors(List<string> targetFeatures, int i)
 	{
 		Color targetColor;
-		if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
-			targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
-		else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
-			targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
-		else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
-			targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+		float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+		float colorValue = 1 / (index + 1);
+
+		if (index % 3 == 0)
+			targetColor = new Color(0, colorValue, 0);
+		else if (index % 3 == 1)
+			targetColor = new Color(0, 0, colorValue);
+		else if (index % 3 == 2)
+			targetColor = new Color(colorValue, 0, 0);
 		else
 			targetColor = Color.black;
+
+		//if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
+		//	targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
+		//else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
+		//	targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
+		//else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
+		//	targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
 
 		return targetColor;
 	}

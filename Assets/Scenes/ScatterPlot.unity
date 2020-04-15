@@ -791,17 +791,15 @@ MonoBehaviour:
 
     W A S D - Movement
 
-    CTRL . Down
+    CTRL - Down
 
     Space - Up
 
-    Right
-    click - Camera movement
+    Right click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted
-    Databall'
+    E - Move targeted Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -873,7 +871,7 @@ MonoBehaviour:
     characterCount: 139
     spriteCount: 0
     spaceCount: 29
-    wordCount: 29
+    wordCount: 30
     linkCount: 0
     lineCount: 7
     pageCount: 1

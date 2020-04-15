@@ -6486,11 +6486,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   columnList: []
+  featureList: []
   plotScale: 10
   PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,
     type: 3}
   PointHolder: {fileID: 1701465377}
   LinePrefab: {fileID: 691959262909666679, guid: ff91df615aff9644aa7268a2dfb222e6,
+    type: 3}
+  TargetFeaturePrefab: {fileID: 1585714160290058712, guid: 0e39cea1edded674a98943ade14754c1,
     type: 3}
   column1: {fileID: 964748675}
   column2: {fileID: 1205685613}

@@ -49,7 +49,8 @@ public class DataPlotter : MonoBehaviour
 	{
 		// Set pointlist to results of function Reader with argument inputfile
 		//Debug.Log(MainMenu.fileData);
-		pointList = CSVläsare.Read(MainMenu.fileData);
+		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+        pointList = dataClass.CSV;
 
 		//Log to console
 		//Debug.Log(pointList);

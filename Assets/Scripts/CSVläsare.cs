@@ -56,7 +56,7 @@ public class CSVläsare
                 {
                     finalvalue = n;
                 }
-                else if (float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
+                else if (float.TryParse(value, out f))
                 {
                     finalvalue = f;
                 }
@@ -64,10 +64,10 @@ public class CSVläsare
             }
             list.Add(entry); // Add Dictionary ("entry" variable) to list
             }
-
+            float r;
             DataClass dataClass;
             columnList = new List<string>(list[0].Keys);
-            if (list[list.Count - 1][columnList[columnList.Count - 1]] is double)
+            if (float.TryParse(list[list.Count - 1][columnList[columnList.Count - 1]].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out r))
             {
                 dataClass = new Regression(list);
             }

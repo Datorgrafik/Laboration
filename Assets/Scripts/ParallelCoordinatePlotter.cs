@@ -19,6 +19,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject PointHolder;
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
+	public TMP_Text valuePrefab;
 	private Color targetColor;
 	private List<string> targetFeatures = new List<string>();
 	private string columnName;
@@ -38,12 +39,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-        // Set pointlist to results of function Reader with argument inputfile
-        DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
-        pointList = dataClass.CSV;
+		// Set pointlist to results of function Reader with argument inputfile
+		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+		pointList = dataClass.CSV;
 
-        // Declare list of strings, fill with keys (column names)
-        columnList = new List<string>(pointList[1].Keys);
+		// Declare list of strings, fill with keys (column names)
+		columnList = new List<string>(pointList[1].Keys);
 
 		// FeatureList without first or last index: Id / TargetColumn
 		featureList = new List<string>();
@@ -78,10 +79,68 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		InstantiateTargetFeatureList();
 
+		DrawBackgroundGrid();
+
 		// Run the default startup plot
 		for (int i = 1; i <= 4; i++)
 		{
 			PlotData(i - 1, i);
+		}
+	}
+
+	private void DrawBackgroundGrid()
+	{
+		// Draw vertical lines
+		for (int i = 1; i <= 4; i++)
+		{
+			float xPos = SetColumnPosition(i);
+
+			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
+			xLine.transform.parent = PointHolder.transform;
+			xLine.transform.name = $"Column{i}Line";
+			LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
+			xLineRenderer.positionCount = 2;
+			xLineRenderer.startWidth = 0.025f;
+			xLineRenderer.endWidth = 0.025f;
+			xLineRenderer.SetPosition(0, new Vector3(xPos, -0.05f, -0.001f) * plotScale);
+			xLineRenderer.SetPosition(1, new Vector3(xPos, 1.05f, -0.001f) * plotScale);
+			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+		}
+
+		float yMax = 0f;
+		float yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
+
+		for (int i = 0; i < featureList.Count; i++)
+		{
+			float yMaxTempValue = FindMaxValue(featureList[i]);
+			if (yMaxTempValue > yMax)
+				yMax = yMaxTempValue;
+
+			float yMinTempValue = FindMinValue(featureList[i]);
+			if (yMinTempValue < yMin)
+				yMin = yMinTempValue;
+		}
+
+		// Draw horizontal lines
+		for (int i = 0; i <= 10; i++)
+		{
+			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
+			yLine.transform.parent = PointHolder.transform;
+			yLine.transform.name = $"Value{i}Line";
+			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
+			yLineRenderer.positionCount = 2;
+			yLineRenderer.startWidth = 0.025f;
+			yLineRenderer.endWidth = 0.025f;
+			yLineRenderer.SetPosition(0, new Vector3(0.1f, (float)i/10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(1, new Vector3(1.5f, (float)i/10, -0.001f) * plotScale);
+			yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+
+			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1.25f, 0 + i, 0), Quaternion.identity);
+			valuePointY.transform.name = $"Value{i}LineText";
+
+			float yValue = ((yMax - yMin) / 10) * i + yMin;
+
+			valuePointY.text = Convert.ToString(yValue);
 		}
 	}
 

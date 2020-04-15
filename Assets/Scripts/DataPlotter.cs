@@ -44,9 +44,17 @@ public class DataPlotter : MonoBehaviour
 	public List<string> targetFeatures;
 
 
+    public float xMax;
+    public float yMax;
+    public float zMax;
+    public float xMin;
+    public float yMin;
+    public float zMin;
+
+
     public static DataPlotter ThisInstans;
     public static DataClass dataClass;
-    private int selectedIndex;
+    private int selectedIndex = -1;
 
 	// Use this for initialization
 	void Start()
@@ -121,8 +129,6 @@ public class DataPlotter : MonoBehaviour
             Destroy(dataValues);
         }
 
-        List<List<string>> indexList = new List<List<string>>();
-
 		xName = columnList[xList.value];
 		yName = columnList[yList.value];
 
@@ -130,14 +136,14 @@ public class DataPlotter : MonoBehaviour
 		yAxisText.text = yName;
 
 		// Get maxes of each axis
-		float xMax = FindMaxValue(xName);
-		float yMax = FindMaxValue(yName);
-		float zMax = 0f;
+		xMax = FindMaxValue(xName);
+		yMax = FindMaxValue(yName);
+		zMax = 0f;
 
 		// Get minimums of each axis
-		float xMin = FindMinValue(xName);
-		float yMin = FindMinValue(yName);
-		float zMin = 0f;
+		xMin = FindMinValue(xName);
+		yMin = FindMinValue(yName);
+		zMin = 0f;
 
 		if (MainMenu.renderMode == 1)
 		{

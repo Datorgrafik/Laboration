@@ -795,13 +795,11 @@ MonoBehaviour:
 
     Space - Up
 
-    Right
-    click - Camera movement
+    Right click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted
-    Databall'
+    E - Move targeted Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3893,6 +3891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1714565334}
+  dataPlotter: {fileID: 813571230}
   inputX: {fileID: 1714565338}
   inputY: {fileID: 1714565337}
   inputZ: {fileID: 1714565336}

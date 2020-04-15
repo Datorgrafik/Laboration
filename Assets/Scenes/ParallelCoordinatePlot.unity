@@ -6495,6 +6495,8 @@ MonoBehaviour:
     type: 3}
   TargetFeaturePrefab: {fileID: 1585714160290058712, guid: 0e39cea1edded674a98943ade14754c1,
     type: 3}
+  valuePrefab: {fileID: 1957521861262652421, guid: 2b1a901be47aa0549bd376335453ce17,
+    type: 3}
   column1: {fileID: 964748675}
   column2: {fileID: 1205685613}
   column3: {fileID: 309578047}

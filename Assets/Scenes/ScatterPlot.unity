@@ -3893,6 +3893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1714565334}
+  dataPlotter: {fileID: 813571230}
   inputX: {fileID: 1714565338}
   inputY: {fileID: 1714565337}
   inputZ: {fileID: 1714565336}

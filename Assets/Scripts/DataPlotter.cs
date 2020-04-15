@@ -42,6 +42,8 @@ public class DataPlotter : MonoBehaviour
 	public List<string> columnList;
 	public List<string> targetFeatures;
 
+    private int selectedIndex;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -99,8 +101,13 @@ public class DataPlotter : MonoBehaviour
 		return maxValue;
 	}
 
-	private void PlottData()
+	public void PlottData()
 	{
+        if(TargetingScript.selectedTarget != null)
+        {
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
+        }
+
         GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
         foreach (GameObject dataValues in allDataBalls)
         {
@@ -190,7 +197,6 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
 				dataPoint.transform.parent = PointHolder.transform;
-				//indexList[i].Add(new List<string> { Convert.ToString(dataPoint.GetInstanceID()), pointList[i][] };
 			}
 			else
 			{
@@ -199,8 +205,9 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
 				dataPoint.transform.parent = PointHolder.transform;
-				//indexList[i].Add(new List<string> { Convert.ToString(dataPoint.GetInstanceID()), pointList[i] };
 			}
+
+            dataPoint.GetComponent<StoreIndexInDataBall>().SetIndex(i);
 
 			if (index % 3 == 0)
 			{
@@ -216,6 +223,15 @@ public class DataPlotter : MonoBehaviour
 				dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
 
 			}
+
+            if(selectedIndex == i)
+            {
+                TargetingScript.selectedTarget = dataPoint;
+                TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+                TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+                selectedIndex = -1;
+            }
 		}
 	}
 

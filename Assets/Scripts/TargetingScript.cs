@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class TargetingScript : MonoBehaviour {
-	private Color colorOff;
+	public static Color colorOff;
 	public static GameObject selectedTarget = null;
 	private EventSystem eventSys;
 

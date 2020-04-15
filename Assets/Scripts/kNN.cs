@@ -54,7 +54,7 @@ List<Dictionary<string, object>> trainData, int k)
     static object Vote(IndexAndDistance[] info,
       List<Dictionary<string, object>> trainData, int k)
     {
-        List<string> attributes = CSV.columnList;
+
         Dictionary<string, int> votes = new Dictionary<string, int>(); // One cell per class
         for (int i = 0; i < k; ++i)
         {       // Just first k

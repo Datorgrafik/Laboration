@@ -38,11 +38,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		// Set pointlist to results of function Reader with argument inputfile
-		pointList = CSVläsare.Read(MainMenu.fileData);
+        // Set pointlist to results of function Reader with argument inputfile
+        DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+        pointList = dataClass.CSV;
 
-		// Declare list of strings, fill with keys (column names)
-		columnList = new List<string>(pointList[1].Keys);
+        // Declare list of strings, fill with keys (column names)
+        columnList = new List<string>(pointList[1].Keys);
 
 		// FeatureList without first or last index: Id / TargetColumn
 		featureList = new List<string>();

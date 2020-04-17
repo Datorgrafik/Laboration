@@ -20,7 +20,6 @@ public class TargetingScript : MonoBehaviour {
 
 			foreach (RaycastHit hit in hits)
 			{
-                Debug.Log(hit.collider.tag);
                 if (hit.collider.CompareTag("DataBall"))
 				{
 					missTarget = false;

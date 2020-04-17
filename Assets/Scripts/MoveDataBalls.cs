@@ -42,10 +42,10 @@ public class MoveDataBalls : MonoBehaviour
                     mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
                     TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
                 }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    Denormalize();
-                }
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                Denormalize();
             }
         }
         else if (TargetingScript.selectedTarget != null)
@@ -94,7 +94,6 @@ public class MoveDataBalls : MonoBehaviour
             DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
         }
 
-        Debug.Log(newPosition);
         DataPlotter.ThisInstans.PlottData();
     }
 }

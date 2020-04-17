@@ -176,9 +176,10 @@ public class DataPlotter : MonoBehaviour
 				float xValue = ((xMax - xMin) / 10) * i + xMin;
 				float yValue = ((yMax - yMin) / 10) * i + yMin;
 
-				valuePointX.text = Convert.ToString(xValue);
-				valuePointY.text = Convert.ToString(yValue);
-			}
+                valuePointX.text = xValue.ToString("0.00"); 
+                valuePointY.text = yValue.ToString("0.00"); 
+
+            }
 		}
 
 

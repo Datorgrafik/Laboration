@@ -20,7 +20,7 @@ public class MoveDataBalls : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown(0))
         {
-            if(grabItem == true)
+            if (grabItem == true)
             {
                 Denormalize();
                 grabItem = false;
@@ -74,21 +74,27 @@ public class MoveDataBalls : MonoBehaviour
     private void Denormalize()
     {
         float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
-        string newPosition = (DataPlotter.ThisInstans.xMin + mellanskillnad * selectedTarget.transform.position.x).ToString();
+        string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+        newPosition = newPosition.Replace(',', '.');
         index = selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
-        DataPlotter.pointList[index][DataPlotter.xName] = newValue;
+        DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
 
         mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
-        newPosition = (DataPlotter.ThisInstans.yMin + mellanskillnad * selectedTarget.transform.position.y).ToString();
+        newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+        newPosition = newPosition.Replace(',', '.');
         index = selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
-        DataPlotter.pointList[index][DataPlotter.xName] = newValue;
+        DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
 
-        if(MainMenu.renderMode == 1)
+        if (MainMenu.renderMode == 1)
         {
             mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
-            newPosition = (DataPlotter.ThisInstans.zMin + mellanskillnad * selectedTarget.transform.position.z).ToString();
+            newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
             index = selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
-            DataPlotter.pointList[index][DataPlotter.xName] = newValue;
+            DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
         }
+
+        Debug.Log(newPosition);
+        DataPlotter.ThisInstans.PlottData();
     }
 }

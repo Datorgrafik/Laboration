@@ -39,13 +39,11 @@ public class EditPosition : MonoBehaviour
 
 			string[] newName = TargetingScript.selectedTarget.name.Split(' ');
 
-			Xvalue.text = newName[0];
-			Yvalue.text = newName[1];
+            Denormalize();
 
 			if (MainMenu.renderMode == 1)
 			{
 				Zname.text = DataPlotter.zName;
-				Zvalue.text = newName[2];
 			}
 
             if (!addedListener)
@@ -67,6 +65,7 @@ public class EditPosition : MonoBehaviour
 		if (inputX.text.Length > 0)
 		{
 			newValue = inputX.GetComponent<InputField>().text;
+            newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
             DataPlotter.pointList[index][DataPlotter.xName] = newValue;
         }
@@ -74,6 +73,7 @@ public class EditPosition : MonoBehaviour
 		if (inputY.text.Length > 0)
 		{
 			newValue = inputY.GetComponent<InputField>().text;
+            newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
             DataPlotter.pointList[index][DataPlotter.yName] = newValue;
         }
@@ -83,12 +83,26 @@ public class EditPosition : MonoBehaviour
 			if (inputZ.text.Length > 0)
 			{
 				newValue = inputZ.GetComponent<InputField>().text;
-
+                newValue = newValue.Replace(',', '.');
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
                 DataPlotter.pointList[index][DataPlotter.zName] = newValue;
 			}
 		}
 
         dataPlotter.GetComponent<DataPlotter>().PlottData();
+    }
+
+    private void Denormalize()
+    {
+        float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
+        Xvalue.text = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+
+        mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
+        Yvalue.text = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10 ).ToString();
+        if (MainMenu.renderMode == 1)
+        {
+            mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
+            Zvalue.text = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+        }
     }
 }

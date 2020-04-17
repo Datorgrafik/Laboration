@@ -19,6 +19,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject PointHolder;
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
+	public TMP_Text valuePrefab;
 	private Color targetColor;
 	private List<string> targetFeatures = new List<string>();
 	private string columnName;
@@ -38,12 +39,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-        // Set pointlist to results of function Reader with argument inputfile
-        DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
-        pointList = dataClass.CSV;
+		// Set pointlist to results of function Reader with argument inputfile
+		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+		pointList = dataClass.CSV;
 
-        // Declare list of strings, fill with keys (column names)
-        columnList = new List<string>(pointList[1].Keys);
+		// Declare list of strings, fill with keys (column names)
+		columnList = new List<string>(pointList[1].Keys);
 
 		// FeatureList without first or last index: Id / TargetColumn
 		featureList = new List<string>();
@@ -51,6 +52,29 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
 
+		AddDropdownListeners();
+
+		// Default values for each columntext at start
+		column1Text.text = featureList[0];
+		column2Text.text = featureList[1];
+		column3Text.text = featureList[2];
+		column4Text.text = featureList[3];
+
+		GetDistinctTargetFeatures();
+
+		InstantiateTargetFeatureList();
+
+		DrawBackgroundGrid();
+
+		// Run the default startup plot
+		for (int i = 1; i <= 4; i++)
+		{
+			PlotData(i - 1, i);
+		}
+	}
+
+	private void AddDropdownListeners()
+	{
 		// Assign column name from columnList to Name variables
 		column1.AddOptions(featureList);
 		column1.value = 0;
@@ -67,21 +91,65 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		column4.AddOptions(featureList);
 		column4.value = 3;
 		column4.onValueChanged.AddListener(delegate { column4Text.text = featureList[column4.value]; });
+	}
 
-		// Default values for each columntext at start
-		column1Text.text = featureList[0];
-		column2Text.text = featureList[1];
-		column3Text.text = featureList[2];
-		column4Text.text = featureList[3];
-
-		GetDistinctTargetFeatures();
-
-		InstantiateTargetFeatureList();
-
-		// Run the default startup plot
+	private void DrawBackgroundGrid()
+	{
+		// Draw vertical lines
 		for (int i = 1; i <= 4; i++)
 		{
-			PlotData(i - 1, i);
+			float xPos = SetColumnPosition(i);
+
+			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
+			xLine.transform.parent = PointHolder.transform;
+			xLine.transform.name = $"Column{i}Line";
+			
+			LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
+			xLineRenderer.positionCount = 2;
+			xLineRenderer.startWidth = 0.025f;
+			xLineRenderer.endWidth = 0.025f;
+			xLineRenderer.SetPosition(0, new Vector3(xPos, -0.05f, -0.001f) * plotScale);
+			xLineRenderer.SetPosition(1, new Vector3(xPos, 1.05f, -0.001f) * plotScale);
+			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+		}
+
+		float yMax = 0f;
+		float yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
+
+		// Find and render Max- & Min-values on Y-Axis
+		for (int i = 0; i < featureList.Count; i++)
+		{
+			Debug.Log(featureList[i]);
+			float yMaxTempValue = FindMaxValue(featureList[i]);
+			if (yMaxTempValue > yMax)
+				yMax = yMaxTempValue;
+
+			float yMinTempValue = FindMinValue(featureList[i]);
+			if (yMinTempValue < yMin)
+				yMin = yMinTempValue;
+		}
+
+		// Draw horizontal lines
+		for (int i = 0; i <= 10; i++)
+		{
+			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
+			yLine.transform.parent = PointHolder.transform;
+			yLine.transform.name = $"Value{i}Line";
+			
+			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
+			yLineRenderer.positionCount = 2;
+			yLineRenderer.startWidth = 0.025f;
+			yLineRenderer.endWidth = 0.025f;
+			yLineRenderer.SetPosition(0, new Vector3(0.1f, (float)i/10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(1, new Vector3(1.5f, (float)i/10, -0.001f) * plotScale);
+			yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+
+			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1.25f, 0 + i, 0), Quaternion.identity);
+			valuePointY.transform.name = $"Value{i}LineText";
+
+			float yValue = ((yMax - yMin) / 10) * i + yMin;
+
+			valuePointY.text = Convert.ToString(yValue);
 		}
 	}
 
@@ -102,7 +170,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		float targetXpos = 17f;
 		float targetYpos = 8f;
 		float targetZpos = 0f;
-		Color color = Color.black;
+		Color targetColor;
 
 		// Instantiate a list of targetFeatures to the side of the plot
 		foreach (var targetFeature in targetFeatures)
@@ -111,19 +179,23 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			GameObject targetFeaturePoint = Instantiate(TargetFeaturePrefab, new Vector3(targetXpos, targetYpos, targetZpos), Quaternion.identity);
 			targetFeaturePoint.name = targetFeature;
 
-			// Get correct color
-			if (targetFeature == targetFeatures[0])
-				color = new Color(0.9921569f, 0.9058824f, 0.1333333f);
-			else if (targetFeature == targetFeatures[1])
-				color = new Color(0.1333333f, 0.5647059f, 0.5490196f);
-			else if (targetFeature == targetFeatures[2])
-				color = new Color(0.2627451f, 0.0509804f, 0.3254902f);
+			float index = targetFeatures.IndexOf(targetFeature.ToString());
+			float colorValue = 1 / (index + 1);
+
+			if (index % 3 == 0)
+				targetColor = new Color(0, colorValue, 0);
+			else if (index % 3 == 1)
+				targetColor = new Color(0, 0, colorValue);
+			else if (index % 3 == 2)
+				targetColor = new Color(colorValue, 0, 0);
+			else
+				targetColor = Color.black;
 
 			// Set color and text
-			targetFeaturePoint.GetComponentInChildren<Renderer>().material.color = color;
+			targetFeaturePoint.GetComponentInChildren<Renderer>().material.color = targetColor;
 			TextMeshPro text = targetFeaturePoint.GetComponentInChildren<TextMeshPro>();
 			text.text = targetFeature;
-			text.color = color;
+			text.color = targetColor;
 
 			// Change Y-Position for next targetFeature in the loop
 			targetYpos -= 1f;
@@ -235,13 +307,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		else
 			targetColor = Color.black;
 
-		//if (pointList[i][columnList[5]].ToString() == targetFeatures[0])
-		//	targetColor = new Color(0.9921569f, 0.9058824f, 0.1333333f);
-		//else if (pointList[i][columnList[5]].ToString() == targetFeatures[1])
-		//	targetColor = new Color(0.1333333f, 0.5647059f, 0.5490196f);
-		//else if (pointList[i][columnList[5]].ToString() == targetFeatures[2])
-		//	targetColor = new Color(0.2627451f, 0.0509804f, 0.3254902f);
-
 		return targetColor;
 	}
 
@@ -254,8 +319,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		{
 			string maxValueStringLoop = pointList[i][columnName].ToString();
 
-			if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
-				maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
+			try
+			{
+				if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
+					maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
+			}
+			catch (Exception)
+			{
+				// Catches '?' as missing values that cannot be converted to floats in the dataset.
+			}
 		}
 
 		return maxValue;
@@ -270,8 +342,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		{
 			string minValueStringLoop = pointList[i][columnName].ToString();
 
-			if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
-				minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
+			try
+			{
+				if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
+					minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
+			}
+			catch (Exception)
+			{
+				// Catches '?' as missing values that cannot be converted to floats in the dataset.
+			}
 		}
 
 		return minValue;
@@ -287,6 +366,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			Destroy(databall);
 		}
 
+		// Plot data for the four selected columns
 		PlotData(column1.value, 1);
 		PlotData(column2.value, 2);
 		PlotData(column3.value, 3);

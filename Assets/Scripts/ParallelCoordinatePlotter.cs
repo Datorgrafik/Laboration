@@ -103,6 +103,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
 			xLine.transform.parent = PointHolder.transform;
 			xLine.transform.name = $"Column{i}Line";
+			
 			LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
 			xLineRenderer.positionCount = 2;
 			xLineRenderer.startWidth = 0.025f;
@@ -115,6 +116,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		float yMax = 0f;
 		float yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
 
+		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
 		{
 			Debug.Log(featureList[i]);
@@ -133,6 +135,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
 			yLine.transform.parent = PointHolder.transform;
 			yLine.transform.name = $"Value{i}Line";
+			
 			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
 			yLineRenderer.positionCount = 2;
 			yLineRenderer.startWidth = 0.025f;
@@ -363,6 +366,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			Destroy(databall);
 		}
 
+		// Plot data for the four selected columns
 		PlotData(column1.value, 1);
 		PlotData(column2.value, 2);
 		PlotData(column3.value, 3);

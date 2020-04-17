@@ -11,8 +11,8 @@ public class DataPlotter : MonoBehaviour
 {
 	public static List<Dictionary<string, object>> pointList;
 
-	// Indices for columns to be assigned
-	public int columnX = 1;
+    // Indices for columns to be assigned
+    public int columnX = 1;
 	public int columnY = 2;
 	public int columnZ = 3;
 
@@ -58,7 +58,6 @@ public class DataPlotter : MonoBehaviour
 
 	// Use this for initialization
 	void Start()
-
 	{
 		// Set pointlist to results of function Reader with argument inputfile
 		//Debug.Log(MainMenu.fileData);
@@ -71,7 +70,6 @@ public class DataPlotter : MonoBehaviour
 
         // Declare list of strings, fill with keys (column names)
         columnList = new List<string>(pointList[1].Keys);
-
 		// Print number of keys (using .count)
 		//Debug.Log("There are " + columnList.Count + " columns in CSV");
 

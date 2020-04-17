@@ -9,12 +9,13 @@ using UnityEngine;
 
 public class kNN 
 {
-    private static List<string> attributes;
+    public static List<string> attributes;
 
     static public object ClassifyReg(double[] unknown,
 List<Dictionary<string, object>> trainData, int k)
     {
-        attributes = new List<string>(trainData[0].Keys);
+        if (attributes.Count == 0)
+            attributes = new List<string>(trainData[0].Keys);
 
         int n = trainData.Count;
         IndexAndDistance[] info = new IndexAndDistance[n];

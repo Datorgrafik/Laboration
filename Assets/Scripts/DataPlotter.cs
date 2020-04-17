@@ -227,7 +227,7 @@ public class DataPlotter : MonoBehaviour
 			}
 			else if (index % 3 == 1)
 			{
-				dataPoint.GetComponent<Renderer>().material.color = new Color(0, 1, colorValue, 1.0f);
+				dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
 
 			}
 			else if (index % 3 == 2)

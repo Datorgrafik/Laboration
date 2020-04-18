@@ -41,13 +41,9 @@ public class EditPosition : MonoBehaviour
 
             Denormalize();
 
-			//Xvalue.text = newName[0];
-			//Yvalue.text = newName[1];
-
 			if (MainMenu.renderMode == 1)
 			{
 				Zname.text = DataPlotter.zName;
-				//Zvalue.text = newName[2];
 			}
 
             if (!addedListener)
@@ -70,7 +66,7 @@ public class EditPosition : MonoBehaviour
 		{
 			newValue = inputX.GetComponent<InputField>().text;
             newValue = newValue.Replace(',', '.');
-            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
+            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
             DataPlotter.pointList[index][DataPlotter.xName] = newValue;
         }
 
@@ -78,7 +74,7 @@ public class EditPosition : MonoBehaviour
 		{
 			newValue = inputY.GetComponent<InputField>().text;
             newValue = newValue.Replace(',', '.');
-            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
+            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
             DataPlotter.pointList[index][DataPlotter.yName] = newValue;
         }
 
@@ -88,7 +84,7 @@ public class EditPosition : MonoBehaviour
 			{
 				newValue = inputZ.GetComponent<InputField>().text;
                 newValue = newValue.Replace(',', '.');
-                int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
+                int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
                 DataPlotter.pointList[index][DataPlotter.zName] = newValue;
 			}
 		}

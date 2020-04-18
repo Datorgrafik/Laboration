@@ -120,7 +120,7 @@ public class DataPlotter : MonoBehaviour
 	{
         if(TargetingScript.selectedTarget != null)
         {
-            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
         }
 
         GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
@@ -220,7 +220,8 @@ public class DataPlotter : MonoBehaviour
 				dataPoint.transform.parent = PointHolder.transform;
 			}
 
-            dataPoint.GetComponent<StoreIndexInDataBall>().SetIndex(i);
+            dataPoint.GetComponent<StoreIndexInDataBall>().index= i;
+			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
 			if (index % 3 == 0)
 			{

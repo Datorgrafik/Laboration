@@ -11,8 +11,8 @@ public class DataPlotter : MonoBehaviour
 {
 	public static List<Dictionary<string, object>> pointList;
 
-	// Indices for columns to be assigned
-	public int columnX = 1;
+    // Indices for columns to be assigned
+    public int columnX = 1;
 	public int columnY = 2;
 	public int columnZ = 3;
 
@@ -58,7 +58,6 @@ public class DataPlotter : MonoBehaviour
 
 	// Use this for initialization
 	void Start()
-
 	{
 		// Set pointlist to results of function Reader with argument inputfile
 		//Debug.Log(MainMenu.fileData);
@@ -71,7 +70,6 @@ public class DataPlotter : MonoBehaviour
 
         // Declare list of strings, fill with keys (column names)
         columnList = new List<string>(pointList[1].Keys);
-
 		// Print number of keys (using .count)
 		//Debug.Log("There are " + columnList.Count + " columns in CSV");
 
@@ -176,9 +174,10 @@ public class DataPlotter : MonoBehaviour
 				float xValue = ((xMax - xMin) / 10) * i + xMin;
 				float yValue = ((yMax - yMin) / 10) * i + yMin;
 
-				valuePointX.text = Convert.ToString(xValue);
-				valuePointY.text = Convert.ToString(yValue);
-			}
+                valuePointX.text = xValue.ToString("0.00"); 
+                valuePointY.text = yValue.ToString("0.00"); 
+
+            }
 		}
 
 
@@ -229,7 +228,7 @@ public class DataPlotter : MonoBehaviour
 			}
 			else if (index % 3 == 1)
 			{
-				dataPoint.GetComponent<Renderer>().material.color = new Color(0, 1, colorValue, 1.0f);
+				dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
 
 			}
 			else if (index % 3 == 2)

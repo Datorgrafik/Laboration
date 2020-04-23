@@ -12,7 +12,7 @@ public class KNN : MonoBehaviour
     public Toggle weights;
     //public static Toggle staticWeights { get { return instance.myNormalVar; } }
     public InputField k;
-    public static List<Dictionary<string, object>> PointsToColor;
+    //public static List<Dictionary<string, object>> PointsToColor;
 
     void Start()
     {
@@ -60,7 +60,7 @@ List<Dictionary<string, object>> trainData)
     static object Vote(IndexAndDistance[] info,
       List<Dictionary<string, object>> trainData, int k)
     {
-        PointsToColor.Clear();
+        //PointsToColor.Clear();
         Dictionary<string, int> votes = new Dictionary<string, int>(); // One cell per class
         for (int i = 0; i < k; ++i)
         {       // Just first k
@@ -74,7 +74,7 @@ List<Dictionary<string, object>> trainData)
             {
                 votes.Add(c, 1);
             }
-            ColorPoint((GameObject)trainData[i]["DataBall"]);
+            //ColorPoint((GameObject)trainData[i]["DataBall"]);
         }
         var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
         return Maxvotes;
@@ -90,7 +90,7 @@ List<Dictionary<string, object>> trainData)
             int idx = info[i].idx;
             double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
             sum += c;
-            ColorPoint((GameObject)trainData[i]["DataBall"] as GameObject);
+           // ColorPoint((GameObject)trainData[i]["DataBall"] as GameObject);
         }
         return sum / k;
     }

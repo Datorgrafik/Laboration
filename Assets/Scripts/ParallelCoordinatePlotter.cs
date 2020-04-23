@@ -146,11 +146,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
 		{
-			float yMaxTempValue = FindMaxValue(featureList[i]);
+			float yMaxTempValue = FindMinMaxValue.FindMaxValue(featureList[i], pointList);
 			if (yMaxTempValue > yMax)
 				yMax = yMaxTempValue;
 
-			float yMinTempValue = FindMinValue(featureList[i]);
+			float yMinTempValue = FindMinMaxValue.FindMinValue(featureList[i], pointList);
 			if (yMinTempValue < yMin)
 				yMin = yMinTempValue;
 		}
@@ -237,9 +237,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		float xPos = SetColumnPosition(columnPos);
 
 		// Get MaxValue
-		float columnMax = FindMaxValue(columnName);
+		float columnMax = FindMinMaxValue.FindMaxValue(columnName, pointList);
 		// Get MinValue
-		float columnMin = FindMinValue(columnName);
+		float columnMin = FindMinMaxValue.FindMinValue(columnName, pointList);
 
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)
@@ -335,56 +335,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			targetColor = Color.black;
 
 		return targetColor;
-	}
-
-	private float FindMaxValue(string columnName)
-	{
-		string maxValueString = pointList[0][columnName].ToString();
-		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
-
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string maxValueStringLoop = pointList[i][columnName].ToString();
-
-			try
-			{
-				if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
-					maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				// Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
-				// Removes the instance with the missing value
-				pointList.RemoveAt(i);
-			}
-		}
-
-		return maxValue;
-	}
-
-	private float FindMinValue(string columnName)
-	{
-		string minValueString = pointList[0][columnName].ToString();
-		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
-
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string minValueStringLoop = pointList[i][columnName].ToString();
-
-			try
-			{
-				if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
-					minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				// Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
-				// Removes the instance with the missing value
-				pointList.RemoveAt(i);
-			}
-		}
-
-		return minValue;
 	}
 
 	public void ReorderColumns()

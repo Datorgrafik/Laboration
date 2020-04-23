@@ -17,7 +17,6 @@ public static class FindMinMaxValue
         {
             string maxValueStringLoop = pointList[i][columnName].ToString();
 
-
             try
             {
                 if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
@@ -25,7 +24,9 @@ public static class FindMinMaxValue
             }
             catch (Exception)
             {
-                pointList[i][columnName] = pointList[i - 1][columnName];
+                // Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
+                // Removes the instance with the missing value
+                pointList.RemoveAt(i);
             }
         }
 
@@ -50,7 +51,9 @@ public static class FindMinMaxValue
             }
             catch (Exception)
             {
-                pointList[i][columnName] = pointList[i - 1][columnName];
+                // Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
+                // Removes the instance with the missing value
+                pointList.RemoveAt(i);
             }
         }
 

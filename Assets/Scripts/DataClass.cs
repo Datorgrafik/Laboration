@@ -11,5 +11,5 @@ public abstract class DataClass
         CSV = data;
     }
 
-    public abstract object Knn(double[] unknown, int k);
+    public abstract object Knn(double[] unknown);
 }

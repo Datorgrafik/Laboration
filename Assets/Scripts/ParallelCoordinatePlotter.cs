@@ -66,6 +66,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		featureList.RemoveAt(0);
 		nFeatures = featureList.Count;
 
+		// Set correct number of vertices in LinePrefab depending on dataset
+		if (nFeatures <= 4)
+			LinePrefab.GetComponent<LineRenderer>().positionCount = nFeatures;
+		else
+			LinePrefab.GetComponent<LineRenderer>().positionCount = 4;
+
+		// Add attributes to lists for easier initial management
 		columnTextList = new List<TMP_Text>()
 		{
 			column1Text,
@@ -73,7 +80,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			column3Text,
 			column4Text
 		};
-
 		columnDropdownList = new List<Dropdown>()
 		{
 			column1,
@@ -100,9 +106,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		DrawBackgroundGrid();
 
 		// Run the default startup plot
-		for (int i = 1; i <= 4; i++)
+		for (int i = 0; i < nFeatures; i++)
 		{
-			PlotData(i - 1, i);
+			PlotData(i, i + 1);
+
+			if (i + 1 == 4)
+				break;
 		}
 	}
 
@@ -394,11 +403,14 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			Destroy(databall);
 		}
 
-		// Plot data for the four selected columns
-		PlotData(column1.value, 1);
-		PlotData(column2.value, 2);
-		PlotData(column3.value, 3);
-		PlotData(column4.value, 4);
+		// Plot data for the selected columns
+		for (int i = 0; i < nFeatures; i++)
+		{
+			PlotData(columnDropdownList[i].value, i+1);
+
+			if (i + 1 == 4)
+				break;
+		}
 	}
 
 	#endregion

@@ -70,7 +70,6 @@ public class MainMenu : MonoBehaviour
 
 	public void QuitApplication()
 	{
-		Debug.Log("QUIT...");
 		Application.Quit();
 	}
 }

@@ -39,6 +39,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	// ChangePanel Lists
 	public List<TMP_Text> ChangePanelColumnText = new List<TMP_Text>();
+	public List<TMP_Text> ChangePanelColumnValueText = new List<TMP_Text>();
 	public List<TMP_InputField> ChangePanelColumnInputfield = new List<TMP_InputField>();
 
 	#endregion

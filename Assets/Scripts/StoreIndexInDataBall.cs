@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class StoreIndexInDataBall : MonoBehaviour
 {
-    int index;
-
-    public void SetIndex(int index)
-    {
-        this.index = index;
-    }
-
-    public int GetIndex() { return this.index; }
+    public int index { get; set; }
+    public string TargetFeature { get; set; }
+    public int targetFeatureIndex { get; set; }
 }

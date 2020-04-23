@@ -121,7 +121,7 @@ public class DataPlotter : MonoBehaviour
 	{
         if(TargetingScript.selectedTarget != null)
         {
-            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().GetIndex();
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
         }
 
         GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
@@ -204,9 +204,6 @@ public class DataPlotter : MonoBehaviour
 				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
 			}
 
-			float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
-			float colorValue = 1 / (index + 1);
-
 			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
@@ -226,31 +223,38 @@ public class DataPlotter : MonoBehaviour
                     pointList[i]["DataBall"] = dataPoint;
 			}
 
-            dataPoint.GetComponent<StoreIndexInDataBall>().SetIndex(i);
+			dataPoint.GetComponent<StoreIndexInDataBall>().index = i;
+			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
-			if (index % 3 == 0)
+			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+			ChangeColor(dataPoint, index);
+
+			if (selectedIndex == i)
 			{
-				dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
+				TargetingScript.selectedTarget = dataPoint;
+				TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+				TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+				TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+				selectedIndex = -1;
 			}
-			else if (index % 3 == 1)
-			{
-				dataPoint.GetComponent<Renderer>().material.color = new Color(0, 1, colorValue, 1.0f);
+		}
+	}
 
-			}
-			else if (index % 3 == 2)
-			{
-				dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
+	public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
+	{
+		float colorValue = (float)1 / (targetFeatureIndex + 1);
 
-			}
-
-            if(selectedIndex == i)
-            {
-                TargetingScript.selectedTarget = dataPoint;
-                TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
-                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
-                TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
-                selectedIndex = -1;
-            }
+		if (targetFeatureIndex % 3 == 0)
+		{
+			dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
+		}
+		else if (targetFeatureIndex % 3 == 1)
+		{
+			dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
+		}
+		else if (targetFeatureIndex % 3 == 2)
+		{
+			dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
 		}
 	}
 

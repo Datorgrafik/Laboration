@@ -6,15 +6,11 @@ using UnityEngine.EventSystems;
 public class MoveDataBalls : MonoBehaviour
 {
 	private bool grabItem = false;
-	private Vector3 pointOnScreen;
-	private Vector3 ObjectPoint;
     private Vector3 mousePosition;
     private GameObject selectedTarget;
     private EventSystem eventSys;
 
     private float timeChecker = 0f;
-
-    private float newValue;
     private int index;
 
     // Update is called once per frame

@@ -293,7 +293,7 @@ public class DataPlotter : MonoBehaviour
 
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
 
-        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)));
+        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture))+1);
 
         Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
 
@@ -325,7 +325,7 @@ public class DataPlotter : MonoBehaviour
         {
             datapoints.Add(child.gameObject);
         }
-        //ThisInstans.PlottData();
+        ThisInstans.PlottData();
 
     }
 }

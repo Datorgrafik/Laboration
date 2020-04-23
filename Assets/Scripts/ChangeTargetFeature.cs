@@ -42,5 +42,6 @@ public class ChangeTargetFeature : MonoBehaviour
         DataPlotter.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
         TargetingScript.colorOff = selTarget.GetComponent<Renderer>().material.color;
         colorOfTargetFeature.GetComponent<Image>().color = selTarget.GetComponent<Renderer>().material.color;
+        targetFeatureText.text = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
     }
 }

@@ -20,28 +20,30 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	// GameObjects
 	public GameObject PointPrefab;
-	public GameObject PointHolder;
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
+	public GameObject PointHolder;
 
 	// Misc
 	public float plotScale = 10;
 	public TMP_Text valuePrefab;
 	private Color targetColor;
 	private string columnName;
-	public static ParallelCoordinatePlotter ThisInstance;
+	private int nFeatures;
 
 	// PlotColumns
 	public Dropdown column1;
 	public Dropdown column2;
 	public Dropdown column3;
 	public Dropdown column4;
+	List<Dropdown> columnDropdownList;
 
 	// Column Text Fields
 	public TMP_Text column1Text;
 	public TMP_Text column2Text;
 	public TMP_Text column3Text;
 	public TMP_Text column4Text;
+	List<TMP_Text> columnTextList;
 
 	#endregion
 
@@ -62,14 +64,34 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		featureList.AddRange(columnList);
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
+		nFeatures = featureList.Count;
+
+		columnTextList = new List<TMP_Text>()
+		{
+			column1Text,
+			column2Text,
+			column3Text,
+			column4Text
+		};
+
+		columnDropdownList = new List<Dropdown>()
+		{
+			column1,
+			column2,
+			column3,
+			column4
+		};
 
 		AddDropdownListeners();
 
-		// Default values for each columntext at start
-		column1Text.text = featureList[0];
-		column2Text.text = featureList[1];
-		column3Text.text = featureList[2];
-		column4Text.text = featureList[3];
+		// Default values for each columntext at start, depending on nFeatures (max 4)
+		for (int i = 0; i < nFeatures; i++)
+		{
+			columnTextList[i].text = featureList[i];
+
+			if (i+1 == 4)
+				break;
+		}
 
 		GetDistinctTargetFeatures();
 
@@ -87,21 +109,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
-		column1.AddOptions(featureList);
-		column1.value = 0;
-		column1.onValueChanged.AddListener(delegate { column1Text.text = featureList[column1.value]; });
+		for (int i = 0; i < nFeatures; i++)
+		{
+			columnDropdownList[i].AddOptions(featureList);
+			columnDropdownList[i].value = i;
+			columnDropdownList[i].onValueChanged.AddListener(delegate { columnTextList[i].text = featureList[columnDropdownList[i].value]; });
 
-		column2.AddOptions(featureList);
-		column2.value = 1;
-		column2.onValueChanged.AddListener(delegate { column2Text.text = featureList[column2.value]; });
-
-		column3.AddOptions(featureList);
-		column3.value = 2;
-		column3.onValueChanged.AddListener(delegate { column3Text.text = featureList[column3.value]; });
-
-		column4.AddOptions(featureList);
-		column4.value = 3;
-		column4.onValueChanged.AddListener(delegate { column4Text.text = featureList[column4.value]; });
+			if (i + 1 == 4)
+				break;
+		}
 	}
 
 	private void DrawBackgroundGrid()
@@ -237,7 +253,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Set normalized Y-value
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
 
-			InstantiateAndRenderDatapoints(xPos, i, y);
+			//InstantiateAndRenderDatapoints(xPos, i, y);
 
 			InstantiateAndRenderLines(columnPos, xPos, i, y);
 		}

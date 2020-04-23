@@ -40,6 +40,11 @@ public class MoveDataBalls : MonoBehaviour
             }
             if (Input.GetMouseButton(0))
             {
+                if (eventSys.IsPointerOverGameObject())
+                {
+                    return;
+                }
+
                 timeChecker += Time.unscaledDeltaTime;
                 if(timeChecker > 0.3F)
                 {
@@ -47,7 +52,7 @@ public class MoveDataBalls : MonoBehaviour
                     TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
                 }
             }
-            if (Input.GetMouseButtonUp(0) && !eventSys.IsPointerOverGameObject())
+            if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
             {
                 Denormalize();
             }

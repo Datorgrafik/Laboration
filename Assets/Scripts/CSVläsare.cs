@@ -69,8 +69,6 @@ public class CSVläsare
             columnList = new List<string>(list[0].Keys);
             if (float.TryParse(list[list.Count - 1][columnList[columnList.Count - 1]].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out r))
             {
-                Debug.Log("Reggclass");
-                Debug.Log(columnList.Count.ToString());
                 dataClass = new Regression(list);
             }
             else

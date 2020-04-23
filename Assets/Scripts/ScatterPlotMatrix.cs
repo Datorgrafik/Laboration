@@ -53,10 +53,10 @@ public class ScatterPlotMatrix : MonoBehaviour
         columnList = new List<string>(pointList[1].Keys);
 
         // Print number of keys (using .count)
-        Debug.Log("There are " + columnList.Count + " columns in CSV");
+        //Debug.Log("There are " + columnList.Count + " columns in CSV");
 
-        foreach (string key in columnList)
-            Debug.Log("Column name is " + key);
+        //foreach (string key in columnList)
+        //    Debug.Log("Column name is " + key);
 
         // Assign column name from columnList to Name variables
         feature1.AddOptions(columnList);

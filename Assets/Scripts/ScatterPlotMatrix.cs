@@ -92,8 +92,6 @@ public class ScatterPlotMatrix : MonoBehaviour
         string maxValueString = pointList[0][columnName].ToString();
         float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
 
-        //float maxValue = Convert.ToSingle(pointList[0][columnName]);
-
         //Loop through Dictionary, overwrite existing maxValue if new value is larger
         for (var i = 0; i < pointList.Count; i++)
         {

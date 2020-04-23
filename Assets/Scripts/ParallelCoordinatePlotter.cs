@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,20 +8,28 @@ using UnityEngine.UI;
 
 public class ParallelCoordinatePlotter : MonoBehaviour
 {
+	#region Attributes
+
 	// List for holding data from CSV reader
 	private List<Dictionary<string, object>> pointList;
 
+	// Lists
 	public List<string> columnList;
 	public List<string> featureList;
-	public float plotScale = 10;
+	private List<string> targetFeatures = new List<string>();
+
+	// GameObjects
 	public GameObject PointPrefab;
 	public GameObject PointHolder;
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
+
+	// Misc
+	public float plotScale = 10;
 	public TMP_Text valuePrefab;
 	private Color targetColor;
-	private List<string> targetFeatures = new List<string>();
 	private string columnName;
+	public static ParallelCoordinatePlotter ThisInstance;
 
 	// PlotColumns
 	public Dropdown column1;
@@ -36,6 +43,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public TMP_Text column3Text;
 	public TMP_Text column4Text;
 
+	#endregion
+
+	#region Methods
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -46,7 +57,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
 
-		// FeatureList without first or last index: Id / TargetColumn
+		// FeatureList without first and last index: Id / TargetColumn
 		featureList = new List<string>();
 		featureList.AddRange(columnList);
 		featureList.RemoveAt(columnList.Count - 1);
@@ -103,7 +114,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
 			xLine.transform.parent = PointHolder.transform;
 			xLine.transform.name = $"Column{i}Line";
-			
+
 			LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
 			xLineRenderer.positionCount = 2;
 			xLineRenderer.startWidth = 0.025f;
@@ -132,16 +143,17 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Draw horizontal lines
 		for (int i = 0; i <= 10; i++)
 		{
+			// Instantiate lines, set parent, set transform name
 			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
 			yLine.transform.parent = PointHolder.transform;
 			yLine.transform.name = $"Value{i}Line";
-			
+
 			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
 			yLineRenderer.positionCount = 2;
 			yLineRenderer.startWidth = 0.025f;
 			yLineRenderer.endWidth = 0.025f;
-			yLineRenderer.SetPosition(0, new Vector3(0.1f, (float)i/10, -0.001f) * plotScale);
-			yLineRenderer.SetPosition(1, new Vector3(1.5f, (float)i/10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(0, new Vector3(0.1f, (float)i / 10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(1, new Vector3(1.5f, (float)i / 10, -0.001f) * plotScale);
 			yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
 
 			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1.25f, 0 + i, 0), Quaternion.identity);
@@ -372,4 +384,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		PlotData(column3.value, 3);
 		PlotData(column4.value, 4);
 	}
+
+	#endregion
 }

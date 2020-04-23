@@ -53,10 +53,10 @@ public class ScatterPlotMatrix : MonoBehaviour
         columnList = new List<string>(pointList[1].Keys);
 
         // Print number of keys (using .count)
-        Debug.Log("There are " + columnList.Count + " columns in CSV");
+        //Debug.Log("There are " + columnList.Count + " columns in CSV");
 
-        foreach (string key in columnList)
-            Debug.Log("Column name is " + key);
+        //foreach (string key in columnList)
+        //    Debug.Log("Column name is " + key);
 
         // Assign column name from columnList to Name variables
         feature1.AddOptions(columnList);
@@ -91,8 +91,6 @@ public class ScatterPlotMatrix : MonoBehaviour
         //set initial value to first value
         string maxValueString = pointList[0][columnName].ToString();
         float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
-
-        //float maxValue = Convert.ToSingle(pointList[0][columnName]);
 
         //Loop through Dictionary, overwrite existing maxValue if new value is larger
         for (var i = 0; i < pointList.Count; i++)

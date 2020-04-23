@@ -78,18 +78,21 @@ public class DataPlotter : MonoBehaviour
 
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(columnList);
-		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-		xList.value = 1;
+        xList.value = 1;
+        xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+
 
 		yList.AddOptions(columnList);
-		yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-		yList.value = 2;
+        yList.value = 2;
+        yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+
 
 		if (MainMenu.renderMode == 1)
 		{
 			zList.AddOptions(columnList);
-			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-			zList.value = 3;
+            zList.value = 3;
+            zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+
 		}
 
 		PlottData();
@@ -215,8 +218,12 @@ public class DataPlotter : MonoBehaviour
 				valueString = pointList[i][zName].ToString();
 				z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
-				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName];
+                dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count()-1]];
 				dataPoint.transform.parent = PointHolder.transform;
+                if (!pointList[i].ContainsKey("DataBall"))
+                    pointList[i].Add("DataBall", dataPoint);
+                else
+                    pointList[i]["DataBall"] = dataPoint;
 			}
 
             dataPoint.GetComponent<StoreIndexInDataBall>().SetIndex(i);
@@ -282,7 +289,7 @@ public class DataPlotter : MonoBehaviour
 
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
 
-        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture) - 1));
+        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)));
 
         Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
 
@@ -296,24 +303,25 @@ public class DataPlotter : MonoBehaviour
 
         double[] unknown = new double[newPoint.Count];
 
-        for (int i = 0; i > newPoint.Count; ++i)
+        for (int i = 0; i < newPoint.Count; ++i)
         {
             unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
             Debug.Log(newPoint[i].ToString());
         }
 
 
-        var predict = dataClass.Knn(unknown, 3);
+        var predict = dataClass.Knn(unknown);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);
+        
         GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-
+        List<GameObject> datapoints = new List<GameObject>();
         foreach (Transform child in ScatterPlotter.transform)
         {
-            Destroy(child.gameObject);
+            datapoints.Add(child.gameObject);
         }
-        ThisInstans.PlottData();
+        //ThisInstans.PlottData();
 
     }
 }

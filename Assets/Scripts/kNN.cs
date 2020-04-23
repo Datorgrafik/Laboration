@@ -4,35 +4,40 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
-//Plagiatvarning här med?
-
-public class kNN 
+public class KNN : MonoBehaviour
 {
     public static List<string> attributes;
+    public Toggle weights;
+    //public static Toggle staticWeights { get { return instance.myNormalVar; } }
+    public InputField k;
+    public static List<Dictionary<string, object>> PointsToColor;
+
+    void Start()
+    {
+        weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
+        k = (InputField)GameObject.FindWithTag("K").GetComponent<InputField>();
+    }
 
     static public object ClassifyReg(double[] unknown,
-List<Dictionary<string, object>> trainData, int k)
+List<Dictionary<string, object>> trainData)
     {
-        if (attributes.Count == 0)
-            attributes = new List<string>(trainData[0].Keys);
+        IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
 
-        int n = trainData.Count;
-        IndexAndDistance[] info = new IndexAndDistance[n];
-        for (int i = 0; i < n; ++i)
-        {
-            IndexAndDistance curr = new IndexAndDistance();
-            double dist = Distance(unknown, trainData[i]);
-            curr.idx = i;
-            curr.dist = dist;
-            info[i] = curr;
-        }
-        object result = VoteReg(info, trainData, k);
-        return result;
+        return VoteReg(info, trainData,3);
     }
 
     static public object ClassifyClass(double[] unknown,
-List<Dictionary<string, object>> trainData, int k)
+List<Dictionary<string, object>> trainData)
+    {
+        IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
+
+        return Vote(info, trainData, 3);
+    }
+
+    static IndexAndDistance[] SortedDistanceArray(double[] unknown,
+List<Dictionary<string, object>> trainData)
     {
         attributes = new List<string>(trainData[0].Keys);
 
@@ -46,20 +51,21 @@ List<Dictionary<string, object>> trainData, int k)
             curr.dist = dist;
             info[i] = curr;
         }
+        Array.Sort(info);
 
-        object result = Vote(info, trainData, k);
-        return result;
+        return info;
+
     }
 
     static object Vote(IndexAndDistance[] info,
       List<Dictionary<string, object>> trainData, int k)
     {
-
+        PointsToColor.Clear();
         Dictionary<string, int> votes = new Dictionary<string, int>(); // One cell per class
         for (int i = 0; i < k; ++i)
         {       // Just first k
             int idx = info[i].idx;            // Which train item
-            string c = (string)trainData[idx][attributes[attributes.Count - 1]];   // Class in last cell
+            string c = (string)trainData[idx][attributes[attributes.Count - 2]];   // Class in last cell
             if (votes.ContainsKey(c))
             {
                 ++votes[c];
@@ -68,6 +74,7 @@ List<Dictionary<string, object>> trainData, int k)
             {
                 votes.Add(c, 1);
             }
+            ColorPoint((GameObject)trainData[i]["DataBall"]);
         }
         var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
         return Maxvotes;
@@ -76,14 +83,14 @@ List<Dictionary<string, object>> trainData, int k)
     static object VoteReg(IndexAndDistance[] info,
     List<Dictionary<string, object>> trainData, int k)
     {
-       
+
         double sum = 0.0;
         for (int i = 0; i < k; ++i)
         {
             int idx = info[i].idx;
             double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
             sum += c;
-
+            ColorPoint((GameObject)trainData[i]["DataBall"] as GameObject);
         }
         return sum / k;
     }
@@ -91,14 +98,18 @@ List<Dictionary<string, object>> trainData, int k)
     static double Distance(double[] unknown,
       Dictionary<string, object> data)
     {
-        
+
         double sum = 0.0;
-        for (int i = 1; i < unknown.Length; ++i)
+        for (int i = 0; i < unknown.Length; ++i)
         {
 
-            sum += (unknown[i] - Convert.ToDouble(data[attributes[i]], CultureInfo.InvariantCulture)) * (unknown[i] - Convert.ToDouble(data[attributes[i]], CultureInfo.InvariantCulture));
+            sum += (unknown[i] - Convert.ToDouble(data[attributes[i + 1]], CultureInfo.InvariantCulture)) * (unknown[i] - Convert.ToDouble(data[attributes[i + 1]], CultureInfo.InvariantCulture));
         }
         return Math.Sqrt(sum);
+    }
+    static void ColorPoint(GameObject gb)
+    {
+        gb.GetComponent<Renderer>().material.color = Color.red;
     }
 
 } // Program class

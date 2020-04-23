@@ -11,14 +11,26 @@ public class NewDataButton : MonoBehaviour
     public GameObject newDataList;
     public InputField input;
     public Text description;
-    public Button save;
+    public Button button;
     public List<string> dataPoint;
+
 
     // Start is called before the first frame update
     void Start()
     {
         newData.onClick.AddListener(OnClick);
-        
+    }
+    void Cancel()
+    {
+
+        foreach (Transform child in newDataWindow.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        newDataList.SetActive(false);
+        newDataWindow.SetActive(false);
+        newData.interactable = true;
     }
     void OnClick()
     {
@@ -40,11 +52,20 @@ public class NewDataButton : MonoBehaviour
 
             ypos = ypos - 20;
         }
-        Button SaveData = Instantiate(save, new Vector2(71, ypos), Quaternion.identity) as Button;
+        Button SaveData = Instantiate(button, new Vector2(71, ypos), Quaternion.identity) as Button;
+        SaveData.GetComponentInChildren<Text>().text = "Save";
         SaveData.transform.SetParent(newDataWindow.transform, false);
+        SaveData.onClick.AddListener(SaveInput);
+
+        Button CancelButton = Instantiate(button, new Vector2(71, ypos-20), Quaternion.identity) as Button;
+        CancelButton.GetComponentInChildren<Text>().text = "Cancel";
+        CancelButton.onClick.AddListener(Cancel);
+        CancelButton.transform.SetParent(newDataWindow.transform, false);
+
+
         newDataList.SetActive(true);
         newDataWindow.SetActive(true);
-        SaveData.onClick.AddListener(SaveInput);
+        newData.interactable = false;
     }
     public void SaveInput()
     {
@@ -55,15 +76,11 @@ public class NewDataButton : MonoBehaviour
             data.text = null;
            
         }
-        foreach (Transform child in newDataWindow.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        newDataList.SetActive(false);
-        newDataWindow.SetActive(false);
+        Cancel();
+        //newDataList.SetActive(false);
+       // newDataWindow.SetActive(false);
         Debug.Log("Save inpur efter upphämtning av input");
         DataPlotter.AddDataPoint(dataPoint);
-
+        //newData.interactable = true;
     }
 }

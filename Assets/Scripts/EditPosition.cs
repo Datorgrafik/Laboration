@@ -63,6 +63,7 @@ public class EditPosition : MonoBehaviour
             newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
             DataPlotter.pointList[index][DataPlotter.xName] = newValue;
+			inputX.text = string.Empty;
         }
 
 		if (inputY.text.Length > 0)
@@ -71,6 +72,7 @@ public class EditPosition : MonoBehaviour
             newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
             DataPlotter.pointList[index][DataPlotter.yName] = newValue;
+			inputY.text = string.Empty;
         }
 
 		if (MainMenu.renderMode == 1)
@@ -81,6 +83,7 @@ public class EditPosition : MonoBehaviour
                 newValue = newValue.Replace(',', '.');
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
                 DataPlotter.pointList[index][DataPlotter.zName] = newValue;
+				inputZ.text = string.Empty;
 			}
 		}
 
@@ -90,14 +93,14 @@ public class EditPosition : MonoBehaviour
     private void Denormalize()
     {
         float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
-        Xvalue.text = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString("0.000");
+        Xvalue.text = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString("0.0");
 
         mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
-        Yvalue.text = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10 ).ToString("0.000");
+        Yvalue.text = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10 ).ToString("0.0");
         if (MainMenu.renderMode == 1)
         {
             mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
-            Zvalue.text = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString("0.000");
+            Zvalue.text = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString("0.0");
         }
     }
 }

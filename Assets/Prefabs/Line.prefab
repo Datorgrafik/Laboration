@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2447034991419741629}
   - component: {fileID: 4894695848933275863}
+  - component: {fileID: 8950073944097687054}
   m_Layer: 0
   m_Name: Line
   m_TagString: DataLine
@@ -41,7 +42,7 @@ LineRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
-  m_DynamicOccludee: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -130,3 +131,15 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &8950073944097687054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691959262909666679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61758d1f07b30b2419c82e6c6fe11398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

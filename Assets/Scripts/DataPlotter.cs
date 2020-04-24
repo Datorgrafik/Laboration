@@ -63,7 +63,6 @@ public class DataPlotter : MonoBehaviour
 		//Debug.Log(MainMenu.fileData);
 		dataClass = CSVläsare.Read(MainMenu.fileData);
         pointList = dataClass.CSV;
-
         ThisInstans = this;
         //Log to console
         //Debug.Log(pointList);
@@ -121,7 +120,7 @@ public class DataPlotter : MonoBehaviour
 	{
         if(TargetingScript.selectedTarget != null)
         {
-            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
         }
 
         GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
@@ -217,13 +216,13 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
                 dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count()-1]];
 				dataPoint.transform.parent = PointHolder.transform;
-                if (!pointList[i].ContainsKey("DataBall"))
-                    pointList[i].Add("DataBall", dataPoint);
-                else
-                    pointList[i]["DataBall"] = dataPoint;
+               // if (!pointList[i].ContainsKey("DataBall"))
+                 //   pointList[i].Add("DataBall", dataPoint);
+                //else
+                  //  pointList[i]["DataBall"] = dataPoint;
 			}
 
-			dataPoint.GetComponent<StoreIndexInDataBall>().index = i;
+			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
@@ -295,15 +294,10 @@ public class DataPlotter : MonoBehaviour
 
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
 
-        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture))+1);
-
-        Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
-
+        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
 
         for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
         {
-            Debug.Log("Column name is " + ThisInstans.columnList[i + 1]);
-            Debug.Log("value is " + newPoint[i].ToString());
             newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
         }
 
@@ -315,19 +309,12 @@ public class DataPlotter : MonoBehaviour
             Debug.Log(newPoint[i].ToString());
         }
 
-
         var predict = dataClass.Knn(unknown);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);
-        
-        GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-        List<GameObject> datapoints = new List<GameObject>();
-        foreach (Transform child in ScatterPlotter.transform)
-        {
-            datapoints.Add(child.gameObject);
-        }
+
         ThisInstans.PlottData();
-       
+
     }
 }

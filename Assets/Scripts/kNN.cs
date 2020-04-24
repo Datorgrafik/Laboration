@@ -10,18 +10,27 @@ public class KNN : MonoBehaviour
 {
     public static List<string> attributes;
     public Toggle weights;
-    //public static Toggle staticWeights { get { return instance.myNormalVar; } }
+    //public Toggle weights { get { return instance.myNormalVar; } }
+    //public GameObject input;
     public InputField k;
+    //public string kValue;
     //public static List<Dictionary<string, object>> PointsToColor;
     public static List<int> kPoints;
 
     void Start()
     {
-        weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
-        k = (InputField)GameObject.FindWithTag("K").GetComponent<InputField>();
+        k.text = "2";
     }
 
-    static public object ClassifyReg(double[] unknown,
+    //public KNN()
+    //{
+    //    //weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
+    //    //k = GameObject.FindGameObjectWithTag("kInput").GetComponent<InputField>() as InputField;
+    //    int u = 1;
+    //   // k = input.GetComponent<InputField>();
+    //}
+
+    public object ClassifyReg(double[] unknown,
 List<Dictionary<string, object>> trainData)
     {
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
@@ -29,15 +38,15 @@ List<Dictionary<string, object>> trainData)
         return VoteReg(info, trainData,3);
     }
 
-    static public object ClassifyClass(double[] unknown,
+    public object ClassifyClass(double[] unknown,
 List<Dictionary<string, object>> trainData)
     {
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
-
+        
         return Vote(info, trainData, 3);
     }
 
-    static IndexAndDistance[] SortedDistanceArray(double[] unknown,
+    public IndexAndDistance[] SortedDistanceArray(double[] unknown,
 List<Dictionary<string, object>> trainData)
     {
         attributes = new List<string>(trainData[0].Keys);
@@ -58,7 +67,7 @@ List<Dictionary<string, object>> trainData)
 
     }
 
-    static object Vote(IndexAndDistance[] info,
+    public object Vote(IndexAndDistance[] info,
       List<Dictionary<string, object>> trainData, int k)
     {
         kPoints = new List<int>();
@@ -83,7 +92,7 @@ List<Dictionary<string, object>> trainData)
         return Maxvotes;
     }
 
-    static object VoteReg(IndexAndDistance[] info,
+    public object VoteReg(IndexAndDistance[] info,
     List<Dictionary<string, object>> trainData, int k)
     {
         kPoints = new List<int>();
@@ -98,7 +107,7 @@ List<Dictionary<string, object>> trainData)
         return sum / k;
     }
 
-    static double Distance(double[] unknown,
+    public double Distance(double[] unknown,
       Dictionary<string, object> data)
     {
 
@@ -111,6 +120,49 @@ List<Dictionary<string, object>> trainData)
         return Math.Sqrt(sum);
     }
 
+    public object WeightClass(IndexAndDistance[] info,
+    List<Dictionary<string, object>> trainData, int k)
+    {
+
+        Dictionary<string, double> votes = new Dictionary<string, double>(); // One cell per class
+        for (int i = 0; i < k; ++i)
+        {       // Just first k
+            int idx = info[i].idx;            // Which train item
+            string c = (string)trainData[idx][attributes[attributes.Count - 1]];   // Class in last cell
+            if (votes.ContainsKey(c))
+            {
+                ++votes[c];
+            }
+            else
+            {
+                votes.Add(c, (votes[c] += info[i].dist));
+            }
+            //kPoints.Add(Convert.ToInt32(trainData[idx][""], CultureInfo.InvariantCulture));
+
+        }
+        var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
+        return Maxvotes;
+
+
+    }
+
+    public object WeightReg(IndexAndDistance[] info,
+List<Dictionary<string, object>> trainData, int k)
+    {
+        double sumWeight = 0.0;
+        double sumWeightXReg = 0.0;
+
+        for (int i = 0; i < k; ++i)
+        {
+            int idx = info[i].idx;
+            double weight = (1 / Math.Sqrt(info[i].dist));
+            sumWeight += weight; 
+            double reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
+            sumWeightXReg += weight * reg;
+        }
+        
+        return sumWeightXReg/sumWeight;
+    }
 } // Program class
 
 public class IndexAndDistance : IComparable<IndexAndDistance>

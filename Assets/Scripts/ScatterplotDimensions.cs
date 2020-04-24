@@ -68,7 +68,7 @@ public class ScatterplotDimensions : MonoBehaviour
 
         if (TargetingScript.selectedTarget != null)
         {
-            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
         }
 
         GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
@@ -109,7 +109,7 @@ public class ScatterplotDimensions : MonoBehaviour
             }
 
             dataPoint = AssignDataBallAttributes_Instantiate(i, floatList);
-            dataPoint.GetComponent<StoreIndexInDataBall>().index = i;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
             dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
             ReselectDataball_IfDataballWasSelected(i, dataPoint);
         }

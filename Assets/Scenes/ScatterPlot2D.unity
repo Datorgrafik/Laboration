@@ -1015,6 +1015,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 2Dpanel
       objectReference: {fileID: 0}
+    - target: {fileID: 1113919268377329104, guid: cfb37402649a9044a86b664cccb62934,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2162622602274033758, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

@@ -81,13 +81,13 @@ public class MoveDataBalls : MonoBehaviour
         float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
         string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
         newPosition = newPosition.Replace(',', '.');
-        index = selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+        index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
         DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
 
         mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
         newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
         newPosition = newPosition.Replace(',', '.');
-        index = selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+        index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
         DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
 
         if (MainMenu.renderMode == 1)
@@ -95,7 +95,7 @@ public class MoveDataBalls : MonoBehaviour
             mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
             newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
             newPosition = newPosition.Replace(',', '.');
-            index = selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
             DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
         }
 

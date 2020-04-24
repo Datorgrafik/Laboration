@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class Classification : DataClass
 {
-    public Classification(List<Dictionary<string, object>> data)
-    : base(data)
-    {
+    #region Attributes
 
-    }
+    #endregion
+
+    #region Methods
+
+    public Classification(List<Dictionary<string, object>> data)
+    : base(data) { }
 
     public override object Knn(double[] unknown, string k, bool weightedOrNot)
     {
-        return KNN.ClassifyClass(unknown, CSV);
+        KNN knn = new KNN(unknown, k, weightedOrNot);
+        return knn.ClassifyClass(unknown, CSV);
     }
+
+    #endregion
 }

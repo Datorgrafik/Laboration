@@ -10,15 +10,18 @@ public class KNN : MonoBehaviour
 {
     public static List<string> attributes;
     public Toggle weights;
-    //public static Toggle staticWeights { get { return instance.myNormalVar; } }
+    //public Toggle weights { get { return instance.myNormalVar; } }
+    public GameObject input;
     public InputField k;
+    public string kValue;
     //public static List<Dictionary<string, object>> PointsToColor;
     public static List<int> kPoints;
 
-    void Start()
+    public KNN()
     {
         weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
-        k = (InputField)GameObject.FindWithTag("K").GetComponent<InputField>();
+        input = GameObject.FindGameObjectWithTag("kInput");
+        k = input.GetComponent<InputField>();
     }
 
     public object ClassifyReg(double[] unknown,

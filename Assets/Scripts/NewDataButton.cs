@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class NewDataButton : MonoBehaviour
 {
- 
     public Button newData;
     public GameObject newDataWindow;
     public GameObject newDataList;
@@ -22,7 +21,6 @@ public class NewDataButton : MonoBehaviour
     }
     void Cancel()
     {
-
         foreach (Transform child in newDataWindow.transform)
         {
             Destroy(child.gameObject);
@@ -32,9 +30,9 @@ public class NewDataButton : MonoBehaviour
         newDataWindow.SetActive(false);
         newData.interactable = true;
     }
+
     void OnClick()
     {
-
         List<string> attributes = CSVläsare.columnList;
         Debug.Log(attributes.Count.ToString());
         int ypos = 224;

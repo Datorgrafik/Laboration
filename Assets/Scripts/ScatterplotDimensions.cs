@@ -11,18 +11,19 @@ public class ScatterplotDimensions : MonoBehaviour
 {
     // Start is called before the first frame update
     public static List<Dictionary<string, object>> pointList;
-    public int[] columns = new int[6];
+    public int[] columns = new int[5];
 
     [SerializeField]
-    public TMP_Text[] textList = new TMP_Text[6];
-    public Dropdown[] dropDownList = new Dropdown[6];
+    public TMP_Text[] textList = new TMP_Text[5];
+    public Dropdown[] dropDownList = new Dropdown[5];
 
     public float plotScale = 10;
     public GameObject PointPrefab;
     public GameObject LineSeparatorPrefab;
 
-    public Color ColorTop = new Color(1, 1, 1, 1.0f);
-    public Color ColorBottom = new Color(1, 0, 1, 1.0f);
+    private Color ColorTop = new Color(1, 1, 1, 1.0f);
+    private Color ColorBottom = new Color(1, 0, 1, 1.0f);
+    public GameObject GradientPlane;
 
     [SerializeField]
     public TMP_Text valuePrefab;
@@ -46,8 +47,8 @@ public class ScatterplotDimensions : MonoBehaviour
         columnList = new List<string>(pointList[1].Keys);
 
         Dimensions = columnList.Count - 2;
-        if (Dimensions > 6)
-            Dimensions = 6;
+        if (Dimensions > 5)
+            Dimensions = 5;
 
         for (int i = 0; i < Dimensions; i++)
         {
@@ -118,7 +119,9 @@ public class ScatterplotDimensions : MonoBehaviour
     {
         GameObject dataPoint = Instantiate(PointPrefab, new Vector3(floatList[0], floatList[1], floatList[2]) * plotScale, Quaternion.identity);
         if (Dimensions > 3)
+        {
             dataPoint.GetComponent<Renderer>().material.color = new Color(1, floatList[3], 1, 1.0f);
+        }
         if (Dimensions > 4)
             dataPoint.transform.localScale += new Vector3(floatList[4] / 2, floatList[4] / 2, floatList[4] / 2);
 
@@ -182,7 +185,7 @@ public class ScatterplotDimensions : MonoBehaviour
         }
 
 
-        var predict = dataClass.Knn(unknown);
+        var predict = dataClass.Knn(unknown, NewDataButton.kValue, NewDataButton.weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);

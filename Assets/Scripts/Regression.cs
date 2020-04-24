@@ -10,9 +10,9 @@ public class Regression : DataClass
 
     }
 
-    public override object Knn(double[] unknown)
+    public override object Knn(double[] unknown, string k, bool weightedOrNot)
     {
-        KNN knn = new KNN();
+        KNN knn = new KNN(unknown, k, weightedOrNot);
         return knn.ClassifyReg(unknown, CSV);
     }
 }

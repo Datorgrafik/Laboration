@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class ScatterPlotMatrix : MonoBehaviour
 {
@@ -32,11 +33,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 	[SerializeField]
 	public TMP_Text valuePrefab;
 
-	public Dropdown feature1;
-	public Dropdown feature2;
-	public Dropdown feature3;
-	public Dropdown feature4;
-	private static Dropdown[] features;
+	// PlotColumns
+	public List<Dropdown> columnDropdownList = new List<Dropdown>();
 
 	public GameObject PointHolder;
 	public GameObject planePointBackground;
@@ -67,12 +65,6 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 		AddDropdownListeners();
 
-		features = new Dropdown[4];
-		features[0] = feature1;
-		features[1] = feature2;
-		features[2] = feature3;
-		features[3] = feature4;
-
 		PlottData();
 
 		// Set Camera position
@@ -82,21 +74,15 @@ public class ScatterPlotMatrix : MonoBehaviour
 	private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
-		feature1.AddOptions(columnList);
-		feature1.value = 1;
-		feature1.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+		for (int i = 0; i < nFeatures; i++)
+		{
+			columnDropdownList[i].AddOptions(featureList);
+			columnDropdownList[i].value = i;
+			columnDropdownList[i].onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
-		feature2.AddOptions(columnList);
-		feature2.value = 2;
-		feature2.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-
-		feature3.AddOptions(columnList);
-		feature3.value = 3;
-		feature3.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-
-		feature4.AddOptions(columnList);
-		feature4.value = 4;
-		feature4.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
+			if (i + 1 == 4)
+				break;
+		}
 	}
 
 	private void PlottData()
@@ -113,8 +99,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 														new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
 														Quaternion.Euler(0, 90, -90));
 
-					feature1Name = columnList[features[j].value];
-					feature2Name = columnList[features[k].value];
+					feature1Name = featureList[columnDropdownList[j].value];
+					feature2Name = featureList[columnDropdownList[k].value];
 
 					if (j == k)
 					{
@@ -149,15 +135,15 @@ public class ScatterPlotMatrix : MonoBehaviour
 							valueString = pointList[i][feature2Name].ToString();
 							float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-							//Lägger in alla targetfeatures i en lista
-							if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
-								targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+							GetDistinctTargetFeatures();
 
 							float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 							float colorValue = 1 / (index + 1);
 
 							// Instantiate dataPoint
-							dataPoint = Instantiate(PointPrefab, new Vector3(x + k * 1.2F, y + j * 1.2F, 0) * plotScale, Quaternion.identity);
+							dataPoint = Instantiate(PointPrefab, 
+													new Vector3(x + k * 1.2F, y + j * 1.2F, 0) * plotScale, 
+													Quaternion.identity);
 							// Set transform name
 							dataPoint.transform.name = pointList[i][feature1Name] + " " + pointList[i][feature2Name];
 							// Set parent
@@ -180,6 +166,18 @@ public class ScatterPlotMatrix : MonoBehaviour
 				catch (Exception) { }
 			}
 		}
+	}
+
+	private void GetDistinctTargetFeatures()
+	{
+		// Add targetFeatures to a seperate list
+		for (int i = 0; i < pointList.Count; i++)
+		{
+			targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+		}
+
+		// Only keep distinct targetFeatures
+		targetFeatures = targetFeatures.Distinct().ToList();
 	}
 
 	private static void ResetDataPlot()

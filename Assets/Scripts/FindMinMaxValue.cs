@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using UnityEngine;
 
 public static class FindMinMaxValue
 {
+    #region Methods
+
     public static float FindMaxValue(string columnName, List<Dictionary<string, object>> pointList)
     {
-        //set initial value to first value
         string maxValueString = pointList[0][columnName].ToString();
         float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
 
@@ -30,7 +29,6 @@ public static class FindMinMaxValue
             }
         }
 
-        //Spit out the max value
         return maxValue;
     }
 
@@ -59,4 +57,6 @@ public static class FindMinMaxValue
 
         return minValue;
     }
+
+    #endregion
 }

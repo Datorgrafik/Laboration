@@ -61,7 +61,7 @@ public class EditPosition : MonoBehaviour
 		{
 			newValue = inputX.GetComponent<InputField>().text;
             newValue = newValue.Replace(',', '.');
-            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
             DataPlotter.pointList[index][DataPlotter.xName] = newValue;
 			inputX.text = string.Empty;
         }
@@ -70,7 +70,7 @@ public class EditPosition : MonoBehaviour
 		{
 			newValue = inputY.GetComponent<InputField>().text;
             newValue = newValue.Replace(',', '.');
-            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
             DataPlotter.pointList[index][DataPlotter.yName] = newValue;
 			inputY.text = string.Empty;
         }
@@ -81,7 +81,7 @@ public class EditPosition : MonoBehaviour
 			{
 				newValue = inputZ.GetComponent<InputField>().text;
                 newValue = newValue.Replace(',', '.');
-                int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().index;
+                int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
                 DataPlotter.pointList[index][DataPlotter.zName] = newValue;
 				inputZ.text = string.Empty;
 			}

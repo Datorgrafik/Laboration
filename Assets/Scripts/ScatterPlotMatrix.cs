@@ -172,7 +172,7 @@ public class ScatterPlotMatrix : MonoBehaviour
                             dataPoint = Instantiate(PointPrefab, new Vector3(x + k * 1.2F, y + j * 1.2F, 0) * plotScale, Quaternion.identity);
                             dataPoint.transform.name = pointList[i][feature1Name] + " " + pointList[i][feature2Name];
                             dataPoint.transform.parent = PointHolder.transform;
-                            dataPoint.GetComponent<StoreIndexInDataBall>().index = i;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
                             dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
                             if (index % 3 == 0)

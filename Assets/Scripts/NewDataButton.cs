@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,13 +20,12 @@ public class NewDataButton : MonoBehaviour
     public static string kValue;
     public static bool weightedOrNot;
 
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         newData.onClick.AddListener(OnClick);
     }
-    void Cancel()
+    private void Cancel()
     {
         foreach (Transform child in newDataWindow.transform)
         {
@@ -35,7 +37,7 @@ public class NewDataButton : MonoBehaviour
         newData.interactable = true;
     }
 
-    void OnClick()
+    private void OnClick()
     {
         List<string> attributes = CSVläsare.columnList;
         Debug.Log(attributes.Count.ToString());
@@ -50,6 +52,7 @@ public class NewDataButton : MonoBehaviour
             InputField inputfield = Instantiate(input, new Vector2(71, ypos), Quaternion.identity) as InputField;
             inputfield.transform.SetParent(newDataWindow.transform, false);
             inputfield.name = attributes[i];
+            inputfield.text = FindAverage(attributes[i]);
 
 
             ypos = ypos - 20;
@@ -69,7 +72,7 @@ public class NewDataButton : MonoBehaviour
         newDataWindow.SetActive(true);
         newData.interactable = false;
     }
-    public void SaveInput()
+    private void SaveInput()
     {
         dataPoint.Clear();
         foreach (InputField data in newDataWindow.GetComponentsInChildren<InputField>())
@@ -95,5 +98,16 @@ public class NewDataButton : MonoBehaviour
         //Debug.Log("Save input efter upphämtning av input");
         DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
         //newData.interactable = true;
+    }
+
+    private string FindAverage(string attribute)
+    {
+        double  sum = 0.0;
+        for (int i = 0; i < DataPlotter.dataClass.CSV.Count - 1; ++i)
+        {
+            sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
+        }
+        return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2));
+
     }
 }

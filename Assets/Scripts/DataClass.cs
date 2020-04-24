@@ -17,11 +17,7 @@ public abstract class DataClass
         CSV = data;
     }
 
-<<<<<<< HEAD
     public abstract object Knn(double[] unknown, string k, bool weightedOrNot);
-=======
-    public abstract object Knn(double[] unknown);
 
     #endregion
->>>>>>> 22739ca145c1e46963ba50647d63d119ce40432e
 }

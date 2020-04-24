@@ -1,24 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MoveDataBalls : MonoBehaviour
 {
 	private bool grabItem = false;
-	private Vector3 pointOnScreen;
-	private Vector3 ObjectPoint;
     private Vector3 mousePosition;
     private GameObject selectedTarget;
+    private EventSystem eventSys;
 
     private float timeChecker = 0f;
-
-    private float newValue;
     private int index;
 
     // Update is called once per frame
     void Update()
 	{
-		if (Input.GetMouseButtonDown(0))
+        eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
+        if (Input.GetMouseButtonDown(0))
         {
             if (grabItem == true)
             {
@@ -36,6 +36,11 @@ public class MoveDataBalls : MonoBehaviour
             }
             if (Input.GetMouseButton(0))
             {
+                if (eventSys.IsPointerOverGameObject())
+                {
+                    return;
+                }
+
                 timeChecker += Time.unscaledDeltaTime;
                 if(timeChecker > 0.3F)
                 {
@@ -43,7 +48,7 @@ public class MoveDataBalls : MonoBehaviour
                     TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
                 }
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
             {
                 Denormalize();
             }

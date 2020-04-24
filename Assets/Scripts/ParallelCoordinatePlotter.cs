@@ -20,28 +20,27 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	// GameObjects
 	public GameObject PointPrefab;
-	public GameObject PointHolder;
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
+	public GameObject PointHolder;
 
 	// Misc
 	public float plotScale = 10;
 	public TMP_Text valuePrefab;
 	private Color targetColor;
 	private string columnName;
-	public static ParallelCoordinatePlotter ThisInstance;
+	private int nFeatures;
 
 	// PlotColumns
-	public Dropdown column1;
-	public Dropdown column2;
-	public Dropdown column3;
-	public Dropdown column4;
+	public List<Dropdown> columnDropdownList = new List<Dropdown>();
 
 	// Column Text Fields
-	public TMP_Text column1Text;
-	public TMP_Text column2Text;
-	public TMP_Text column3Text;
-	public TMP_Text column4Text;
+	public List<TMP_Text> columnTextList = new List<TMP_Text>();
+
+	// ChangePanel Lists
+	public List<TMP_Text> ChangePanelColumnText = new List<TMP_Text>();
+	public List<TMP_Text> ChangePanelColumnValueText = new List<TMP_Text>();
+	public List<TMP_InputField> ChangePanelColumnInputfield = new List<TMP_InputField>();
 
 	#endregion
 
@@ -62,14 +61,25 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		featureList.AddRange(columnList);
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
+		nFeatures = featureList.Count;
+
+		// Set correct number of vertices in LinePrefab depending on dataset
+		if (nFeatures <= 4)
+			LinePrefab.GetComponent<LineRenderer>().positionCount = nFeatures;
+		else
+			LinePrefab.GetComponent<LineRenderer>().positionCount = 4;
 
 		AddDropdownListeners();
 
-		// Default values for each columntext at start
-		column1Text.text = featureList[0];
-		column2Text.text = featureList[1];
-		column3Text.text = featureList[2];
-		column4Text.text = featureList[3];
+		// Default values for each columntext at start, depending on nFeatures (max 4)
+		for (int i = 0; i < nFeatures; i++)
+		{
+			columnTextList[i].text = featureList[i];
+			ChangePanelColumnText[i].text = featureList[i];
+
+			if (i+1 == 4)
+				break;
+		}
 
 		GetDistinctTargetFeatures();
 
@@ -78,30 +88,36 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		DrawBackgroundGrid();
 
 		// Run the default startup plot
-		for (int i = 1; i <= 4; i++)
+		for (int i = 0; i < nFeatures; i++)
 		{
-			PlotData(i - 1, i);
+			PlotData(i, i + 1);
+
+			if (i + 1 == 4)
+				break;
 		}
 	}
 
 	private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
-		column1.AddOptions(featureList);
-		column1.value = 0;
-		column1.onValueChanged.AddListener(delegate { column1Text.text = featureList[column1.value]; });
+		for (int i = 0; i < nFeatures; i++)
+		{
+			// iLocal for Listener reference
+			int iLocal = i;
 
-		column2.AddOptions(featureList);
-		column2.value = 1;
-		column2.onValueChanged.AddListener(delegate { column2Text.text = featureList[column2.value]; });
+			columnDropdownList[i].AddOptions(featureList);
+			columnDropdownList[i].value = i;
 
-		column3.AddOptions(featureList);
-		column3.value = 2;
-		column3.onValueChanged.AddListener(delegate { column3Text.text = featureList[column3.value]; });
+			columnDropdownList[iLocal].onValueChanged
+				.AddListener(delegate 
+				{
+					columnTextList[iLocal].text = featureList[columnDropdownList[iLocal].value];
+					ChangePanelColumnText[iLocal].text = featureList[columnDropdownList[iLocal].value];
+				});
 
-		column4.AddOptions(featureList);
-		column4.value = 3;
-		column4.onValueChanged.AddListener(delegate { column4Text.text = featureList[column4.value]; });
+			if (i + 1 == 4)
+				break;
+		}
 	}
 
 	private void DrawBackgroundGrid()
@@ -130,12 +146,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
 		{
-			Debug.Log(featureList[i]);
-			float yMaxTempValue = FindMaxValue(featureList[i]);
+			float yMaxTempValue = FindMinMaxValue.FindMaxValue(featureList[i], pointList);
 			if (yMaxTempValue > yMax)
 				yMax = yMaxTempValue;
 
-			float yMinTempValue = FindMinValue(featureList[i]);
+			float yMinTempValue = FindMinMaxValue.FindMinValue(featureList[i], pointList);
 			if (yMinTempValue < yMin)
 				yMin = yMinTempValue;
 		}
@@ -222,9 +237,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		float xPos = SetColumnPosition(columnPos);
 
 		// Get MaxValue
-		float columnMax = FindMaxValue(columnName);
+		float columnMax = FindMinMaxValue.FindMaxValue(columnName, pointList);
 		// Get MinValue
-		float columnMin = FindMinValue(columnName);
+		float columnMin = FindMinMaxValue.FindMinValue(columnName, pointList);
 
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)
@@ -237,7 +252,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Set normalized Y-value
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
 
-			InstantiateAndRenderDatapoints(xPos, i, y);
+			//InstantiateAndRenderDatapoints(xPos, i, y);
 
 			InstantiateAndRenderLines(columnPos, xPos, i, y);
 		}
@@ -322,52 +337,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		return targetColor;
 	}
 
-	private float FindMaxValue(string columnName)
-	{
-		string maxValueString = pointList[0][columnName].ToString();
-		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
-
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string maxValueStringLoop = pointList[i][columnName].ToString();
-
-			try
-			{
-				if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
-					maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				// Catches '?' as missing values that cannot be converted to floats in the dataset.
-			}
-		}
-
-		return maxValue;
-	}
-
-	private float FindMinValue(string columnName)
-	{
-		string minValueString = pointList[0][columnName].ToString();
-		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
-
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string minValueStringLoop = pointList[i][columnName].ToString();
-
-			try
-			{
-				if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
-					minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				// Catches '?' as missing values that cannot be converted to floats in the dataset.
-			}
-		}
-
-		return minValue;
-	}
-
 	public void ReorderColumns()
 	{
 		// Destroy Datapoints
@@ -378,11 +347,14 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			Destroy(databall);
 		}
 
-		// Plot data for the four selected columns
-		PlotData(column1.value, 1);
-		PlotData(column2.value, 2);
-		PlotData(column3.value, 3);
-		PlotData(column4.value, 4);
+		// Plot data for the selected columns
+		for (int i = 0; i < nFeatures; i++)
+		{
+			PlotData(columnDropdownList[i].value, i+1);
+
+			if (i + 1 == 4)
+				break;
+		}
 	}
 
 	#endregion

@@ -53,10 +53,10 @@ public class ScatterPlotMatrix : MonoBehaviour
         columnList = new List<string>(pointList[1].Keys);
 
         // Print number of keys (using .count)
-        Debug.Log("There are " + columnList.Count + " columns in CSV");
+        //Debug.Log("There are " + columnList.Count + " columns in CSV");
 
-        foreach (string key in columnList)
-            Debug.Log("Column name is " + key);
+        //foreach (string key in columnList)
+        //    Debug.Log("Column name is " + key);
 
         // Assign column name from columnList to Name variables
         feature1.AddOptions(columnList);
@@ -91,8 +91,6 @@ public class ScatterPlotMatrix : MonoBehaviour
         //set initial value to first value
         string maxValueString = pointList[0][columnName].ToString();
         float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
-
-        //float maxValue = Convert.ToSingle(pointList[0][columnName]);
 
         //Loop through Dictionary, overwrite existing maxValue if new value is larger
         for (var i = 0; i < pointList.Count; i++)
@@ -174,6 +172,8 @@ public class ScatterPlotMatrix : MonoBehaviour
                             dataPoint = Instantiate(PointPrefab, new Vector3(x + k * 1.2F, y + j * 1.2F, 0) * plotScale, Quaternion.identity);
                             dataPoint.transform.name = pointList[i][feature1Name] + " " + pointList[i][feature2Name];
                             dataPoint.transform.parent = PointHolder.transform;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().index = i;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
                             if (index % 3 == 0)
                             {
@@ -181,7 +181,7 @@ public class ScatterPlotMatrix : MonoBehaviour
                             }
                             else if (index % 3 == 1)
                             {
-                                dataPoint.GetComponent<Renderer>().material.color = new Color(0, 1, colorValue, 1.0f);
+                                dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
 
                             }
                             else if (index % 3 == 2)

@@ -1,13 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TargetingScript : MonoBehaviour {
+public class TargetingScript : MonoBehaviour
+{
+	#region Attributes
+
 	public static Color colorOff;
 	public static GameObject selectedTarget = null;
 	private EventSystem eventSys;
 
+	#endregion
+
+	#region Methods
+
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 		//Left mouse click. If object is clicked, target it.
 		if (Input.GetMouseButtonDown(0))
 		{
@@ -18,23 +27,36 @@ public class TargetingScript : MonoBehaviour {
 
 			foreach (RaycastHit hit in hits)
 			{
-                if (hit.collider.CompareTag("DataBall"))
+				if (hit.collider.CompareTag("DataBall"))
 				{
 					missTarget = false;
-					SelectTarget(hit);
+					SelectDataBall(hit);
+					break;
+				}
+
+				else if (hit.collider.CompareTag("DataLine"))
+				{
+					missTarget = false;
+					SelectDataLine(hit);
 					break;
 				}
 			}
+
 			if (missTarget == true && !eventSys.IsPointerOverGameObject() && selectedTarget != null)
 			{
-				selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+				if (selectedTarget.gameObject.CompareTag("DataBall"))
+					selectedTarget.GetComponent<Renderer>().material.color = colorOff;
+				
+				else if (selectedTarget.gameObject.CompareTag("DataLine"))
+					selectedTarget.GetComponent<LineRenderer>().material.color = colorOff;
+
 				selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
 				selectedTarget = null;
 			}
 		}
 	}
 
-	private void SelectTarget(RaycastHit hit)
+	private void SelectDataBall(RaycastHit hit)
 	{
 		if (selectedTarget != null)
 		{
@@ -47,4 +69,20 @@ public class TargetingScript : MonoBehaviour {
 		selectedTarget.GetComponent<Renderer>().material.color = Color.white;
 		selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 	}
+
+	private void SelectDataLine(RaycastHit hit)
+	{
+		if (selectedTarget != null)
+		{
+			selectedTarget.GetComponent<LineRenderer>().material.color = colorOff;
+			selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+		}
+
+		selectedTarget = hit.transform.gameObject;
+		colorOff = selectedTarget.GetComponent<LineRenderer>().material.color;
+		selectedTarget.GetComponent<LineRenderer>().material.color = Color.white;
+		selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+	}
+
+	#endregion
 }

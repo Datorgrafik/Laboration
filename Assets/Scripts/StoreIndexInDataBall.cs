@@ -2,6 +2,10 @@
 
 public class StoreIndexInDataBall : MonoBehaviour
 {
-    public int index { get; set; }
-    public string TargetFeature { get; set; }
+	#region Attributes
+
+	public int Index { get; set; }
+	public string TargetFeature { get; set; }
+
+	#endregion
 }

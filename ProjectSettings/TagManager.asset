@@ -8,6 +8,9 @@ TagManager:
   - dataValues
   - DataLine
   - TextValues
+  - kInput
+  - newkValue
+  - weightedToggle
   layers:
   - Default
   - TransparentFX

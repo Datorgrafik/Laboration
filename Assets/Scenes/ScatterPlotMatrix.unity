@@ -3699,22 +3699,22 @@ PrefabInstance:
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 706
+      value: 710.32
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 62
+      value: 60.5
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1421
+      value: -1422.7114
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -613.6
+      value: -610.50586
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
@@ -4890,6 +4890,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 2Dpanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113919268377329104, guid: cfb37402649a9044a86b664cccb62934,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2162622602274033758, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}

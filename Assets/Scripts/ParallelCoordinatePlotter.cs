@@ -32,18 +32,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private int nFeatures;
 
 	// PlotColumns
-	public Dropdown column1;
-	public Dropdown column2;
-	public Dropdown column3;
-	public Dropdown column4;
-	List<Dropdown> columnDropdownList;
+	public List<Dropdown> columnDropdownList = new List<Dropdown>();
 
 	// Column Text Fields
-	public TMP_Text column1Text;
-	public TMP_Text column2Text;
-	public TMP_Text column3Text;
-	public TMP_Text column4Text;
-	List<TMP_Text> columnTextList;
+	public List<TMP_Text> columnTextList = new List<TMP_Text>();
+
+	// ChangePanel Lists
+	public List<TMP_Text> ChangePanelColumnText = new List<TMP_Text>();
+	public List<TMP_Text> ChangePanelColumnValueText = new List<TMP_Text>();
+	public List<TMP_InputField> ChangePanelColumnInputfield = new List<TMP_InputField>();
 
 	#endregion
 
@@ -72,28 +69,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		else
 			LinePrefab.GetComponent<LineRenderer>().positionCount = 4;
 
-		// Add attributes to lists for easier initial management
-		columnTextList = new List<TMP_Text>()
-		{
-			column1Text,
-			column2Text,
-			column3Text,
-			column4Text
-		};
-		columnDropdownList = new List<Dropdown>()
-		{
-			column1,
-			column2,
-			column3,
-			column4
-		};
-
 		AddDropdownListeners();
 
 		// Default values for each columntext at start, depending on nFeatures (max 4)
 		for (int i = 0; i < nFeatures; i++)
 		{
 			columnTextList[i].text = featureList[i];
+			ChangePanelColumnText[i].text = featureList[i];
 
 			if (i+1 == 4)
 				break;
@@ -120,9 +102,18 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Assign column name from columnList to Name variables
 		for (int i = 0; i < nFeatures; i++)
 		{
+			// iLocal for Listener reference
+			int iLocal = i;
+
 			columnDropdownList[i].AddOptions(featureList);
 			columnDropdownList[i].value = i;
-			columnDropdownList[i].onValueChanged.AddListener(delegate { columnTextList[i].text = featureList[columnDropdownList[i].value]; });
+
+			columnDropdownList[iLocal].onValueChanged
+				.AddListener(delegate 
+				{
+					columnTextList[iLocal].text = featureList[columnDropdownList[iLocal].value];
+					ChangePanelColumnText[iLocal].text = featureList[columnDropdownList[iLocal].value];
+				});
 
 			if (i + 1 == 4)
 				break;
@@ -155,12 +146,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
 		{
-			Debug.Log(featureList[i]);
-			float yMaxTempValue = FindMaxValue(featureList[i]);
+			float yMaxTempValue = FindMinMaxValue.FindMaxValue(featureList[i], pointList);
 			if (yMaxTempValue > yMax)
 				yMax = yMaxTempValue;
 
-			float yMinTempValue = FindMinValue(featureList[i]);
+			float yMinTempValue = FindMinMaxValue.FindMinValue(featureList[i], pointList);
 			if (yMinTempValue < yMin)
 				yMin = yMinTempValue;
 		}
@@ -247,9 +237,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		float xPos = SetColumnPosition(columnPos);
 
 		// Get MaxValue
-		float columnMax = FindMaxValue(columnName);
+		float columnMax = FindMinMaxValue.FindMaxValue(columnName, pointList);
 		// Get MinValue
-		float columnMin = FindMinValue(columnName);
+		float columnMin = FindMinMaxValue.FindMinValue(columnName, pointList);
 
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)
@@ -345,52 +335,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			targetColor = Color.black;
 
 		return targetColor;
-	}
-
-	private float FindMaxValue(string columnName)
-	{
-		string maxValueString = pointList[0][columnName].ToString();
-		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
-
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string maxValueStringLoop = pointList[i][columnName].ToString();
-
-			try
-			{
-				if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
-					maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				// Catches '?' as missing values that cannot be converted to floats in the dataset.
-			}
-		}
-
-		return maxValue;
-	}
-
-	private float FindMinValue(string columnName)
-	{
-		string minValueString = pointList[0][columnName].ToString();
-		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
-
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string minValueStringLoop = pointList[i][columnName].ToString();
-
-			try
-			{
-				if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
-					minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				// Catches '?' as missing values that cannot be converted to floats in the dataset.
-			}
-		}
-
-		return minValue;
 	}
 
 	public void ReorderColumns()

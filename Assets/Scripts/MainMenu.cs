@@ -59,6 +59,7 @@ public class MainMenu : MonoBehaviour
 
 	public void ValfriTeknik()
 	{
+        renderMode = 1;
 		SceneManager.LoadScene("ValfriTeknik");
 	}
 
@@ -69,7 +70,6 @@ public class MainMenu : MonoBehaviour
 
 	public void QuitApplication()
 	{
-		Debug.Log("QUIT...");
 		Application.Quit();
 	}
 }

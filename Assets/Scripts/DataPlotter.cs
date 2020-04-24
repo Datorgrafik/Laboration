@@ -238,7 +238,9 @@ public class DataPlotter : MonoBehaviour
 				selectedIndex = -1;
 			}
 		}
-	}
+       // GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+        //transform.LookAt(newBall.transform);
+    }
 
 	public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
 	{
@@ -326,6 +328,6 @@ public class DataPlotter : MonoBehaviour
             datapoints.Add(child.gameObject);
         }
         ThisInstans.PlottData();
-
+       
     }
 }

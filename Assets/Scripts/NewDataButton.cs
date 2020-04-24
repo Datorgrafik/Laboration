@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +15,7 @@ public class NewDataButton : MonoBehaviour
     public Text description;
     public Button button;
     public List<string> dataPoint;
+   
 
 
     // Start is called before the first frame update
@@ -77,8 +81,36 @@ public class NewDataButton : MonoBehaviour
         Cancel();
         //newDataList.SetActive(false);
        // newDataWindow.SetActive(false);
-        Debug.Log("Save inpur efter upphämtning av input");
         DataPlotter.AddDataPoint(dataPoint);
         //newData.interactable = true;
     }
+    //public void AddDataPoint(List<string> newPoint)
+    //{
+    //    Dictionary<string, object> last = DataPlotter.pointList.Last();
+
+    //    Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
+
+    //    newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
+
+    //    for (int i = 0; i < DataPlotter.ThisInstans.columnList.Count - 2; i++)
+    //    {
+    //        newDataPoint.Add(DataPlotter.ThisInstans.columnList[i + 1], newPoint[i]);
+    //    }
+
+    //    double[] unknown = new double[newPoint.Count];
+
+    //    for (int i = 0; i < newPoint.Count; ++i)
+    //    {
+    //        unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+    //        Debug.Log(newPoint[i].ToString());
+    //    }
+
+    //    var predict = DataPlotter.dataClass.Knn(unknown);
+    //    newDataPoint.Add(DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1], predict);
+
+    //    DataPlotter.pointList.Add(newDataPoint);
+
+    //    DataPlotter.ThisInstans.PlottData();
+
+    //}
 }

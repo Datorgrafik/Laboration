@@ -63,7 +63,7 @@ public class DataPlotter : MonoBehaviour
 		//Debug.Log(MainMenu.fileData);
 		dataClass = CSVläsare.Read(MainMenu.fileData);
         pointList = dataClass.CSV;
-
+        ThisInstans = this;
         //Log to console
         //Debug.Log(pointList);
 
@@ -288,13 +288,13 @@ public class DataPlotter : MonoBehaviour
 		PlottData();
 	}
 
-    public void AddDataPoint(List<string> newPoint)
+    static public void AddDataPoint(List<string> newPoint)
     {
         Dictionary<string, object> last = pointList.Last();
 
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
 
-        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture))+1);
+        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
 
         for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
         {
@@ -310,11 +310,11 @@ public class DataPlotter : MonoBehaviour
         }
 
         var predict = dataClass.Knn(unknown);
-        newDataPoint.Add(columnList[columnList.Count - 1], predict);
+        newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);
-        
-        PlottData();
-       
+
+        ThisInstans.PlottData();
+
     }
 }

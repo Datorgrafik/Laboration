@@ -21,6 +21,9 @@ public class ScatterplotDimensions : MonoBehaviour
     public GameObject PointPrefab;
     public GameObject LineSeparatorPrefab;
 
+    public Color ColorTop = new Color(1, 1, 1, 1.0f);
+    public Color ColorBottom = new Color(1, 0, 1, 1.0f);
+
     [SerializeField]
     public TMP_Text valuePrefab;
 

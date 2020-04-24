@@ -9,19 +9,14 @@ using UnityEngine.UI;
 public class KNN : MonoBehaviour
 {
     public static List<string> attributes;
-    public Toggle weights;
     //public Toggle weights { get { return instance.myNormalVar; } }
-    public GameObject input;
-    public InputField k;
-    public string kValue;
     //public static List<Dictionary<string, object>> PointsToColor;
     public static List<int> kPoints;
 
     public KNN()
     {
-        weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
-        input = GameObject.FindGameObjectWithTag("kInput");
-        k = input.GetComponent<InputField>();
+        //weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
+        //k = GameObject.FindGameObjectWithTag("kInput").GetComponent<InputField>() as InputField;
     }
 
     static public object ClassifyReg(double[] unknown,

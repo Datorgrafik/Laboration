@@ -12,6 +12,10 @@ public class NewDataButton : MonoBehaviour
     public Text description;
     public Button button;
     public List<string> dataPoint;
+    public InputField k;
+    public Toggle weighted;
+    public static string kValue;
+    public static bool weightedOrNot;
 
 
     // Start is called before the first frame update
@@ -72,13 +76,24 @@ public class NewDataButton : MonoBehaviour
         {
             dataPoint.Add(data.text);
             data.text = null;
-           
         }
+
+        kValue = k.GetComponent<InputField>().text;
+
+        if (weighted.GetComponent<Toggle>().isOn == true)
+        {
+            weightedOrNot = true;
+        }
+        else
+        {
+            weightedOrNot = false;
+        }
+
         Cancel();
         //newDataList.SetActive(false);
        // newDataWindow.SetActive(false);
-        Debug.Log("Save inpur efter upphämtning av input");
-        DataPlotter.AddDataPoint(dataPoint);
+        //Debug.Log("Save input efter upphämtning av input");
+        DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
         //newData.interactable = true;
     }
 }

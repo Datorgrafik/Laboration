@@ -182,7 +182,7 @@ public class ScatterplotDimensions : MonoBehaviour
         }
 
 
-        var predict = dataClass.Knn(unknown);
+        var predict = dataClass.Knn(unknown, NewDataButton.kValue, NewDataButton.weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);

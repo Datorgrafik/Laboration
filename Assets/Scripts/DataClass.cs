@@ -11,5 +11,5 @@ public abstract class DataClass
         CSV = data;
     }
 
-    public abstract object Knn(double[] unknown);
+    public abstract object Knn(double[] unknown, string k, bool weightedOrNot);
 }

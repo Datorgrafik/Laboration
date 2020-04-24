@@ -289,7 +289,7 @@ public class DataPlotter : MonoBehaviour
 		PlottData();
 	}
 
-    static public void AddDataPoint(List<string> newPoint)
+    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
     {
         Dictionary<string, object> last = pointList.Last();
 
@@ -316,7 +316,7 @@ public class DataPlotter : MonoBehaviour
         }
 
 
-        var predict = dataClass.Knn(unknown);
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);

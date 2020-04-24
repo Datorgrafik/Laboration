@@ -10,7 +10,7 @@ public class Classification : DataClass
 
     }
 
-    public override object Knn(double[] unknown)
+    public override object Knn(double[] unknown, string k, bool weightedOrNot)
     {
         return KNN.ClassifyClass(unknown, CSV);
     }

@@ -216,10 +216,10 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
                 dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count()-1]];
 				dataPoint.transform.parent = PointHolder.transform;
-               // if (!pointList[i].ContainsKey("DataBall"))
-                 //   pointList[i].Add("DataBall", dataPoint);
-                //else
-                  //  pointList[i]["DataBall"] = dataPoint;
+                if (!pointList[i].ContainsKey("DataBall"))
+                    pointList[i].Add("DataBall", dataPoint);
+                else
+                    pointList[i]["DataBall"] = dataPoint;
 			}
 
 			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
@@ -288,7 +288,7 @@ public class DataPlotter : MonoBehaviour
 		PlottData();
 	}
 
-    static public void AddDataPoint(List<string> newPoint)
+    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
     {
         Dictionary<string, object> last = pointList.Last();
 
@@ -309,12 +309,21 @@ public class DataPlotter : MonoBehaviour
             Debug.Log(newPoint[i].ToString());
         }
 
-        var predict = dataClass.Knn(unknown);
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
         pointList.Add(newDataPoint);
 
         ThisInstans.PlottData();
+        Blink(KNN.kPoints);
 
+    }
+    static void Blink(List<int> kPoints)
+    {
+        foreach (int data in kPoints)
+        {
+            GameObject ball = (GameObject)pointList[data]["DataBall"];
+            ball.GetComponent<Blink>().enabled = true;
+        }
     }
 }

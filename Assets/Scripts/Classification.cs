@@ -13,9 +13,9 @@ public class Classification : DataClass
     public Classification(List<Dictionary<string, object>> data)
     : base(data) { }
 
-    public override object Knn(double[] unknown)
+    public override object Knn(double[] unknown, string k, bool weightedOrNot)
     {
-        KNN knn = new KNN();
+        KNN knn = new KNN(unknown, k, weightedOrNot);
         return knn.ClassifyClass(unknown, CSV);
     }
 

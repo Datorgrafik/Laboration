@@ -15,8 +15,10 @@ public class NewDataButton : MonoBehaviour
     public Text description;
     public Button button;
     public List<string> dataPoint;
-   
-
+    public InputField k;
+    public Toggle weighted;
+    public static string kValue;
+    public static bool weightedOrNot;
 
     // Start is called before the first frame update
     private void Start()
@@ -77,43 +79,27 @@ public class NewDataButton : MonoBehaviour
         {
             dataPoint.Add(data.text);
             data.text = null;
-           
         }
+
+        kValue = k.GetComponent<InputField>().text;
+
+        if (weighted.GetComponent<Toggle>().isOn == true)
+        {
+            weightedOrNot = true;
+        }
+        else
+        {
+            weightedOrNot = false;
+        }
+
         Cancel();
         //newDataList.SetActive(false);
        // newDataWindow.SetActive(false);
-        DataPlotter.AddDataPoint(dataPoint);
+        //Debug.Log("Save input efter upphämtning av input");
+        DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
         //newData.interactable = true;
     }
-    //public void AddDataPoint(List<string> newPoint)
-    //{
-    //    Dictionary<string, object> last = DataPlotter.pointList.Last();
 
-    //    Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
-
-    //    newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
-
-    //    for (int i = 0; i < DataPlotter.ThisInstans.columnList.Count - 2; i++)
-    //    {
-    //        newDataPoint.Add(DataPlotter.ThisInstans.columnList[i + 1], newPoint[i]);
-    //    }
-
-    //    double[] unknown = new double[newPoint.Count];
-
-    //    for (int i = 0; i < newPoint.Count; ++i)
-    //    {
-    //        unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-    //        Debug.Log(newPoint[i].ToString());
-    //    }
-
-    //    var predict = DataPlotter.dataClass.Knn(unknown);
-    //    newDataPoint.Add(DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1], predict);
-
-    //    DataPlotter.pointList.Add(newDataPoint);
-
-    //    DataPlotter.ThisInstans.PlottData();
-
-    //}
     private string FindAverage(string attribute)
     {
         double  sum = 0.0;

@@ -9,26 +9,23 @@ using UnityEngine.UI;
 public class KNN : MonoBehaviour
 {
     public static List<string> attributes;
-    public Toggle weights;
     //public Toggle weights { get { return instance.myNormalVar; } }
-    //public GameObject input;
-    public InputField k;
-    //public string kValue;
     //public static List<Dictionary<string, object>> PointsToColor;
     public static List<int> kPoints;
+    public string kValue;
+    public bool trueOrFalse;
+
+    public KNN(double[] unknown, string k, bool weightedOrNot)
+    {
+        kValue = k;
+        trueOrFalse = weightedOrNot;
+        int u = 1;
+    }
 
     void Start()
     {
-        k.text = "2";
+        
     }
-
-    //public KNN()
-    //{
-    //    //weights = (Toggle)GameObject.FindWithTag("Weight").GetComponent<Toggle>();
-    //    //k = GameObject.FindGameObjectWithTag("kInput").GetComponent<InputField>() as InputField;
-    //    int u = 1;
-    //   // k = input.GetComponent<InputField>();
-    //}
 
     public object ClassifyReg(double[] unknown,
 List<Dictionary<string, object>> trainData)

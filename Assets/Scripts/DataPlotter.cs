@@ -9,10 +9,12 @@ using System.Linq;
 
 public class DataPlotter : MonoBehaviour
 {
+	#region Attributes
+
 	public static List<Dictionary<string, object>> pointList;
 
-    // Indices for columns to be assigned
-    public int columnX = 1;
+	// Indices for columns to be assigned
+	public int columnX = 1;
 	public int columnY = 2;
 	public int columnZ = 3;
 
@@ -43,91 +45,62 @@ public class DataPlotter : MonoBehaviour
 	public List<string> columnList;
 	public List<string> targetFeatures;
 
+	public float xMax;
+	public float yMax;
+	public float zMax;
+	public float xMin;
+	public float yMin;
+	public float zMin;
 
-    public float xMax;
-    public float yMax;
-    public float zMax;
-    public float xMin;
-    public float yMin;
-    public float zMin;
+	public static DataPlotter ThisInstans;
+	public static DataClass dataClass;
+	private int selectedIndex = -1;
 
+	#endregion
 
-    public static DataPlotter ThisInstans;
-    public static DataClass dataClass;
-    private int selectedIndex = -1;
+	#region Methods
 
 	// Use this for initialization
 	void Start()
 	{
 		// Set pointlist to results of function Reader with argument inputfile
-		//Debug.Log(MainMenu.fileData);
 		dataClass = CSVläsare.Read(MainMenu.fileData);
-        pointList = dataClass.CSV;
-        ThisInstans = this;
-        //Log to console
-        //Debug.Log(pointList);
+		pointList = dataClass.CSV;
+		ThisInstans = this;
 
-        // Declare list of strings, fill with keys (column names)
-        columnList = new List<string>(pointList[1].Keys);
-		// Print number of keys (using .count)
-		//Debug.Log("There are " + columnList.Count + " columns in CSV");
-
-		//foreach (string key in columnList)
-		//	Debug.Log("Column name is " + key);
+		// Declare list of strings, fill with keys (column names)
+		columnList = new List<string>(pointList[1].Keys);
 
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(columnList);
-        xList.value = 1;
-        xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-
+		xList.value = 1;
+		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
 		yList.AddOptions(columnList);
-        yList.value = 2;
-        yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-
+		yList.value = 2;
+		yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
 		if (MainMenu.renderMode == 1)
 		{
 			zList.AddOptions(columnList);
-            zList.value = 3;
-            zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-
+			zList.value = 3;
+			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 		}
 
 		PlottData();
 	}
 
-	private float FindMaxValue(string columnName)
-	{
-		//set initial value to first value
-		string maxValueString = pointList[0][columnName].ToString();
-		float maxValue = float.Parse(maxValueString, CultureInfo.InvariantCulture);
-
-		//Loop through Dictionary, overwrite existing maxValue if new value is larger
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string maxValueStringLoop = pointList[i][columnName].ToString();
-
-			if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
-				maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
-		}
-
-		//Spit out the max value
-		return maxValue;
-	}
-
 	public void PlottData()
 	{
-        if(TargetingScript.selectedTarget != null)
-        {
-            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-        }
+		if (TargetingScript.selectedTarget != null)
+			selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-        GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
-        foreach (GameObject dataValues in allDataBalls)
-        {
-            Destroy(dataValues);
-        }
+		GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
+
+		foreach (GameObject dataValues in allDataBalls)
+		{
+			Destroy(dataValues);
+		}
 
 		xName = columnList[xList.value];
 		yName = columnList[yList.value];
@@ -136,21 +109,21 @@ public class DataPlotter : MonoBehaviour
 		yAxisText.text = yName;
 
 		// Get maxes of each axis
-		xMax = FindMaxValue(xName);
-		yMax = FindMaxValue(yName);
+		xMax = FindMinMaxValue.FindMaxValue(xName, pointList);
+		yMax = FindMinMaxValue.FindMaxValue(yName, pointList);
 		zMax = 0f;
 
 		// Get minimums of each axis
-		xMin = FindMinValue(xName);
-		yMin = FindMinValue(yName);
+		xMin = FindMinMaxValue.FindMinValue(xName, pointList);
+		yMin = FindMinMaxValue.FindMinValue(yName, pointList);
 		zMin = 0f;
 
 		if (MainMenu.renderMode == 1)
 		{
 			zName = columnList[zList.value];
 			zAxisText.text = zName;
-			zMax = FindMaxValue(zName);
-			zMin = FindMinValue(zName);
+			zMax = FindMinMaxValue.FindMaxValue(zName, pointList);
+			zMin = FindMinMaxValue.FindMinValue(zName, pointList);
 		}
 
 		string valueString;
@@ -158,6 +131,7 @@ public class DataPlotter : MonoBehaviour
 		if (MainMenu.renderMode == 0)
 		{
 			GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
+
 			foreach (GameObject dataValues in allGameObjects)
 			{
 				Destroy(dataValues);
@@ -167,6 +141,7 @@ public class DataPlotter : MonoBehaviour
 			{
 				GameObject lineSeparatorX = Instantiate(LineSeparatorPrefab, new Vector3(i, 5.4F, -0.001F), Quaternion.identity);
 				GameObject lineSeparatorY = Instantiate(LineSeparatorPrefab, new Vector3(5, i, -0.001F), Quaternion.identity);
+				
 				lineSeparatorX.transform.rotation = Quaternion.Euler(0, 0, 0);
 				lineSeparatorY.transform.rotation = Quaternion.Euler(0, 0, 90);
 
@@ -176,12 +151,10 @@ public class DataPlotter : MonoBehaviour
 				float xValue = ((xMax - xMin) / 10) * i + xMin;
 				float yValue = ((yMax - yMin) / 10) * i + yMin;
 
-                valuePointX.text = xValue.ToString("0.00"); 
-                valuePointY.text = yValue.ToString("0.00"); 
-
-            }
+				valuePointX.text = xValue.ToString("0.00");
+				valuePointY.text = yValue.ToString("0.00");
+			}
 		}
-
 
 		//Loop through Pointlist
 		for (var i = 0; i < pointList.Count; i++)
@@ -199,9 +172,7 @@ public class DataPlotter : MonoBehaviour
 
 			//Lägger in alla targetfeatures i en lista
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
-			{
 				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
-			}
 
 			if (MainMenu.renderMode == 0)
 			{
@@ -214,12 +185,13 @@ public class DataPlotter : MonoBehaviour
 				valueString = pointList[i][zName].ToString();
 				z = (float.Parse(valueString, CultureInfo.InvariantCulture) - zMin) / (zMax - zMin);
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
-                dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count()-1]];
+				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
-                if (!pointList[i].ContainsKey("DataBall"))
-                    pointList[i].Add("DataBall", dataPoint);
-                else
-                    pointList[i]["DataBall"] = dataPoint;
+
+				if (!pointList[i].ContainsKey("DataBall"))
+					pointList[i].Add("DataBall", dataPoint);
+				else
+					pointList[i]["DataBall"] = dataPoint;
 			}
 
 			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
@@ -237,9 +209,9 @@ public class DataPlotter : MonoBehaviour
 				selectedIndex = -1;
 			}
 		}
-       // GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
-        //transform.LookAt(newBall.transform);
-    }
+		// GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+		//transform.LookAt(newBall.transform);
+	}
 
 	public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
 	{
@@ -259,23 +231,6 @@ public class DataPlotter : MonoBehaviour
 		}
 	}
 
-	private float FindMinValue(string columnName)
-	{
-		string minValueString = pointList[0][columnName].ToString();
-		float minValue = float.Parse(minValueString, CultureInfo.InvariantCulture);
-
-		//Loop through Dictionary, overwrite existing minValue if new value is smaller
-		for (var i = 0; i < pointList.Count; i++)
-		{
-			string minValueStringLoop = pointList[i][columnName].ToString();
-
-			if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
-				minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
-		}
-
-		return minValue;
-	}
-
 	public void DropdownValueChanged()
 	{
 		GameObject ScatterPlotter = GameObject.Find("Scatterplot");
@@ -288,42 +243,44 @@ public class DataPlotter : MonoBehaviour
 		PlottData();
 	}
 
-    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
-    {
-        Dictionary<string, object> last = pointList.Last();
+	static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
+	{
+		Dictionary<string, object> last = pointList.Last();
 
-        Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
+		Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
 
-        newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
+		newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
 
-        for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
-        {
-            newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
-        }
+		for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
+		{
+			newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
+		}
 
-        double[] unknown = new double[newPoint.Count];
+		double[] unknown = new double[newPoint.Count];
 
-        for (int i = 0; i < newPoint.Count; ++i)
-        {
-            unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-            Debug.Log(newPoint[i].ToString());
-        }
+		for (int i = 0; i < newPoint.Count; ++i)
+		{
+			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+			Debug.Log(newPoint[i].ToString());
+		}
 
-        var predict = dataClass.Knn(unknown, k, weightedOrNot);
-        newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+		var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
-        pointList.Add(newDataPoint);
+		pointList.Add(newDataPoint);
 
-        ThisInstans.PlottData();
-        Blink(KNN.kPoints);
+		ThisInstans.PlottData();
+		Blink(KNN.kPoints);
+	}
 
-    }
-    static void Blink(List<int> kPoints)
-    {
-        foreach (int data in kPoints)
-        {
-            GameObject ball = (GameObject)pointList[data]["DataBall"];
-            ball.GetComponent<Blink>().enabled = true;
-        }
-    }
+	static void Blink(List<int> kPoints)
+	{
+		foreach (int data in kPoints)
+		{
+			GameObject ball = (GameObject)pointList[data]["DataBall"];
+			ball.GetComponent<Blink>().enabled = true;
+		}
+	}
+
+	#endregion
 }

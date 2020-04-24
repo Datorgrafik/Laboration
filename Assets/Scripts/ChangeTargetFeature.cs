@@ -28,7 +28,6 @@ public class ChangeTargetFeature : MonoBehaviour
 			colorOfTargetFeature.GetComponent<Image>().color = TargetingScript.colorOff;
 			changeTargetFeature.AddOptions(DataPlotter.ThisInstans.targetFeatures);
 			targetFeatureText.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
-
 		}
 		else if (TargetingScript.selectedTarget != selTarget)
 		{
@@ -49,5 +48,4 @@ public class ChangeTargetFeature : MonoBehaviour
 	}
 
 	#endregion
-
 }

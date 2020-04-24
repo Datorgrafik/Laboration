@@ -12,6 +12,7 @@ public class Regression : DataClass
 
     public override object Knn(double[] unknown)
     {
-        return KNN.ClassifyReg(unknown, CSV);
+        KNN knn = new KNN();
+        return knn.ClassifyReg(unknown, CSV);
     }
 }

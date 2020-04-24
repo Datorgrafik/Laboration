@@ -121,7 +121,7 @@ public class NewDataButton : MonoBehaviour
         {
             sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
         }
-        return Convert.ToString(sum / DataPlotter.dataClass.CSV.Count - 1);
+        return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2));
 
     }
 }

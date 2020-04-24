@@ -15,6 +15,7 @@ public class KNN : MonoBehaviour
     public InputField k;
     public string kValue;
     //public static List<Dictionary<string, object>> PointsToColor;
+    public static List<int> kPoints;
 
     public KNN()
     {
@@ -63,6 +64,7 @@ List<Dictionary<string, object>> trainData)
     static object Vote(IndexAndDistance[] info,
       List<Dictionary<string, object>> trainData, int k)
     {
+        kPoints = new List<int>();
         //PointsToColor.Clear();
         Dictionary<string, int> votes = new Dictionary<string, int>(); // One cell per class
         for (int i = 0; i < k; ++i)
@@ -77,7 +79,8 @@ List<Dictionary<string, object>> trainData)
             {
                 votes.Add(c, 1);
             }
-            //ColorPoint((GameObject)trainData[i]["DataBall"]);
+            kPoints.Add(Convert.ToInt32(trainData[idx][""], CultureInfo.InvariantCulture));
+
         }
         var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
         return Maxvotes;
@@ -86,14 +89,14 @@ List<Dictionary<string, object>> trainData)
     static object VoteReg(IndexAndDistance[] info,
     List<Dictionary<string, object>> trainData, int k)
     {
-
+        kPoints = new List<int>();
         double sum = 0.0;
         for (int i = 0; i < k; ++i)
         {
             int idx = info[i].idx;
             double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
             sum += c;
-           // ColorPoint((GameObject)trainData[i]["DataBall"] as GameObject);
+            kPoints.Add(Convert.ToInt32(trainData[idx][""], CultureInfo.InvariantCulture));
         }
         return sum / k;
     }
@@ -109,10 +112,6 @@ List<Dictionary<string, object>> trainData)
             sum += (unknown[i] - Convert.ToDouble(data[attributes[i + 1]], CultureInfo.InvariantCulture)) * (unknown[i] - Convert.ToDouble(data[attributes[i + 1]], CultureInfo.InvariantCulture));
         }
         return Math.Sqrt(sum);
-    }
-    static void ColorPoint(GameObject gb)
-    {
-        gb.GetComponent<Renderer>().material.color = Color.red;
     }
 
 } // Program class

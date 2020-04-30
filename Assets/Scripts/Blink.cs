@@ -9,11 +9,16 @@ public class Blink : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
-        Ball = GetComponent<Renderer>();       
+        Ball = GetComponent<Renderer>();
+        InvokeRepeating("Blinking",0,0.2f);
     }
-    void Update()
+    void Blinking()
     {
-        Ball.enabled = false;
-        Ball.enabled = true;
+        if (Ball.enabled == true)
+        {
+            Ball.enabled = false;
+        }
+        else
+            Ball.enabled = true;
     }
 }

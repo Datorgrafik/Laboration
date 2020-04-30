@@ -258,14 +258,15 @@ public class DataPlotter : MonoBehaviour
 
 		double[] unknown = new double[newPoint.Count];
 
-		for (int i = 0; i < newPoint.Count; ++i)
-		{
-			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-			Debug.Log(newPoint[i].ToString());
-		}
+        for (int i = 0; i < newPoint.Count; ++i)
+        {
+            unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+
+        }
 
 		var predict = dataClass.Knn(unknown, k, weightedOrNot);
 		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+
 
 		pointList.Add(newDataPoint);
 

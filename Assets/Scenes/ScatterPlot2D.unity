@@ -733,6 +733,11 @@ PrefabInstance:
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 58
+      objectReference: {fileID: 0}
+    - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: -312.2
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
@@ -4631,15 +4636,13 @@ MonoBehaviour:
 
     UpArrow - Zoom in
 
-    DownArrow
-    - Zoom out
+    DownArrow - Zoom out
 
     Right click - Camera movement
 
     Left click - Target DataBalls
 
-    Left
-    click and move mouse - Move targeted DataBall'
+    Left click and move mouse - Move targeted DataBall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

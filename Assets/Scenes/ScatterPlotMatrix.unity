@@ -2787,10 +2787,6 @@ MonoBehaviour:
   - {fileID: 809509369}
   - {fileID: 1353339434}
   - {fileID: 651315231}
-  feature1: {fileID: 1805951028}
-  feature2: {fileID: 809509369}
-  feature3: {fileID: 1353339434}
-  feature4: {fileID: 651315231}
   PointHolder: {fileID: 840835706}
   planePointBackground: {fileID: 3924216286870470730, guid: 47f55a5ec49893b41ad9fd21346ad824,
     type: 3}

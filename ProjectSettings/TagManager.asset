@@ -11,6 +11,7 @@ TagManager:
   - kInput
   - newkValue
   - weightedToggle
+  - 3D_Axis_ValueText
   layers:
   - Default
   - TransparentFX

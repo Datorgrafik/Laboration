@@ -6,6 +6,7 @@ using System.Globalization;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using UnityEngine.Animations;
 
 public class DataPlotter : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class DataPlotter : MonoBehaviour
 	public GameObject PointHolder;
 	public List<string> columnList;
 	public List<string> targetFeatures;
+	public TMP_Text axisValueTextPrefab;
 
 	public float xMax;
 	public float yMax;
@@ -102,6 +104,12 @@ public class DataPlotter : MonoBehaviour
 			Destroy(dataValues);
 		}
 
+		GameObject[] allAxisValueTexts = GameObject.FindGameObjectsWithTag("3D_Axis_ValueText");
+		foreach (var axisValue in allAxisValueTexts)
+		{
+			Destroy(axisValue);
+		}
+
 		xName = columnList[xList.value];
 		yName = columnList[yList.value];
 
@@ -128,6 +136,7 @@ public class DataPlotter : MonoBehaviour
 
 		string valueString;
 
+		// If renderMode is 2D
 		if (MainMenu.renderMode == 0)
 		{
 			GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
@@ -155,6 +164,10 @@ public class DataPlotter : MonoBehaviour
 				valuePointY.text = yValue.ToString("0.00");
 			}
 		}
+
+		// If renderMode is 3D
+		if (MainMenu.renderMode == 1)
+			RenderAxisValues();
 
 		//Loop through Pointlist
 		for (var i = 0; i < pointList.Count; i++)
@@ -213,6 +226,32 @@ public class DataPlotter : MonoBehaviour
 		//transform.LookAt(newBall.transform);
 	}
 
+	private void RenderAxisValues()
+	{
+		for (int i = 0; i <= 11; i++)
+		{
+			// Skip the first index for X-Axis because text is crowded there
+			if (i != 0)
+			{
+				// Render X-Axis
+				TMP_Text xAxisValue = Instantiate(axisValueTextPrefab, new Vector3(i, 0, -0.5f), Quaternion.Euler(90, -90, 0));
+				float xValue = ((xMax - xMin) / 10) * i + xMin;
+				xAxisValue.text = xValue.ToString("0.0");
+			}
+
+			// Render Y-Axis
+			TMP_Text yAxisValue = Instantiate(axisValueTextPrefab, new Vector3(0, i, -0.5f), Quaternion.Euler(0, -90, 0));
+			float yValue = ((yMax - yMin) / 10) * i + yMin;
+			yAxisValue.text = yValue.ToString("0.0");
+
+			// Render Z-Axis
+			TMP_Text zAxisValue = Instantiate(axisValueTextPrefab, new Vector3(12.5f, 0, i+0.3f), Quaternion.Euler(90, -90, -90));
+			float zValue = ((zMax - zMin) / 10) * i + zMin;
+			zAxisValue.text = zValue.ToString("0.0");
+		}
+
+	}
+
 	public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
 	{
 		float colorValue = (float)1 / (targetFeatureIndex + 1);
@@ -258,11 +297,11 @@ public class DataPlotter : MonoBehaviour
 
 		double[] unknown = new double[newPoint.Count];
 
-        for (int i = 0; i < newPoint.Count; ++i)
-        {
-            unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+		for (int i = 0; i < newPoint.Count; ++i)
+		{
+			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
 
-        }
+		}
 
 		var predict = dataClass.Knn(unknown, k, weightedOrNot);
 		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);

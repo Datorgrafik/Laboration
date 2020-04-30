@@ -5,77 +5,70 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
-//Behöver skrivas om för att undvika plagiat.
-
 public class CSVläsare
 {
-    public static List<string> columnList;
+	public static List<string> columnList;
 
-    static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))"; // Define delimiters, regular expression craziness
-	static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r"; // Define line delimiters, regular experession craziness
+	// Define delimiters, regular expression craziness
+	static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+	// Define line delimiters, regular experession craziness
+	static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 	static char[] TRIM_CHARS = { '\"' };
 
-	public static DataClass Read(string file) //Declare method
+	public static DataClass Read(string file)
 	{
+		//Declare dictionary list
+		var list = new List<Dictionary<string, object>>();
 
-		//Debug.Log("CSVReader is reading " + file); // Print filename, make sure parsed correctly
+		// Split data.text into lines using LINE_SPLIT_RE characters
+		var lines = Regex.Split(file, LINE_SPLIT_RE);
+		//Split header (element 0)
+		var header = Regex.Split(lines[0], SPLIT_RE);
 
-		var list = new List<Dictionary<string, object>>(); //declare dictionary list
+		// Loops through lines
+		for (var i = 1; i < lines.Length; i++)
+		{
+			//Split lines according to SPLIT_RE, store in var (usually string array)
+			var values = Regex.Split(lines[i], SPLIT_RE);
+			
+			// Skip to end of loop (continue) if value is 0 length OR first value is empty
+			if (values.Length == 0 || values[0] == "")
+				continue;
 
-		//TextAsset data = Resources.Load(file) as TextAsset; //Loads the TextAsset named in the file argument of the function
-		// Debug.Log("Data loaded:" + data); // Print raw data, make sure parsed correctly
+			var entry = new Dictionary<string, object>(); // Creates dictionary object
 
-		var lines = Regex.Split(file, LINE_SPLIT_RE); // Split data.text into lines using LINE_SPLIT_RE characters
+			// Loops through every value
+			for (var j = 0; j < header.Length && j < values.Length; j++)
+			{
+				// Set local variable value
+				string value = values[j];
+				// Trim characters
+				value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\", "");
+				// Set final value
+				object finalvalue = value;
 
-		//if (lines.Length <= 1) return list; //Check that there is more than one line
+				// If-else to attempt to parse value into int or float
+				if (int.TryParse(value, out int n))
+					finalvalue = n;
+				else if (float.TryParse(value, out float f))
+					finalvalue = f;
 
-		var header = Regex.Split(lines[0], SPLIT_RE); //Split header (element 0)
+				entry[header[j]] = finalvalue;
+			}
 
-        // Loops through lines
-        for (var i = 1; i < lines.Length; i++)
-        {
+			// Add Dictionary ("entry" variable) to list
+			list.Add(entry);
+		}
 
-            var values = Regex.Split(lines[i], SPLIT_RE); //Split lines according to SPLIT_RE, store in var (usually string array)
-            if (values.Length == 0 || values[0] == "") continue; // Skip to end of loop (continue) if value is 0 length OR first value is empty
+		float r;
+		DataClass dataClass;
+		columnList = new List<string>(list[0].Keys);
 
-            var entry = new Dictionary<string, object>(); // Creates dictionary object
+		if (float.TryParse(list[list.Count - 1][columnList[columnList.Count - 1]].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out r))
+			dataClass = new Regression(list);
+		else
+			dataClass = new Classification(list);
 
-            // Loops through every value
-            for (var j = 0; j < header.Length && j < values.Length; j++)
-            {
-                string value = values[j]; // Set local variable value
-                value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\", ""); // Trim characters
-                object finalvalue = value; //set final value
-
-                int n; // Create int, to hold value if int
-
-                float f; // Create float, to hold value if float
-
-                // If-else to attempt to parse value into int or float
-                if (int.TryParse(value, out n))
-                {
-                    finalvalue = n;
-                }
-                else if (float.TryParse(value, out f))
-                {
-                    finalvalue = f;
-                }
-                entry[header[j]] = finalvalue;
-            }
-            list.Add(entry); // Add Dictionary ("entry" variable) to list
-            }
-            float r;
-            DataClass dataClass;
-            columnList = new List<string>(list[0].Keys);
-            if (float.TryParse(list[list.Count - 1][columnList[columnList.Count - 1]].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out r))
-            {
-                dataClass = new Regression(list);
-            }
-            else
-            {
-                dataClass = new Classification(list);
-            }
-            return dataClass; //Return list
-        }
-		//return dataClass; //Return list
+		return dataClass;
 	}
+}

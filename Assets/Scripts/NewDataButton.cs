@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class NewDataButton : MonoBehaviour
 {
+
     public Button newData;
     public GameObject newDataWindow;
     public GameObject newDataList;
@@ -93,11 +94,8 @@ public class NewDataButton : MonoBehaviour
             weightedOrNot = false;
         }
         Cancel();
-        //newDataList.SetActive(false);
-       // newDataWindow.SetActive(false);
-        //Debug.Log("Save input efter upphämtning av input");
         DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
-        //newData.interactable = true;
+
     }
 
     private string FindAverage(string attribute)
@@ -110,4 +108,5 @@ public class NewDataButton : MonoBehaviour
         return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2), CultureInfo.InvariantCulture);
 
     }
+
 }

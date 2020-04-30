@@ -267,7 +267,6 @@ public class DataPlotter : MonoBehaviour
 			float zValue = ((zMax - zMin) / 10) * i + zMin;
 			zAxisValue.text = zValue.ToString("0.0");
 		}
-
 	}
 
 	public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)

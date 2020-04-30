@@ -20,6 +20,7 @@ public class ScatterplotDimensions : MonoBehaviour
     public float plotScale = 10;
     public GameObject PointPrefab;
     public GameObject LineSeparatorPrefab;
+    public TMP_Text axisValueTextPrefab;
 
     private Color ColorTop = new Color(1, 1, 1, 1.0f);
     private Color ColorBottom = new Color(1, 0, 1, 1.0f);
@@ -78,6 +79,12 @@ public class ScatterplotDimensions : MonoBehaviour
             Destroy(dataValues);
         }
 
+        GameObject[] allAxisValueTexts = GameObject.FindGameObjectsWithTag("3D_Axis_ValueText");
+        foreach (var axisValue in allAxisValueTexts)
+        {
+            Destroy(axisValue);
+        }
+
         for (int i = 0; i < Dimensions; i++)
         {
             nameList[i] = columnList[dropDownList[i].value];
@@ -87,6 +94,8 @@ public class ScatterplotDimensions : MonoBehaviour
         }
 
         InstantiateDataPoint(Max, Min, nameList);
+
+        RenderAxisValues(Max, Min);
 
         if (ThisInstans.teleportCamera)
         {
@@ -105,6 +114,31 @@ public class ScatterplotDimensions : MonoBehaviour
             TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
             TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
             TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+        }
+    }
+
+    private void RenderAxisValues(float[] Max, float[] Min)
+    {
+        for (int i = 0; i <= 11; i++)
+        {
+            // Skip the first index for X-Axis because text is crowded there
+            if (i != 0)
+            {
+                // Render X-Axis
+                TMP_Text xAxisValue = Instantiate(axisValueTextPrefab, new Vector3(i, 0, -0.5f), Quaternion.Euler(90, -90, 0));
+                float xValue = ((Max[0] - Min[0]) / 10) * i + Min[0];
+                xAxisValue.text = xValue.ToString("0.0");
+            }
+
+            // Render Y-Axis
+            TMP_Text yAxisValue = Instantiate(axisValueTextPrefab, new Vector3(0, i, -0.5f), Quaternion.Euler(0, -90, 0));
+            float yValue = ((Max[1] - Min[1]) / 10) * i + Min[1];
+            yAxisValue.text = yValue.ToString("0.0");
+
+            // Render Z-Axis
+            TMP_Text zAxisValue = Instantiate(axisValueTextPrefab, new Vector3(12.5f, 0, i + 0.3f), Quaternion.Euler(90, -90, -90));
+            float zValue = ((Max[2] - Min[2]) / 10) * i + Min[2];
+            zAxisValue.text = zValue.ToString("0.0");
         }
     }
 

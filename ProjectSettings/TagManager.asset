@@ -12,6 +12,7 @@ TagManager:
   - newkValue
   - weightedToggle
   - 3D_Axis_ValueText
+  - ScatterPlotButton
   layers:
   - Default
   - TransparentFX

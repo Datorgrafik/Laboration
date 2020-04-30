@@ -16,6 +16,8 @@ public class MainMenu : MonoBehaviour
 	public TMP_Text file;
 	private static string fileText = "";
 	public static string fileData;
+	public Sprite TwoDImage;
+	public Sprite ThreeDImage;
 
 	#endregion
 
@@ -23,6 +25,8 @@ public class MainMenu : MonoBehaviour
 
 	private void Start()
 	{
+		SetCorrectScatterPlotImage();
+
 		renderModeDropdown.value = renderMode;
 		renderModeDropdown.onValueChanged.AddListener(delegate { DropdownValueChanged(renderModeDropdown); });
 		file.text = fileText;
@@ -31,6 +35,16 @@ public class MainMenu : MonoBehaviour
 	public void DropdownValueChanged(Dropdown value)
 	{
 		renderMode = value.value;
+
+		SetCorrectScatterPlotImage();
+	}
+
+	private void SetCorrectScatterPlotImage()
+	{
+		if (renderMode == 0)
+			GameObject.FindGameObjectWithTag("ScatterPlotButton").GetComponent<Image>().sprite = TwoDImage;
+		else if (renderMode == 1)
+			GameObject.FindGameObjectWithTag("ScatterPlotButton").GetComponent<Image>().sprite = ThreeDImage;
 	}
 
 	public void OpenFileExplorer()

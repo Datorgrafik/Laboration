@@ -5,20 +5,22 @@ using UnityEngine;
 public class Blink : MonoBehaviour
 {
     Renderer Ball;
+    Color color;
 
     // Update is called once per frame
     void Start()
     {
         Ball = GetComponent<Renderer>();
         InvokeRepeating("Blinking",0,0.2f);
+        color = Ball.material.color;
     }
     void Blinking()
     {
-        if (Ball.enabled == true)
+        if (Ball.material.color == color)
         {
-            Ball.enabled = false;
+            Ball.material.color = Color.white;
         }
         else
-            Ball.enabled = true;
+            Ball.material.color = color;
     }
 }

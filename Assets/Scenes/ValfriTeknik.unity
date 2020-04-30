@@ -1355,30 +1355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &242242693 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9052989829857447457, guid: 1d9c134299a391d44ae4a91afc586d16,
-    type: 3}
-  m_PrefabInstance: {fileID: 242242690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &242242694 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8381635317960870443, guid: 1d9c134299a391d44ae4a91afc586d16,
-    type: 3}
-  m_PrefabInstance: {fileID: 242242690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &242242695 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1055368241447594336, guid: 1d9c134299a391d44ae4a91afc586d16,
@@ -1406,30 +1382,6 @@ MonoBehaviour:
 --- !u!114 &242242697 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8191348536342699283, guid: 1d9c134299a391d44ae4a91afc586d16,
-    type: 3}
-  m_PrefabInstance: {fileID: 242242690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &242242698 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4910737241236436912, guid: 1d9c134299a391d44ae4a91afc586d16,
-    type: 3}
-  m_PrefabInstance: {fileID: 242242690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &242242699 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1537118208671617542, guid: 1d9c134299a391d44ae4a91afc586d16,
     type: 3}
   m_PrefabInstance: {fileID: 242242690}
   m_PrefabAsset: {fileID: 0}
@@ -1473,30 +1425,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &242242703 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4057649741739624208, guid: 1d9c134299a391d44ae4a91afc586d16,
-    type: 3}
-  m_PrefabInstance: {fileID: 242242690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &242242704 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4964375016124452349, guid: 1d9c134299a391d44ae4a91afc586d16,
-    type: 3}
-  m_PrefabInstance: {fileID: 242242690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &242242705 stripped
@@ -5215,18 +5143,12 @@ MonoBehaviour:
   inputX: {fileID: 242242707}
   inputY: {fileID: 242242706}
   inputZ: {fileID: 242242705}
-  inputA: {fileID: 242242704}
-  inputB: {fileID: 242242703}
   Xvalue: {fileID: 242242697}
   Yvalue: {fileID: 242242696}
   Zvalue: {fileID: 242242695}
-  Avalue: {fileID: 242242694}
-  Bvalue: {fileID: 242242693}
   Xname: {fileID: 242242702}
   Yname: {fileID: 242242701}
   Zname: {fileID: 242242700}
-  Aname: {fileID: 242242699}
-  Bname: {fileID: 242242698}
   ChangeX: {fileID: 242242692}
 --- !u!114 &1090632221
 MonoBehaviour:
@@ -5713,11 +5635,13 @@ MonoBehaviour:
 
     Space - Up
 
-    Right click - Camera movement
+    Right
+    click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted Databall'
+    E - Move targeted
+    Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9038,7 +8962,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1956540592
 RectTransform:
   m_ObjectHideFlags: 0

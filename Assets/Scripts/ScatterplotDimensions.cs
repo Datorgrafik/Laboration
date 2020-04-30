@@ -36,6 +36,7 @@ public class ScatterplotDimensions : MonoBehaviour
     public static ScatterplotDimensions ThisInstans;
     public static DataClass dataClass;
     private int selectedIndex = -1;
+    private bool teleportCamera = false;
 
     // Use this for initialization
     void Start()
@@ -86,6 +87,25 @@ public class ScatterplotDimensions : MonoBehaviour
         }
 
         InstantiateDataPoint(Max, Min, nameList);
+
+        if (ThisInstans.teleportCamera)
+        {
+            ThisInstans.teleportCamera = false;
+            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+            Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+            Camera.main.transform.LookAt(newBall.transform);
+
+            if (TargetingScript.selectedTarget != null)
+            {
+                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+                TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+            }
+
+            TargetingScript.selectedTarget = newBall;
+            TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+            TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+            TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+        }
     }
 
     private void InstantiateDataPoint(float[] Max, float[] Min, string[] nameList)
@@ -155,17 +175,16 @@ public class ScatterplotDimensions : MonoBehaviour
         PlottData();
     }
 
-    static public void AddDataPoint(List<string> newPoint)
+    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
     {
         Dictionary<string, object> last = pointList.Last();
+
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
+
         newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
-        Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
 
         for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
         {
-            Debug.Log("Column name is " + ThisInstans.columnList[i + 1]);
-            Debug.Log("value is " + newPoint[i].ToString());
             newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
         }
 
@@ -174,20 +193,23 @@ public class ScatterplotDimensions : MonoBehaviour
         for (int i = 0; i < newPoint.Count; ++i)
         {
             unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-            Debug.Log(newPoint[i].ToString());
+
         }
 
-        var predict = dataClass.Knn(unknown, NewDataButton.kValue, NewDataButton.weightedOrNot);
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
-
         pointList.Add(newDataPoint);
-
-        GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-        List<GameObject> datapoints = new List<GameObject>();
-        foreach (Transform child in ScatterPlotter.transform)
-        {
-            datapoints.Add(child.gameObject);
-        }
+        ThisInstans.teleportCamera = true;
         ThisInstans.PlottData();
+        Blink(KNN.kPoints);
+    }
+
+    static void Blink(List<int> kPoints)
+    {
+        foreach (int data in kPoints)
+        {
+            GameObject ball = (GameObject)pointList[data]["DataBall"];
+            ball.GetComponent<Blink>().enabled = true;
+        }
     }
 }

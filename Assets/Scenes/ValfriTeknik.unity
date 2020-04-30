@@ -5385,11 +5385,13 @@ MonoBehaviour:
 
     Space - Up
 
-    Right click - Camera movement
+    Right
+    click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted Databall'
+    E - Move targeted
+    Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5848,8 +5850,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 149, y: -199.99998}
-  m_SizeDelta: {x: 314.9, y: 9.850006}
+  m_AnchoredPosition: {x: 149, y: -200.075}
+  m_SizeDelta: {x: 314.9, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1305052876
 MonoBehaviour:
@@ -9208,7 +9210,7 @@ MonoBehaviour:
   input: {fileID: 3231395952022082170, guid: 6f3a74a2d9282bd49bdbbebf8fc5e209, type: 3}
   description: {fileID: 1046346778859513792, guid: d0bb9b96d0e5c4a478c3198713ad987d,
     type: 3}
-  button: {fileID: 0}
+  button: {fileID: 7677215751960860652, guid: a795d0f2cf41fba489bab1cb36be9d05, type: 3}
   dataPoint: []
   k: {fileID: 0}
   weighted: {fileID: 0}

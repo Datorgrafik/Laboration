@@ -176,7 +176,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 			float yValue = ((yMax - yMin) / 10) * i + yMin;
 
-			valuePointY.text = Convert.ToString(yValue);
+			valuePointY.text = yValue.ToString("0.00");
 		}
 	}
 

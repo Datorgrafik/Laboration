@@ -42,6 +42,7 @@ public class TargetingScript : MonoBehaviour
 				}
 			}
 
+            //Deselect target 
 			if (missTarget == true && !eventSys.IsPointerOverGameObject() && selectedTarget != null)
 			{
 				if (selectedTarget.gameObject.CompareTag("DataBall"))

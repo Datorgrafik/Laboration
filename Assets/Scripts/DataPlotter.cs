@@ -57,6 +57,7 @@ public class DataPlotter : MonoBehaviour
 	public static DataPlotter ThisInstans;
 	public static DataClass dataClass;
 	private int selectedIndex = -1;
+    private bool teleportCamera = false;
 
 	#endregion
 
@@ -222,9 +223,26 @@ public class DataPlotter : MonoBehaviour
 				selectedIndex = -1;
 			}
 		}
-		// GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
-		//transform.LookAt(newBall.transform);
-	}
+
+        if (ThisInstans.teleportCamera)
+        {
+            ThisInstans.teleportCamera = false;
+            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+            Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+            Camera.main.transform.LookAt(newBall.transform);
+
+            if (TargetingScript.selectedTarget != null)
+            {
+                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+                TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+            }
+
+            TargetingScript.selectedTarget = newBall;
+            TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+            TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+            TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+        }
+    }
 
 	private void RenderAxisValues()
 	{
@@ -308,6 +326,7 @@ public class DataPlotter : MonoBehaviour
 
 
 		pointList.Add(newDataPoint);
+        ThisInstans.teleportCamera = true;
 
 		ThisInstans.PlottData();
 		Blink(KNN.kPoints);

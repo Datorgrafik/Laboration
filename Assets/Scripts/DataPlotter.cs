@@ -212,9 +212,13 @@ public class DataPlotter : MonoBehaviour
 			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
-			ChangeColor(dataPoint, index);
 
-			if (selectedIndex == i)
+   //         if(Klassification)
+			//ChangeColor(dataPoint, index);
+
+   //         dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+
+            if (selectedIndex == i)
 			{
 				TargetingScript.selectedTarget = dataPoint;
 				TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;

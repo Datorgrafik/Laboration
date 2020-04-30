@@ -93,7 +93,6 @@ public class ScatterplotDimensions : MonoBehaviour
         for (var i = 0; i < pointList.Count; i++)
         {
             GameObject dataPoint;
-
             float[] floatList = new float[Dimensions];
 
             //Normalisering
@@ -149,25 +148,19 @@ public class ScatterplotDimensions : MonoBehaviour
     public void DropdownValueChanged()
     {
         GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-
         foreach (Transform child in ScatterPlotter.transform)
         {
             Destroy(child.gameObject);
         }
-
         PlottData();
     }
 
     static public void AddDataPoint(List<string> newPoint)
     {
         Dictionary<string, object> last = pointList.Last();
-
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
-
         newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
-
         Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
-
 
         for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
         {
@@ -184,7 +177,6 @@ public class ScatterplotDimensions : MonoBehaviour
             Debug.Log(newPoint[i].ToString());
         }
 
-
         var predict = dataClass.Knn(unknown, NewDataButton.kValue, NewDataButton.weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 
@@ -197,6 +189,5 @@ public class ScatterplotDimensions : MonoBehaviour
             datapoints.Add(child.gameObject);
         }
         ThisInstans.PlottData();
-
     }
 }

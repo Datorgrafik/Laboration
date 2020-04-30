@@ -24,6 +24,7 @@ public class NewDataButton : MonoBehaviour
     private void Start()
     {
         newData.onClick.AddListener(OnClick);
+        k.text = "3";
     }
     private void Cancel()
     {
@@ -91,7 +92,6 @@ public class NewDataButton : MonoBehaviour
         {
             weightedOrNot = false;
         }
-
         Cancel();
         //newDataList.SetActive(false);
        // newDataWindow.SetActive(false);
@@ -107,7 +107,7 @@ public class NewDataButton : MonoBehaviour
         {
             sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
         }
-        return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2));
+        return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2), CultureInfo.InvariantCulture);
 
     }
 }

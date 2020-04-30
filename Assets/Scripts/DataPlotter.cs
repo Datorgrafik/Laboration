@@ -306,7 +306,7 @@ public class DataPlotter : MonoBehaviour
         for (int i = 0; i < newPoint.Count; ++i)
         {
             unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-            Debug.Log(newPoint[i].ToString());
+
         }
 
         var predict = dataClass.Knn(unknown, k, weightedOrNot);

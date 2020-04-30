@@ -52,5 +52,4 @@ public class ChangeTargetFeature : MonoBehaviour
 	}
 
 	#endregion
-
 }

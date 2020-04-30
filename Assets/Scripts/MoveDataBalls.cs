@@ -5,7 +5,9 @@ using UnityEngine.EventSystems;
 
 public class MoveDataBalls : MonoBehaviour
 {
-	private bool grabItem = false;
+    #region Attributes
+
+    private bool grabItem = false;
     private Vector3 mousePosition;
     private GameObject selectedTarget;
     private EventSystem eventSys;
@@ -13,9 +15,13 @@ public class MoveDataBalls : MonoBehaviour
     private float timeChecker = 0f;
     private int index;
 
+    #endregion
+
+    #region Methods
+
     // Update is called once per frame
     void Update()
-	{
+    {
         eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
         if (Input.GetMouseButtonDown(0))
@@ -34,24 +40,23 @@ public class MoveDataBalls : MonoBehaviour
                 selectedTarget = TargetingScript.selectedTarget;
                 timeChecker = 0f;
             }
+
             if (Input.GetMouseButton(0))
             {
                 if (eventSys.IsPointerOverGameObject())
-                {
                     return;
-                }
 
                 timeChecker += Time.unscaledDeltaTime;
-                if(timeChecker > 0.3F)
+
+                if (timeChecker > 0.3F)
                 {
                     mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
                     TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
                 }
             }
+
             if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
-            {
                 Denormalize();
-            }
         }
         else if (TargetingScript.selectedTarget != null)
         {
@@ -70,11 +75,9 @@ public class MoveDataBalls : MonoBehaviour
             }
 
             if (grabItem == true)
-            {
                 TargetingScript.selectedTarget.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 1;
-            }
         }
-	}
+    }
 
     private void Denormalize()
     {
@@ -101,4 +104,6 @@ public class MoveDataBalls : MonoBehaviour
 
         DataPlotter.ThisInstans.PlottData();
     }
+
+    #endregion
 }

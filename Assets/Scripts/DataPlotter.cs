@@ -182,7 +182,7 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][yName].ToString();
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-			float z;
+			float z = 1;
 
 			//Lägger in alla targetfeatures i en lista
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
@@ -213,10 +213,16 @@ public class DataPlotter : MonoBehaviour
 
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 
-   //         if(Klassification)
-			//ChangeColor(dataPoint, index);
-
-   //         dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+            bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
+            Debug.Log(ClassCheck);
+            if (!ClassCheck)
+            {
+                ChangeColor(dataPoint, index);
+            }
+            else
+            {
+                dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+            }
 
             if (selectedIndex == i)
 			{

@@ -153,13 +153,23 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
 
-							// Set color
-							if (index % 3 == 0)
-								dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
-							else if (index % 3 == 1)
-								dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
-							else if (index % 3 == 2)
-								dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
+
+                            // Set color
+                            bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
+                            Debug.Log(ClassCheck);
+                            if (!ClassCheck)
+                            {
+                                if (index % 3 == 0)
+                                    dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
+                                else if (index % 3 == 1)
+                                    dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
+                                else if (index % 3 == 2)
+                                    dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
+                            }
+                            else
+                            {
+                                dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
+                            }
 						}
 					}
 				}

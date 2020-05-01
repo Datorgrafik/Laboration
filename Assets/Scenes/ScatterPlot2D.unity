@@ -728,32 +728,37 @@ PrefabInstance:
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 709
+      value: -155.6
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 56
+      value: 58
+      objectReference: {fileID: 0}
+    - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -312.2
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1426.0789
+      value: 309.13074
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -610.0883
+      value: 154.58038
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
@@ -1108,32 +1113,32 @@ PrefabInstance:
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 720.4
+      value: -155.59998
       objectReference: {fileID: 0}
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 253.5
+      value: -117.600006
       objectReference: {fileID: 0}
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1442.8661
+      value: 309.1339
       objectReference: {fileID: 0}
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -508.5652
+      value: 233.70984
       objectReference: {fileID: 0}
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5014602821779287433, guid: cfb37402649a9044a86b664cccb62934,
         type: 3}
@@ -2568,6 +2573,7 @@ MonoBehaviour:
   PointHolder: {fileID: 1156929269}
   columnList: []
   targetFeatures: []
+  axisValueTextPrefab: {fileID: 0}
   xMax: 0
   yMax: 0
   zMax: 0
@@ -4630,15 +4636,13 @@ MonoBehaviour:
 
     UpArrow - Zoom in
 
-    DownArrow
-    - Zoom out
+    DownArrow - Zoom out
 
     Right click - Camera movement
 
     Left click - Target DataBalls
 
-    Left
-    click and move mouse - Move targeted DataBall'
+    Left click and move mouse - Move targeted DataBall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

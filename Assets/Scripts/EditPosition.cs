@@ -13,6 +13,7 @@ public class EditPosition : MonoBehaviour
 	public Text Xvalue;
 	public Text Yvalue;
 	public Text Zvalue;
+
 	public Text Xname;
 	public Text Yname;
 	public Text Zname;

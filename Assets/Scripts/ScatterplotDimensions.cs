@@ -20,6 +20,7 @@ public class ScatterplotDimensions : MonoBehaviour
     public float plotScale = 10;
     public GameObject PointPrefab;
     public GameObject LineSeparatorPrefab;
+    public TMP_Text axisValueTextPrefab;
 
     private Color ColorTop = new Color(1, 1, 1, 1.0f);
     private Color ColorBottom = new Color(1, 0, 1, 1.0f);
@@ -36,6 +37,7 @@ public class ScatterplotDimensions : MonoBehaviour
     public static ScatterplotDimensions ThisInstans;
     public static DataClass dataClass;
     private int selectedIndex = -1;
+    private bool teleportCamera = false;
 
     // Use this for initialization
     void Start()
@@ -77,6 +79,12 @@ public class ScatterplotDimensions : MonoBehaviour
             Destroy(dataValues);
         }
 
+        GameObject[] allAxisValueTexts = GameObject.FindGameObjectsWithTag("3D_Axis_ValueText");
+        foreach (var axisValue in allAxisValueTexts)
+        {
+            Destroy(axisValue);
+        }
+
         for (int i = 0; i < Dimensions; i++)
         {
             nameList[i] = columnList[dropDownList[i].value];
@@ -86,6 +94,52 @@ public class ScatterplotDimensions : MonoBehaviour
         }
 
         InstantiateDataPoint(Max, Min, nameList);
+
+        RenderAxisValues(Max, Min);
+
+        if (ThisInstans.teleportCamera)
+        {
+            ThisInstans.teleportCamera = false;
+            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+            Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+            Camera.main.transform.LookAt(newBall.transform);
+
+            if (TargetingScript.selectedTarget != null)
+            {
+                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+                TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+            }
+
+            TargetingScript.selectedTarget = newBall;
+            TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+            TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+            TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+        }
+    }
+
+    private void RenderAxisValues(float[] Max, float[] Min)
+    {
+        for (int i = 0; i <= 11; i++)
+        {
+            // Skip the first index for X-Axis because text is crowded there
+            if (i != 0)
+            {
+                // Render X-Axis
+                TMP_Text xAxisValue = Instantiate(axisValueTextPrefab, new Vector3(i, 0, -0.5f), Quaternion.Euler(90, -90, 0));
+                float xValue = ((Max[0] - Min[0]) / 10) * i + Min[0];
+                xAxisValue.text = xValue.ToString("0.0");
+            }
+
+            // Render Y-Axis
+            TMP_Text yAxisValue = Instantiate(axisValueTextPrefab, new Vector3(0, i, -0.5f), Quaternion.Euler(0, -90, 0));
+            float yValue = ((Max[1] - Min[1]) / 10) * i + Min[1];
+            yAxisValue.text = yValue.ToString("0.0");
+
+            // Render Z-Axis
+            TMP_Text zAxisValue = Instantiate(axisValueTextPrefab, new Vector3(12.5f, 0, i + 0.3f), Quaternion.Euler(90, -90, -90));
+            float zValue = ((Max[2] - Min[2]) / 10) * i + Min[2];
+            zAxisValue.text = zValue.ToString("0.0");
+        }
     }
 
     private void InstantiateDataPoint(float[] Max, float[] Min, string[] nameList)
@@ -155,17 +209,16 @@ public class ScatterplotDimensions : MonoBehaviour
         PlottData();
     }
 
-    static public void AddDataPoint(List<string> newPoint)
+    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
     {
         Dictionary<string, object> last = pointList.Last();
+
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
+
         newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
-        Debug.Log("There are " + ThisInstans.columnList.Count + " columns in CSV");
 
         for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
         {
-            Debug.Log("Column name is " + ThisInstans.columnList[i + 1]);
-            Debug.Log("value is " + newPoint[i].ToString());
             newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
         }
 
@@ -174,20 +227,23 @@ public class ScatterplotDimensions : MonoBehaviour
         for (int i = 0; i < newPoint.Count; ++i)
         {
             unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-            Debug.Log(newPoint[i].ToString());
+
         }
 
-        var predict = dataClass.Knn(unknown, NewDataButton.kValue, NewDataButton.weightedOrNot);
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
-
         pointList.Add(newDataPoint);
-
-        GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-        List<GameObject> datapoints = new List<GameObject>();
-        foreach (Transform child in ScatterPlotter.transform)
-        {
-            datapoints.Add(child.gameObject);
-        }
+        ThisInstans.teleportCamera = true;
         ThisInstans.PlottData();
+        Blink(KNN.kPoints);
+    }
+
+    static void Blink(List<int> kPoints)
+    {
+        foreach (int data in kPoints)
+        {
+            GameObject ball = (GameObject)pointList[data]["DataBall"];
+            ball.GetComponent<Blink>().enabled = true;
+        }
     }
 }

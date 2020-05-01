@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
 	public TMP_Text file;
 	private static string fileText = "";
 	public static string fileData;
+	private readonly string errorMsg = "Please select a .csv file to plot the data...";
 	public Sprite TwoDImage;
 	public Sprite ThreeDImage;
 
@@ -57,6 +58,12 @@ public class MainMenu : MonoBehaviour
 
 	public void ScatterPlot()
 	{
+		if (fileData == null)
+		{
+			file.text = errorMsg;
+			return;
+		}
+
 		if (renderMode == 0)
 		{
 			SceneManager.LoadScene("ScatterPlot2D");
@@ -69,16 +76,34 @@ public class MainMenu : MonoBehaviour
 
 	public void ParallelCoordinatePlot()
 	{
+		if (fileData == null)
+		{
+			file.text = errorMsg;
+			return;
+		}
+
 		SceneManager.LoadScene("ParallelCoordinatePlot");
 	}
 
 	public void ScatterPlotMatrix()
 	{
+		if (fileData == null)
+		{
+			file.text = errorMsg;
+			return;
+		}
+
 		SceneManager.LoadScene("ScatterPlotMatrix");
 	}
 
 	public void ValfriTeknik()
 	{
+		if (fileData == null)
+		{
+			file.text = errorMsg;
+			return;
+		}
+
 		renderMode = 1;
 		SceneManager.LoadScene("ValfriTeknik");
 	}

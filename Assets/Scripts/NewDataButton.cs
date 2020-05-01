@@ -101,11 +101,13 @@ public class NewDataButton : MonoBehaviour
     private string FindAverage(string attribute)
     {
         double  sum = 0.0;
-        for (int i = 0; i < DataPlotter.dataClass.CSV.Count - 1; ++i)
+        int n = 0;
+        for ( int i = 0;  i < DataPlotter.dataClass.CSV.Count - 1; ++i)
         {
             sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
+            ++n;
         }
-        return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2), CultureInfo.InvariantCulture);
+        return Convert.ToString(Math.Round((sum / (DataPlotter.dataClass.CSV.Count - 1)), 2), CultureInfo.InvariantCulture);
 
     }
 

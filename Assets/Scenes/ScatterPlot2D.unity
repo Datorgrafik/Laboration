@@ -733,11 +733,6 @@ PrefabInstance:
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 58
-      objectReference: {fileID: 0}
-    - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: -312.2
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
@@ -1459,7 +1454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6, y: -1.76}
+  m_AnchoredPosition: {x: 5.03, y: -1.76}
   m_SizeDelta: {x: 12, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &423136022
@@ -2563,7 +2558,7 @@ MonoBehaviour:
   plotScale: 10
   PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,
     type: 3}
-  LineSeparatorPrefab: {fileID: 6446824239289434332, guid: 1dd147c944520184290a3d3cff40559a,
+  LinePrefab: {fileID: 691959262909666679, guid: ff91df615aff9644aa7268a2dfb222e6,
     type: 3}
   valuePrefab: {fileID: 1957521861262652421, guid: 2b1a901be47aa0549bd376335453ce17,
     type: 3}
@@ -2848,8 +2843,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1263907462}
   m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 6, y: 6, z: 0}
-  m_LocalScale: {x: 1.3, y: 1, z: 1.4}
+  m_LocalPosition: {x: 5.05, y: 5.05, z: 0}
+  m_LocalScale: {x: 1.15, y: 1, z: 1.15}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -3891,7 +3886,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.55, y: 6}
+  m_AnchoredPosition: {x: -2.55, y: 4.97}
   m_SizeDelta: {x: 12, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1791426988
@@ -4136,7 +4131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879245967}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 6, z: -15}
+  m_LocalPosition: {x: 5, y: 5, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4241,7 +4236,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1881036922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 6, z: -10}
+  m_LocalPosition: {x: 5, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4636,13 +4631,15 @@ MonoBehaviour:
 
     UpArrow - Zoom in
 
-    DownArrow - Zoom out
+    DownArrow
+    - Zoom out
 
     Right click - Camera movement
 
     Left click - Target DataBalls
 
-    Left click and move mouse - Move targeted DataBall'
+    Left
+    click and move mouse - Move targeted DataBall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

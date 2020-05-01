@@ -100,7 +100,7 @@ public class MainMenu : MonoBehaviour
 			file.text = errorMsg;
 			return;
 		}
-
+		renderMode = 0;
 		SceneManager.LoadScene("ParallelCoordinatePlot");
 	}
 
@@ -111,7 +111,7 @@ public class MainMenu : MonoBehaviour
 			file.text = errorMsg;
 			return;
 		}
-
+		renderMode = 0;
 		SceneManager.LoadScene("ScatterPlotMatrix");
 	}
 

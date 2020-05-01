@@ -146,11 +146,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
 		{
-			float yMaxTempValue = FindMinMaxValue.FindMaxValue(featureList[i], pointList);
+			float yMaxTempValue = CalculationHelpers.FindMaxValue(featureList[i], pointList);
 			if (yMaxTempValue > yMax)
 				yMax = yMaxTempValue;
 
-			float yMinTempValue = FindMinMaxValue.FindMinValue(featureList[i], pointList);
+			float yMinTempValue = CalculationHelpers.FindMinValue(featureList[i], pointList);
 			if (yMinTempValue < yMin)
 				yMin = yMinTempValue;
 		}
@@ -237,9 +237,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		float xPos = SetColumnPosition(columnPos);
 
 		// Get MaxValue
-		float columnMax = FindMinMaxValue.FindMaxValue(columnName, pointList);
+		float columnMax = CalculationHelpers.FindMaxValue(columnName, pointList);
 		// Get MinValue
-		float columnMin = FindMinMaxValue.FindMinValue(columnName, pointList);
+		float columnMin = CalculationHelpers.FindMinValue(columnName, pointList);
 
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)

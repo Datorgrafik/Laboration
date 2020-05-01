@@ -106,23 +106,23 @@ public class ScatterPlotMatrix : MonoBehaviour
                                     Quaternion.Euler(0, 90, -90));
                         //Le textfält
                         TMP_Text textField = Instantiate(ScatterplotMatrixText,
-														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, 0) * plotScale,
+														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, -0.01f) * plotScale,
 														Quaternion.identity);
 
 						textField.text = feature2Name;
 					}
-					else if(k > j)
+					else if(k < j)
 					{
                         GameObject summonPlane = Instantiate(planePointBackground,
                                     new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
                                     Quaternion.Euler(0, 90, -90));
                         // Get maxes of each axis
-                        float xMax = FindMinMaxValue.FindMaxValue(feature1Name, pointList);
-						float yMax = FindMinMaxValue.FindMaxValue(feature2Name, pointList);
+                        float xMax = CalculationHelpers.FindMaxValue(feature1Name, pointList);
+						float yMax = CalculationHelpers.FindMaxValue(feature2Name, pointList);
 
 						// Get minimums of each axis
-						float xMin = FindMinMaxValue.FindMinValue(feature1Name, pointList);
-						float yMin = FindMinMaxValue.FindMinValue(feature2Name, pointList);
+						float xMin = CalculationHelpers.FindMinValue(feature1Name, pointList);
+						float yMin = CalculationHelpers.FindMinValue(feature2Name, pointList);
 
 						string valueString;
 

@@ -182,7 +182,9 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][yName].ToString();
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
+
 			float z = 1;
+
 
 			//Lägger in alla targetfeatures i en lista
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
@@ -201,8 +203,8 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
-
-				if (!pointList[i].ContainsKey("DataBall"))
+                Debug.Log(" punkt" + i.ToString());
+                if (!pointList[i].ContainsKey("DataBall"))
 					pointList[i].Add("DataBall", dataPoint);
 				else
 					pointList[i]["DataBall"] = dataPoint;
@@ -299,12 +301,7 @@ public class DataPlotter : MonoBehaviour
 
 	public void DropdownValueChanged()
 	{
-		GameObject ScatterPlotter = GameObject.Find("Scatterplot");
 
-		foreach (Transform child in ScatterPlotter.transform)
-		{
-			Destroy(child.gameObject);
-		}
 
 		PlottData();
 	}
@@ -315,7 +312,7 @@ public class DataPlotter : MonoBehaviour
 
 		Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
 
-		newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
+        newDataPoint.Add(last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1);
 
 		for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
 		{

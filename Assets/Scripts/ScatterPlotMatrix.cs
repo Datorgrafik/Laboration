@@ -88,33 +88,36 @@ public class ScatterPlotMatrix : MonoBehaviour
 	private void PlottData()
 	{
 		ResetDataPlot();
+        GetDistinctTargetFeatures();
 
-		for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; j++)
 		{
 			for (int k = 0; k < 4; k++)
 			{
 				try
 				{
-					GameObject summonPlane = Instantiate(planePointBackground,
-														new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
-														Quaternion.Euler(0, 90, -90));
-
 					feature1Name = featureList[columnDropdownList[j].value];
 					feature2Name = featureList[columnDropdownList[k].value];
 
 					if (j == k)
 					{
-						//Le textfält
-						TMP_Text textField = Instantiate(ScatterplotMatrixText,
+                        GameObject summonPlane = Instantiate(planePointBackground,
+                                    new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
+                                    Quaternion.Euler(0, 90, -90));
+                        //Le textfält
+                        TMP_Text textField = Instantiate(ScatterplotMatrixText,
 														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, 0) * plotScale,
 														Quaternion.identity);
 
 						textField.text = feature2Name;
 					}
-					else
+					else if(k > j)
 					{
-						// Get maxes of each axis
-						float xMax = FindMinMaxValue.FindMaxValue(feature1Name, pointList);
+                        GameObject summonPlane = Instantiate(planePointBackground,
+                                    new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
+                                    Quaternion.Euler(0, 90, -90));
+                        // Get maxes of each axis
+                        float xMax = FindMinMaxValue.FindMaxValue(feature1Name, pointList);
 						float yMax = FindMinMaxValue.FindMaxValue(feature2Name, pointList);
 
 						// Get minimums of each axis
@@ -135,8 +138,6 @@ public class ScatterPlotMatrix : MonoBehaviour
 							valueString = pointList[i][feature2Name].ToString();
 							float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-							GetDistinctTargetFeatures();
-
 							float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 							float colorValue = 1 / (index + 1);
 
@@ -156,7 +157,6 @@ public class ScatterPlotMatrix : MonoBehaviour
 
                             // Set color
                             bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
-                            Debug.Log(ClassCheck);
                             if (!ClassCheck)
                             {
                                 if (index % 3 == 0)

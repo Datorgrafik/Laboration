@@ -134,7 +134,7 @@ List<Dictionary<string, object>> trainData)
             sumWeight += weight; 
             double reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 2]], CultureInfo.InvariantCulture);
             sumWeightXReg += weight * reg;
-            kPoints.Add(Convert.ToInt32(trainData[idx-1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
         
         return sumWeightXReg/sumWeight;

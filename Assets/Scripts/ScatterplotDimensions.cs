@@ -89,8 +89,8 @@ public class ScatterplotDimensions : MonoBehaviour
         {
             nameList[i] = columnList[dropDownList[i].value];
             textList[i].text = nameList[i];
-            Min[i] = FindMinMaxValue.FindMinValue(nameList[i], pointList);
-            Max[i] = FindMinMaxValue.FindMaxValue(nameList[i], pointList);
+            Min[i] = CalculationHelpers.FindMinValue(nameList[i], pointList);
+            Max[i] = CalculationHelpers.FindMaxValue(nameList[i], pointList);
         }
 
         InstantiateDataPoint(Max, Min, nameList);

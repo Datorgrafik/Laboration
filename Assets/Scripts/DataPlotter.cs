@@ -33,7 +33,8 @@ public class DataPlotter : MonoBehaviour
 
 	public float plotScale = 10;
 	public GameObject PointPrefab;
-	public GameObject LineSeparatorPrefab;
+	public GameObject LinePrefab;
+	//public GameObject LineSeparatorPrefab;
 
 	[SerializeField]
 	public TMP_Text valuePrefab;
@@ -118,21 +119,21 @@ public class DataPlotter : MonoBehaviour
 		yAxisText.text = yName;
 
 		// Get maxes of each axis
-		xMax = FindMinMaxValue.FindMaxValue(xName, pointList);
-		yMax = FindMinMaxValue.FindMaxValue(yName, pointList);
+		xMax = CalculationHelpers.FindMaxValue(xName, pointList);
+		yMax = CalculationHelpers.FindMaxValue(yName, pointList);
 		zMax = 0f;
 
 		// Get minimums of each axis
-		xMin = FindMinMaxValue.FindMinValue(xName, pointList);
-		yMin = FindMinMaxValue.FindMinValue(yName, pointList);
+		xMin = CalculationHelpers.FindMinValue(xName, pointList);
+		yMin = CalculationHelpers.FindMinValue(yName, pointList);
 		zMin = 0f;
 
 		if (MainMenu.renderMode == 1)
 		{
 			zName = columnList[zList.value];
 			zAxisText.text = zName;
-			zMax = FindMinMaxValue.FindMaxValue(zName, pointList);
-			zMin = FindMinMaxValue.FindMinValue(zName, pointList);
+			zMax = CalculationHelpers.FindMaxValue(zName, pointList);
+			zMin = CalculationHelpers.FindMinValue(zName, pointList);
 		}
 
 		string valueString;
@@ -149,14 +150,45 @@ public class DataPlotter : MonoBehaviour
 
 			for (int i = 0; i < 11; i++)
 			{
-				GameObject lineSeparatorX = Instantiate(LineSeparatorPrefab, new Vector3(i, 5.4F, -0.001F), Quaternion.identity);
-				GameObject lineSeparatorY = Instantiate(LineSeparatorPrefab, new Vector3(5, i, -0.001F), Quaternion.identity);
-				
-				lineSeparatorX.transform.rotation = Quaternion.Euler(0, 0, 0);
-				lineSeparatorY.transform.rotation = Quaternion.Euler(0, 0, 90);
+				// Draw vertical lines
+				GameObject xLine = Instantiate(LinePrefab, new Vector3(i, 0, -0.001f), Quaternion.identity);
+				xLine.transform.parent = PointHolder.transform;
+				xLine.transform.name = $"Column{i}Line";
 
-				TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i + 0.7F, -1, 0), Quaternion.identity);
-				TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1, 0 + i, 0), Quaternion.identity);
+				LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
+				// Number of vertices
+				xLineRenderer.positionCount = 2;
+				// Set line width
+				xLineRenderer.startWidth = 0.025f;
+				xLineRenderer.endWidth = 0.025f;
+				// Set start & end position
+				xLineRenderer.SetPosition(0, new Vector3(i, -0.5f, -0.001f));
+				xLineRenderer.SetPosition(1, new Vector3(i, 10.5f, -0.001f));
+				// Set line color
+				xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+
+
+				// Draw horizontal lines
+				GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f), Quaternion.identity);
+				yLine.transform.parent = PointHolder.transform;
+				yLine.transform.name = $"Value{i}Line";
+
+				LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
+				// Number of vertices
+				yLineRenderer.positionCount = 2;
+				// Set line width
+				yLineRenderer.startWidth = 0.025f;
+				yLineRenderer.endWidth = 0.025f;
+				// Set start & end position
+				yLineRenderer.SetPosition(0, new Vector3(-0.5f, i, -0.001f));
+				yLineRenderer.SetPosition(1, new Vector3(10.5f, i, -0.001f));
+				// Set line color
+				yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+
+
+				// Draw axis values
+				TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i, -1, 0), Quaternion.identity);
+				TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1.5f, i, 0), Quaternion.identity);
 
 				float xValue = ((xMax - xMin) / 10) * i + xMin;
 				float yValue = ((yMax - yMin) / 10) * i + yMin;
@@ -170,7 +202,7 @@ public class DataPlotter : MonoBehaviour
 		if (MainMenu.renderMode == 1)
 			RenderAxisValues();
 
-		//Loop through Pointlist
+		// Loop through Pointlist
 		for (var i = 0; i < pointList.Count; i++)
 		{
 			GameObject dataPoint;
@@ -182,9 +214,7 @@ public class DataPlotter : MonoBehaviour
 			valueString = pointList[i][yName].ToString();
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
-
 			float z = 1;
-
 
 			//Lägger in alla targetfeatures i en lista
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))

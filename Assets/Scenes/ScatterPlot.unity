@@ -795,11 +795,13 @@ MonoBehaviour:
 
     Space - Up
 
-    Right click - Camera movement
+    Right
+    click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted Databall'
+    E - Move targeted
+    Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3673,7 +3675,7 @@ MonoBehaviour:
   plotScale: 10
   PointPrefab: {fileID: 1395444388124302, guid: e0eef36f4121f6949bcdf9ec72317411,
     type: 3}
-  LineSeparatorPrefab: {fileID: 0}
+  LinePrefab: {fileID: 0}
   valuePrefab: {fileID: 0}
   xList: {fileID: 2039952923}
   yList: {fileID: 538288676}
@@ -7624,11 +7626,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -160
-      objectReference: {fileID: 0}
-    - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -39
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}

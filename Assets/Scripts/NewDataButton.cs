@@ -54,7 +54,7 @@ public class NewDataButton : MonoBehaviour
             InputField inputfield = Instantiate(input, new Vector2(71, ypos), Quaternion.identity) as InputField;
             inputfield.transform.SetParent(newDataWindow.transform, false);
             inputfield.name = attributes[i];
-            inputfield.text = FindAverage(attributes[i]);
+            inputfield.text = CalculationHelpers.FindAverage(attributes[i]);
 
 
             ypos = ypos - 20;
@@ -97,16 +97,4 @@ public class NewDataButton : MonoBehaviour
         DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
 
     }
-
-    private string FindAverage(string attribute)
-    {
-        double  sum = 0.0;
-        for (int i = 0; i < DataPlotter.dataClass.CSV.Count - 1; ++i)
-        {
-            sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
-        }
-        return Convert.ToString(Math.Round((sum / DataPlotter.dataClass.CSV.Count - 1), 2), CultureInfo.InvariantCulture);
-
-    }
-
 }

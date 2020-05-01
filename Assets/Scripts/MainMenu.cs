@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
+using System.Linq;
 
 public class MainMenu : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class MainMenu : MonoBehaviour
 
 	public Dropdown renderModeDropdown;
 	public static int renderMode = 0;
+	public Dropdown DatasetDropdown;
 	public string filePath;
 	public TMP_Text file;
 	private static string fileText = "";
@@ -31,6 +34,30 @@ public class MainMenu : MonoBehaviour
 		renderModeDropdown.value = renderMode;
 		renderModeDropdown.onValueChanged.AddListener(delegate { DropdownValueChanged(renderModeDropdown); });
 		file.text = fileText;
+
+		// Get filepath info from Dataset directory if it exists
+		if (Directory.Exists(Path.Combine(Application.dataPath, "Datasets")))
+		{
+			string filePath = Path.Combine(Application.dataPath, "Datasets");
+			List<string> fileList = Directory.GetFiles(filePath, "*.csv").ToList();
+
+			DirectoryInfo directoryInfo = new DirectoryInfo(filePath);
+			List<string> fileNames = new List<string>();
+
+			// Get all filenames with extentions.
+			foreach (var file in directoryInfo.GetFiles("*.csv"))
+			{
+				fileNames.Add(file.Name.ToString());
+			}
+
+			// Add filepath info to Dropdown options in DatasetDropdown
+			DatasetDropdown.AddOptions(fileNames);
+			DatasetDropdown.onValueChanged.AddListener(delegate
+			{
+				fileData = File.ReadAllText(fileList[DatasetDropdown.value-1]);
+				file.text = fileNames[DatasetDropdown.value-1];
+			});
+		}
 	}
 
 	public void DropdownValueChanged(Dropdown value)
@@ -46,14 +73,6 @@ public class MainMenu : MonoBehaviour
 			GameObject.FindGameObjectWithTag("ScatterPlotButton").GetComponent<Image>().sprite = TwoDImage;
 		else if (renderMode == 1)
 			GameObject.FindGameObjectWithTag("ScatterPlotButton").GetComponent<Image>().sprite = ThreeDImage;
-	}
-
-	public void OpenFileExplorer()
-	{
-		filePath = EditorUtility.OpenFilePanel("Overwrite with dataset", "", "csv");
-		fileText = filePath.Substring(filePath.LastIndexOf('/') + 1);
-		file.text = fileText;
-		fileData = System.IO.File.ReadAllText(filePath);
 	}
 
 	public void ScatterPlot()

@@ -25,15 +25,18 @@ List<Dictionary<string, object>> trainData)
     {
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
 
-        return VoteReg(info, trainData);
+        if (trueOrFalse)
+            return WeightReg(info, trainData);
+        else
+            return VoteReg(info, trainData);
     }
 
     public object ClassifyClass(double[] unknown,
 List<Dictionary<string, object>> trainData)
     {
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
-        
-        return Vote(info, trainData);
+
+            return Vote(info, trainData);
     }
 
     public IndexAndDistance[] SortedDistanceArray(double[] unknown,
@@ -61,19 +64,25 @@ List<Dictionary<string, object>> trainData)
       List<Dictionary<string, object>> trainData)
     {
         kPoints = new List<int>();
-        //PointsToColor.Clear();
-        Dictionary<string, int> votes = new Dictionary<string, int>(); // One cell per class
+
+        Dictionary<string, double> votes = new Dictionary<string, double>(); // One cell per class
         for (int i = 0; i < kValue; ++i)
         {       // Just first k
             int idx = info[i].idx;            // Which train item
             string c = (string)trainData[idx][attributes[attributes.Count - 2]];   // Class in last cell
             if (votes.ContainsKey(c))
             {
-                ++votes[c];
+                if(trueOrFalse)
+                    votes[c] = votes[c] + (1 / Math.Pow(info[i].dist, 2));
+                else
+                    ++votes[c];
             }
             else
             {
-                votes.Add(c, 1);
+                if (trueOrFalse)
+                    votes.Add(c, 1 / Math.Pow(info[i].dist, 2));
+                else
+                    votes.Add(c, 1);
             }
             kPoints.Add(Convert.ToInt32(trainData[idx-1][""], CultureInfo.InvariantCulture));
 
@@ -92,7 +101,7 @@ List<Dictionary<string, object>> trainData)
             int idx = info[i].idx;
             double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
             sum += c;
-            kPoints.Add(Convert.ToInt32(trainData[idx][""], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx-1][""], CultureInfo.InvariantCulture));
         }
         return sum / kValue;
     }
@@ -110,45 +119,22 @@ List<Dictionary<string, object>> trainData)
         return Math.Sqrt(sum);
     }
 
-    public object WeightClass(IndexAndDistance[] info,
-    List<Dictionary<string, object>> trainData)
-    {
-
-        Dictionary<string, double> votes = new Dictionary<string, double>(); // One cell per class
-        for (int i = 0; i < kValue; ++i)
-        {       // Just first k
-            int idx = info[i].idx;            // Which train item
-            string c = (string)trainData[idx][attributes[attributes.Count - 1]];   // Class in last cell
-            if (votes.ContainsKey(c))
-            {
-                ++votes[c];
-            }
-            else
-            {
-                votes.Add(c, (votes[c] += info[i].dist));
-            }
-            //kPoints.Add(Convert.ToInt32(trainData[idx][""], CultureInfo.InvariantCulture));
-
-        }
-        var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
-        return Maxvotes;
-
-
-    }
 
     public object WeightReg(IndexAndDistance[] info,
 List<Dictionary<string, object>> trainData)
     {
         double sumWeight = 0.0;
         double sumWeightXReg = 0.0;
+        kPoints = new List<int>();
 
         for (int i = 0; i < kValue; ++i)
         {
             int idx = info[i].idx;
-            double weight = (1 / Math.Sqrt(info[i].dist));
+            double weight = (1 / Math.Pow(info[i].dist,2));
             sumWeight += weight; 
-            double reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
+            double reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 2]], CultureInfo.InvariantCulture);
             sumWeightXReg += weight * reg;
+            kPoints.Add(Convert.ToInt32(trainData[idx-1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
         
         return sumWeightXReg/sumWeight;

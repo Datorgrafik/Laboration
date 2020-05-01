@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-public static class FindMinMaxValue
+public static class CalculationHelpers
 {
     #region Methods
 
@@ -56,6 +56,18 @@ public static class FindMinMaxValue
         }
 
         return minValue;
+    }
+
+    public static string FindAverage(string attribute)
+    {
+        double sum = 0.0;
+        int n = 0;
+        for (int i = 0; i < DataPlotter.dataClass.CSV.Count - 1; ++i)
+        {
+            sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
+            ++n;
+        }
+        return Convert.ToString(Math.Round((sum / (DataPlotter.dataClass.CSV.Count - 1)), 2), CultureInfo.InvariantCulture);
     }
 
     #endregion

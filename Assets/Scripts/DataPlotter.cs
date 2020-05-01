@@ -118,21 +118,21 @@ public class DataPlotter : MonoBehaviour
 		yAxisText.text = yName;
 
 		// Get maxes of each axis
-		xMax = FindMinMaxValue.FindMaxValue(xName, pointList);
-		yMax = FindMinMaxValue.FindMaxValue(yName, pointList);
+		xMax = CalculationHelpers.FindMaxValue(xName, pointList);
+		yMax = CalculationHelpers.FindMaxValue(yName, pointList);
 		zMax = 0f;
 
 		// Get minimums of each axis
-		xMin = FindMinMaxValue.FindMinValue(xName, pointList);
-		yMin = FindMinMaxValue.FindMinValue(yName, pointList);
+		xMin = CalculationHelpers.FindMinValue(xName, pointList);
+		yMin = CalculationHelpers.FindMinValue(yName, pointList);
 		zMin = 0f;
 
 		if (MainMenu.renderMode == 1)
 		{
 			zName = columnList[zList.value];
 			zAxisText.text = zName;
-			zMax = FindMinMaxValue.FindMaxValue(zName, pointList);
-			zMin = FindMinMaxValue.FindMinValue(zName, pointList);
+			zMax = CalculationHelpers.FindMaxValue(zName, pointList);
+			zMin = CalculationHelpers.FindMinValue(zName, pointList);
 		}
 
 		string valueString;

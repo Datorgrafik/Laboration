@@ -100,7 +100,6 @@ public class DataPlotter : MonoBehaviour
 			selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
 		GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
-
 		foreach (GameObject dataValues in allDataBalls)
 		{
 			Destroy(dataValues);
@@ -148,54 +147,7 @@ public class DataPlotter : MonoBehaviour
 				Destroy(dataValues);
 			}
 
-			for (int i = 0; i < 11; i++)
-			{
-				// Draw vertical lines
-				GameObject xLine = Instantiate(LinePrefab, new Vector3(i, 0, -0.001f), Quaternion.identity);
-				xLine.transform.parent = PointHolder.transform;
-				xLine.transform.name = $"Column{i}Line";
-
-				LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
-				// Number of vertices
-				xLineRenderer.positionCount = 2;
-				// Set line width
-				xLineRenderer.startWidth = 0.025f;
-				xLineRenderer.endWidth = 0.025f;
-				// Set start & end position
-				xLineRenderer.SetPosition(0, new Vector3(i, -0.5f, -0.001f));
-				xLineRenderer.SetPosition(1, new Vector3(i, 10.5f, -0.001f));
-				// Set line color
-				xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-
-
-				// Draw horizontal lines
-				GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f), Quaternion.identity);
-				yLine.transform.parent = PointHolder.transform;
-				yLine.transform.name = $"Value{i}Line";
-
-				LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
-				// Number of vertices
-				yLineRenderer.positionCount = 2;
-				// Set line width
-				yLineRenderer.startWidth = 0.025f;
-				yLineRenderer.endWidth = 0.025f;
-				// Set start & end position
-				yLineRenderer.SetPosition(0, new Vector3(-0.5f, i, -0.001f));
-				yLineRenderer.SetPosition(1, new Vector3(10.5f, i, -0.001f));
-				// Set line color
-				yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
-
-
-				// Draw axis values
-				TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i, -1, 0), Quaternion.identity);
-				TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1.5f, i, 0), Quaternion.identity);
-
-				float xValue = ((xMax - xMin) / 10) * i + xMin;
-				float yValue = ((yMax - yMin) / 10) * i + yMin;
-
-				valuePointX.text = xValue.ToString("0.00");
-				valuePointY.text = yValue.ToString("0.00");
-			}
+			DrawBackgroundGridAndValues();
 		}
 
 		// If renderMode is 3D
@@ -286,6 +238,58 @@ public class DataPlotter : MonoBehaviour
         }
     }
 
+	private void DrawBackgroundGridAndValues()
+	{
+		for (int i = 0; i < 11; i++)
+		{
+			// Draw vertical lines
+			GameObject xLine = Instantiate(LinePrefab, new Vector3(i, 0, -0.001f), Quaternion.identity);
+			xLine.transform.parent = PointHolder.transform;
+			xLine.transform.name = $"Column{i}Line";
+
+			LineRenderer xLineRenderer = xLine.GetComponent<LineRenderer>();
+			// Number of vertices
+			xLineRenderer.positionCount = 2;
+			// Set line width
+			xLineRenderer.startWidth = 0.025f;
+			xLineRenderer.endWidth = 0.025f;
+			// Set start & end position
+			xLineRenderer.SetPosition(0, new Vector3(i, -0.5f, -0.001f));
+			xLineRenderer.SetPosition(1, new Vector3(i, 10.5f, -0.001f));
+			// Set line color
+			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+
+
+			// Draw horizontal lines
+			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f), Quaternion.identity);
+			yLine.transform.parent = PointHolder.transform;
+			yLine.transform.name = $"Value{i}Line";
+
+			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
+			// Number of vertices
+			yLineRenderer.positionCount = 2;
+			// Set line width
+			yLineRenderer.startWidth = 0.025f;
+			yLineRenderer.endWidth = 0.025f;
+			// Set start & end position
+			yLineRenderer.SetPosition(0, new Vector3(-0.5f, i, -0.001f));
+			yLineRenderer.SetPosition(1, new Vector3(10.5f, i, -0.001f));
+			// Set line color
+			yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+
+
+			// Draw axis values
+			TMP_Text valuePointX = Instantiate(valuePrefab, new Vector3(i, -1, 0), Quaternion.identity);
+			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(-1.5f, i, 0), Quaternion.identity);
+
+			float xValue = ((xMax - xMin) / 10) * i + xMin;
+			float yValue = ((yMax - yMin) / 10) * i + yMin;
+
+			valuePointX.text = xValue.ToString("0.00");
+			valuePointY.text = yValue.ToString("0.00");
+		}
+	}
+
 	private void RenderAxisValues()
 	{
 		for (int i = 0; i <= 11; i++)
@@ -331,8 +335,6 @@ public class DataPlotter : MonoBehaviour
 
 	public void DropdownValueChanged()
 	{
-
-
 		PlottData();
 	}
 

@@ -35,27 +35,33 @@ public class MainMenu : MonoBehaviour
 		renderModeDropdown.onValueChanged.AddListener(delegate { DropdownValueChanged(renderModeDropdown); });
 		file.text = fileText;
 
+		CompileDatasetListToDropdown();
+	}
+
+	private void CompileDatasetListToDropdown()
+	{
 		// Get filepath info from Dataset directory if it exists
 		if (Directory.Exists(Path.Combine(Application.dataPath, "Datasets")))
 		{
-			string filePath = Path.Combine(Application.dataPath, "Datasets");
+			filePath = Path.Combine(Application.dataPath, "Datasets");
 			List<string> fileList = Directory.GetFiles(filePath, "*.csv").ToList();
 
+			// Get the DirectoryInfo
 			DirectoryInfo directoryInfo = new DirectoryInfo(filePath);
+			// List for storing fileNames from directory
 			List<string> fileNames = new List<string>();
 
 			// Get all filenames with extentions.
 			foreach (var file in directoryInfo.GetFiles("*.csv"))
-			{
 				fileNames.Add(file.Name.ToString());
-			}
 
 			// Add filepath info to Dropdown options in DatasetDropdown
 			DatasetDropdown.AddOptions(fileNames);
 			DatasetDropdown.onValueChanged.AddListener(delegate
 			{
-				fileData = File.ReadAllText(fileList[DatasetDropdown.value-1]);
-				file.text = fileNames[DatasetDropdown.value-1];
+				fileData = File.ReadAllText(fileList[DatasetDropdown.value - 1]);
+				file.text = fileNames[DatasetDropdown.value - 1];
+				fileText = fileNames[DatasetDropdown.value - 1];
 			});
 		}
 	}
@@ -84,13 +90,9 @@ public class MainMenu : MonoBehaviour
 		}
 
 		if (renderMode == 0)
-		{
 			SceneManager.LoadScene("ScatterPlot2D");
-		}
 		else if (renderMode == 1)
-		{
 			SceneManager.LoadScene("ScatterPlot");
-		}
 	}
 
 	public void ParallelCoordinatePlot()
@@ -100,7 +102,10 @@ public class MainMenu : MonoBehaviour
 			file.text = errorMsg;
 			return;
 		}
+
+		// Keeps the camera settings as 2D in plot
 		renderMode = 0;
+
 		SceneManager.LoadScene("ParallelCoordinatePlot");
 	}
 
@@ -111,7 +116,10 @@ public class MainMenu : MonoBehaviour
 			file.text = errorMsg;
 			return;
 		}
+
+		// Keeps the camera settings as 2D in plot
 		renderMode = 0;
+
 		SceneManager.LoadScene("ScatterPlotMatrix");
 	}
 
@@ -123,7 +131,9 @@ public class MainMenu : MonoBehaviour
 			return;
 		}
 
+		// Keeps the camera settings as 3D in plot
 		renderMode = 1;
+
 		SceneManager.LoadScene("ValfriTeknik");
 	}
 
@@ -138,5 +148,4 @@ public class MainMenu : MonoBehaviour
 	}
 
 	#endregion
-
 }

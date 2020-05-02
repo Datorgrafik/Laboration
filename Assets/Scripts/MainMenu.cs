@@ -64,6 +64,8 @@ public class MainMenu : MonoBehaviour
 				fileText = fileNames[DatasetDropdown.value - 1];
 			});
 		}
+		else
+			file.text = "No 'Datasets' folder found...";
 	}
 
 	public void DropdownValueChanged(Dropdown value)

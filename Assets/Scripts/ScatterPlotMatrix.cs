@@ -104,7 +104,8 @@ public class ScatterPlotMatrix : MonoBehaviour
                         GameObject summonPlane = Instantiate(planePointBackground,
                                     new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
                                     Quaternion.Euler(0, 90, -90));
-                        //Le textfält
+                        
+						//Le textfält
                         TMP_Text textField = Instantiate(ScatterplotMatrixText,
 														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, -0.01f) * plotScale,
 														Quaternion.identity);
@@ -197,9 +198,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 	public void DropdownValueChanged()
 	{
-		GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-
-		foreach (Transform child in ScatterPlotter.transform)
+		foreach (Transform child in GameObject.Find("Scatterplot").transform)
 			Destroy(child.gameObject);
 
 		PlottData();

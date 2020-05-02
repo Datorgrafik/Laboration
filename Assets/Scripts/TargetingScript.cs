@@ -21,11 +21,10 @@ public class TargetingScript : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit[] hits = Physics.RaycastAll(ray);
 			eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 			bool missTarget = true;
 
-			foreach (RaycastHit hit in hits)
+			foreach (RaycastHit hit in Physics.RaycastAll(ray))
 			{
 				if (hit.collider.CompareTag("DataBall"))
 				{
@@ -42,7 +41,7 @@ public class TargetingScript : MonoBehaviour
 				}
 			}
 
-            //Deselect target 
+            // Deselect target 
 			if (missTarget == true && !eventSys.IsPointerOverGameObject() && selectedTarget != null)
 			{
 				if (selectedTarget.gameObject.CompareTag("DataBall"))

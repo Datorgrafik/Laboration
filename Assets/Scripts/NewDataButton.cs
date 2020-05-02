@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class NewDataButton : MonoBehaviour
 {
+	#region Attributes
 
 	public Button newData;
 	public GameObject newDataWindow;
@@ -21,18 +22,21 @@ public class NewDataButton : MonoBehaviour
 	public static string kValue;
 	public static bool weightedOrNot;
 
+	#endregion
+
+	#region Methods
+
 	// Start is called before the first frame update
 	private void Start()
 	{
 		newData.onClick.AddListener(OnClick);
 		k.text = "3";
 	}
+
 	private void Cancel()
 	{
 		foreach (Transform child in newDataWindow.transform)
-		{
 			Destroy(child.gameObject);
-		}
 
 		newDataList.SetActive(false);
 		newDataWindow.SetActive(false);
@@ -66,7 +70,7 @@ public class NewDataButton : MonoBehaviour
 		SaveData.transform.SetParent(newDataWindow.transform, false);
 		SaveData.onClick.AddListener(SaveInput);
 
-		Button CancelButton = Instantiate(button, new Vector2(71, ypos-20), Quaternion.identity) as Button;
+		Button CancelButton = Instantiate(button, new Vector2(71, ypos - 20), Quaternion.identity) as Button;
 		CancelButton.GetComponentInChildren<Text>().text = "Cancel";
 		CancelButton.onClick.AddListener(Cancel);
 		CancelButton.transform.SetParent(newDataWindow.transform, false);
@@ -75,9 +79,11 @@ public class NewDataButton : MonoBehaviour
 		newDataWindow.SetActive(true);
 		newData.interactable = false;
 	}
+
 	private void SaveInput()
 	{
 		dataPoint.Clear();
+
 		foreach (InputField data in newDataWindow.GetComponentsInChildren<InputField>())
 		{
 			dataPoint.Add(data.text);
@@ -94,4 +100,6 @@ public class NewDataButton : MonoBehaviour
 		Cancel();
 		DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
 	}
+
+	#endregion
 }

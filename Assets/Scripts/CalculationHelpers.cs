@@ -21,9 +21,9 @@ public static class CalculationHelpers
                 if (maxValue < float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture))
                     maxValue = float.Parse(maxValueStringLoop, CultureInfo.InvariantCulture);
             }
+            // Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
             catch (Exception)
             {
-                // Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
                 // Removes the instance with the missing value
                 pointList.RemoveAt(i);
             }
@@ -47,9 +47,9 @@ public static class CalculationHelpers
                 if (float.Parse(minValueStringLoop, CultureInfo.InvariantCulture) < minValue)
                     minValue = float.Parse(minValueStringLoop, CultureInfo.InvariantCulture);
             }
+            // Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
             catch (Exception)
             {
-                // Catches missing values i.e. '?' that cannot be converted to floats in the dataset.
                 // Removes the instance with the missing value
                 pointList.RemoveAt(i);
             }
@@ -62,11 +62,13 @@ public static class CalculationHelpers
     {
         double sum = 0.0;
         int n = 0;
+        
         for (int i = 0; i < DataPlotter.dataClass.CSV.Count - 1; ++i)
         {
             sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
             ++n;
         }
+
         return Convert.ToString(Math.Round((sum / (DataPlotter.dataClass.CSV.Count - 1)), 2), CultureInfo.InvariantCulture);
     }
 

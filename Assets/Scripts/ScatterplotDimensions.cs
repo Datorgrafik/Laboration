@@ -143,9 +143,7 @@ public class ScatterplotDimensions : MonoBehaviour
 
             //Normalisering
             for (int j = 0; j < Dimensions; j++)
-            {
                 floatList[j] = (float.Parse(pointList[i][nameList[j]].ToString(), CultureInfo.InvariantCulture) - Min[j]) / (Max[j] - Min[j]);
-            }
 
             //Används för ChangeTargetFeature klassen. Ta ej bort ännu. 
             if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
@@ -193,8 +191,7 @@ public class ScatterplotDimensions : MonoBehaviour
 
     public void DropdownValueChanged()
     {
-        GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-        foreach (Transform child in ScatterPlotter.transform)
+        foreach (Transform child in GameObject.Find("Scatterplot").transform)
             Destroy(child.gameObject);
 
         PlottData();

@@ -75,6 +75,8 @@ public class DataPlotter : MonoBehaviour
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
 
+		GetDistinctTargetFeatures();
+
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(columnList);
 		xList.value = 1;
@@ -94,22 +96,22 @@ public class DataPlotter : MonoBehaviour
 		PlottData();
 	}
 
+	private void GetDistinctTargetFeatures()
+	{
+		// Add targetFeatures to a seperate list
+		for (int i = 0; i < pointList.Count; i++)
+			targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
+
+		// Only keep distinct targetFeatures
+		targetFeatures = targetFeatures.Distinct().ToList();
+	}
+
 	public void PlottData()
 	{
 		if (TargetingScript.selectedTarget != null)
 			selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-		GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
-		foreach (GameObject dataValues in allDataBalls)
-		{
-			Destroy(dataValues);
-		}
-
-		GameObject[] allAxisValueTexts = GameObject.FindGameObjectsWithTag("3D_Axis_ValueText");
-		foreach (var axisValue in allAxisValueTexts)
-		{
-			Destroy(axisValue);
-		}
+		DestroyDataBallsAndAxisValues();
 
 		xName = columnList[xList.value];
 		yName = columnList[yList.value];
@@ -127,6 +129,7 @@ public class DataPlotter : MonoBehaviour
 		yMin = CalculationHelpers.FindMinValue(yName, pointList);
 		zMin = 0f;
 
+		// If renderMode is 3D
 		if (MainMenu.renderMode == 1)
 		{
 			zName = columnList[zList.value];
@@ -140,12 +143,9 @@ public class DataPlotter : MonoBehaviour
 		// If renderMode is 2D
 		if (MainMenu.renderMode == 0)
 		{
-			GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("dataValues");
-
-			foreach (GameObject dataValues in allGameObjects)
-			{
+			// Destroy all dataValues before plotting new ones
+			foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("dataValues"))
 				Destroy(dataValues);
-			}
 
 			DrawBackgroundGridAndValues();
 		}
@@ -168,10 +168,6 @@ public class DataPlotter : MonoBehaviour
 
 			float z = 1;
 
-			//Lägger in alla targetfeatures i en lista
-			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
-				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
-
 			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
@@ -185,8 +181,10 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
-                Debug.Log(" punkt" + i.ToString());
-                if (!pointList[i].ContainsKey("DataBall"))
+
+				Debug.Log(" punkt" + i.ToString());
+
+				if (!pointList[i].ContainsKey("DataBall"))
 					pointList[i].Add("DataBall", dataPoint);
 				else
 					pointList[i]["DataBall"] = dataPoint;
@@ -196,19 +194,16 @@ public class DataPlotter : MonoBehaviour
 			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+			bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
 
-            bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
-            Debug.Log(ClassCheck);
-            if (!ClassCheck)
-            {
-                ChangeColor(dataPoint, index);
-            }
-            else
-            {
-                dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
-            }
+			Debug.Log(ClassCheck);
 
-            if (selectedIndex == i)
+			if (!ClassCheck)
+				ChangeColor(dataPoint, index);
+			else
+				dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
+
+			if (selectedIndex == i)
 			{
 				TargetingScript.selectedTarget = dataPoint;
 				TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
@@ -218,25 +213,36 @@ public class DataPlotter : MonoBehaviour
 			}
 		}
 
-        if (ThisInstans.teleportCamera)
-        {
-            ThisInstans.teleportCamera = false;
-            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
-            Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
-            Camera.main.transform.LookAt(newBall.transform);
+		if (ThisInstans.teleportCamera)
+		{
+			ThisInstans.teleportCamera = false;
+			GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+			Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+			Camera.main.transform.LookAt(newBall.transform);
 
-            if (TargetingScript.selectedTarget != null)
-            {
-                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
-                TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
-            }
+			if (TargetingScript.selectedTarget != null)
+			{
+				TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+				TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+			}
 
-            TargetingScript.selectedTarget = newBall;
-            TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
-            TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
-            TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
-        }
-    }
+			TargetingScript.selectedTarget = newBall;
+			TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+			TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+		}
+	}
+
+	private static void DestroyDataBallsAndAxisValues()
+	{
+		// Destroy all DataBalls before rendering new plot
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataBall"))
+			Destroy(dataValues);
+
+		// Destroy axisValues before rendering new plot
+		foreach (var axisValue in GameObject.FindGameObjectsWithTag("3D_Axis_ValueText"))
+			Destroy(axisValue);
+	}
 
 	private void DrawBackgroundGridAndValues()
 	{
@@ -320,17 +326,13 @@ public class DataPlotter : MonoBehaviour
 		float colorValue = (float)1 / (targetFeatureIndex + 1);
 
 		if (targetFeatureIndex % 3 == 0)
-		{
 			dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
-		}
+
 		else if (targetFeatureIndex % 3 == 1)
-		{
 			dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
-		}
+
 		else if (targetFeatureIndex % 3 == 2)
-		{
 			dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
-		}
 	}
 
 	public void DropdownValueChanged()
@@ -342,26 +344,21 @@ public class DataPlotter : MonoBehaviour
 	{
 		Dictionary<string, object> last = pointList.Last();
 
-		Dictionary<string, object> newDataPoint = new Dictionary<string, object>();
-
-        newDataPoint.Add(last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1);
+		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
+		{
+			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
+		};
 
 		for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
-		{
 			newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
-		}
 
 		double[] unknown = new double[newPoint.Count];
 
 		for (int i = 0; i < newPoint.Count; ++i)
-		{
 			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-
-		}
 
 		var predict = dataClass.Knn(unknown, k, weightedOrNot);
 		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
-
 
 		pointList.Add(newDataPoint);
         ThisInstans.teleportCamera = true;

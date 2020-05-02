@@ -184,9 +184,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	{
 		// Add targetFeatures to a seperate list
 		for (int i = 0; i < pointList.Count; i++)
-		{
 			targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
-		}
 
 		// Only keep distinct targetFeatures
 		targetFeatures = targetFeatures.Distinct().ToList();
@@ -340,12 +338,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public void ReorderColumns()
 	{
 		// Destroy Datapoints
-		GameObject[] databalls = GameObject.FindGameObjectsWithTag("DataBall");
-
-		foreach (var databall in databalls)
-		{
+		foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
 			Destroy(databall);
-		}
 
 		// Plot data for the selected columns
 		for (int i = 0; i < nFeatures; i++)

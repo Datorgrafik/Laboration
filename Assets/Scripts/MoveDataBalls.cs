@@ -42,6 +42,7 @@ public class MoveDataBalls : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
                 if (eventSys.IsPointerOverGameObject())
                     return;
 

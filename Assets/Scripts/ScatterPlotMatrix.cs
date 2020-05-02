@@ -116,6 +116,7 @@ public class ScatterPlotMatrix : MonoBehaviour
                         GameObject summonPlane = Instantiate(planePointBackground,
                                     new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
                                     Quaternion.Euler(0, 90, -90));
+
                         // Get maxes of each axis
                         float xMax = CalculationHelpers.FindMaxValue(feature1Name, pointList);
 						float yMax = CalculationHelpers.FindMaxValue(feature2Name, pointList);
@@ -154,7 +155,6 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
 
-
                             // Set color
                             bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
                             if (!ClassCheck)
@@ -167,9 +167,7 @@ public class ScatterPlotMatrix : MonoBehaviour
                                     dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
                             }
                             else
-                            {
                                 dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
-                            }
 						}
 					}
 				}
@@ -182,9 +180,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 	{
 		// Add targetFeatures to a seperate list
 		for (int i = 0; i < pointList.Count; i++)
-		{
 			targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
-		}
 
 		// Only keep distinct targetFeatures
 		targetFeatures = targetFeatures.Distinct().ToList();
@@ -192,17 +188,11 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 	private static void ResetDataPlot()
 	{
-		GameObject[] allGameObjects = GameObject.FindGameObjectsWithTag("TextValues");
-		foreach (GameObject dataValues in allGameObjects)
-		{
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("TextValues"))
 			Destroy(dataValues);
-		}
 
-		GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
-		foreach (GameObject dataValues in allDataBalls)
-		{
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataBall"))
 			Destroy(dataValues);
-		}
 	}
 
 	public void DropdownValueChanged()
@@ -210,9 +200,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 		GameObject ScatterPlotter = GameObject.Find("Scatterplot");
 
 		foreach (Transform child in ScatterPlotter.transform)
-		{
 			Destroy(child.gameObject);
-		}
 
 		PlottData();
 	}

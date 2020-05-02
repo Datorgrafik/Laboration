@@ -37,9 +37,7 @@ public class EditPosition : MonoBehaviour
             Denormalize();
 
 			if (MainMenu.renderMode == 1)
-			{
 				Zname.text = DataPlotter.zName;
-			}
 
             if (!addedListener)
             {
@@ -97,7 +95,8 @@ public class EditPosition : MonoBehaviour
 
         mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
         Yvalue.text = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10 ).ToString("0.0");
-        if (MainMenu.renderMode == 1)
+        
+		if (MainMenu.renderMode == 1)
         {
             mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
             Zvalue.text = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString("0.0");

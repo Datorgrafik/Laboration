@@ -11,8 +11,9 @@ public class Blink : MonoBehaviour
     void Start()
     {
         Ball = GetComponent<Renderer>();
-        InvokeRepeating("Blinking",0,0.2f);
         color = Ball.material.color;
+        InvokeRepeating("Blinking",0,0.2f);
+        
     }
     void Blinking()
     {

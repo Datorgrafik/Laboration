@@ -233,7 +233,6 @@ public class DataPlotter : MonoBehaviour
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, z) * plotScale, Quaternion.identity);
 				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
-                Debug.Log(" punkt" + i.ToString());
                 if (!pointList[i].ContainsKey("DataBall"))
 					pointList[i].Add("DataBall", dataPoint);
 				else
@@ -284,6 +283,9 @@ public class DataPlotter : MonoBehaviour
             TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
             TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
         }
+        if(KNN.kPoints != null )
+            if(KNN.kPoints.Count > 0)
+                Blink(KNN.kPoints);
     }
 
 	private void RenderAxisValues()
@@ -331,7 +333,6 @@ public class DataPlotter : MonoBehaviour
 
 	public void DropdownValueChanged()
 	{
-
 
 		PlottData();
 	}

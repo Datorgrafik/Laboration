@@ -171,7 +171,7 @@ public class DataPlotter : MonoBehaviour
 			if (MainMenu.renderMode == 0)
 			{
 				dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
-				dataPoint.transform.name = pointList[i][xName] + " " + pointList[i][yName];
+				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][columnList[columnList.Count() - 1]]; 
 				dataPoint.transform.parent = PointHolder.transform;
 			}
 			else
@@ -182,13 +182,13 @@ public class DataPlotter : MonoBehaviour
 				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
 
-				if (!pointList[i].ContainsKey("DataBall"))
-					pointList[i].Add("DataBall", dataPoint);
-				else
-					pointList[i]["DataBall"] = dataPoint;
 			}
+            if (!pointList[i].ContainsKey("DataBall"))
+                pointList[i].Add("DataBall", dataPoint);
+            else
+                pointList[i]["DataBall"] = dataPoint;
 
-			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
@@ -211,9 +211,15 @@ public class DataPlotter : MonoBehaviour
 
         if (ThisInstans.teleportCamera)
         {
-            ThisInstans.teleportCamera = false;
-            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
-            Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+           
+            // ThisInstans.teleportCamera = false;
+             GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+            if (MainMenu.renderMode == 1)
+                Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+                         
+            else
+                Camera.main.transform.position = new Vector3(newBall.transform.position.x, newBall.transform.position.y, newBall.transform.position.z - 8f);
+
             Camera.main.transform.LookAt(newBall.transform);
 
             if (TargetingScript.selectedTarget != null)
@@ -371,7 +377,7 @@ public class DataPlotter : MonoBehaviour
 	{
 		foreach (int data in kPoints)
 		{
-			GameObject ball = (GameObject)pointList[data]["DataBall"];
+			GameObject ball = (GameObject)pointList[data-1]["DataBall"];
 			ball.GetComponent<Blink>().enabled = true;
 		}
 	}

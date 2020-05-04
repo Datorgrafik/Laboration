@@ -12,7 +12,9 @@ public class Blink : MonoBehaviour
     {
         Ball = GetComponent<Renderer>();
         color = Ball.material.color;
+        Ball.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
         InvokeRepeating("Blinking",0,0.2f);
+
         
     }
     void Blinking()

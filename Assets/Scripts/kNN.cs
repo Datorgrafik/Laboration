@@ -53,7 +53,7 @@ public class KNN : MonoBehaviour
         {
             IndexAndDistance curr = new IndexAndDistance();
             double dist = Distance(unknown, trainData[i]);
-            curr.idx = i;
+            curr.idx = i+1;
             curr.dist = dist;
             info[i] = curr;
         }

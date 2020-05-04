@@ -39,9 +39,9 @@ public class ChangeTargetFeature : MonoBehaviour
 
 	public void OnClick()
 	{
-		//Ändra targetfeature
+		// Ändra targetfeature
 		selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature = DataPlotter.ThisInstans.targetFeatures[changeTargetFeature.GetComponent<Dropdown>().value];
-		//Lägg in den nya feature i pointlist och spara
+		// Lägg in den nya feature i pointlist och spara
 		DataPlotter.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
 
 		DataPlotter.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);

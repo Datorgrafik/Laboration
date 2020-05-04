@@ -69,21 +69,13 @@ public class ScatterplotDimensions : MonoBehaviour
         string[] nameList = new string[Dimensions];
 
         if (TargetingScript.selectedTarget != null)
-        {
             selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-        }
 
-        GameObject[] allDataBalls = GameObject.FindGameObjectsWithTag("DataBall");
-        foreach (GameObject dataValues in allDataBalls)
-        {
+        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataBall"))
             Destroy(dataValues);
-        }
 
-        GameObject[] allAxisValueTexts = GameObject.FindGameObjectsWithTag("3D_Axis_ValueText");
-        foreach (var axisValue in allAxisValueTexts)
-        {
+        foreach (var axisValue in GameObject.FindGameObjectsWithTag("3D_Axis_ValueText"))
             Destroy(axisValue);
-        }
 
         for (int i = 0; i < Dimensions; i++)
         {
@@ -151,15 +143,11 @@ public class ScatterplotDimensions : MonoBehaviour
 
             //Normalisering
             for (int j = 0; j < Dimensions; j++)
-            {
                 floatList[j] = (float.Parse(pointList[i][nameList[j]].ToString(), CultureInfo.InvariantCulture) - Min[j]) / (Max[j] - Min[j]);
-            }
 
             //Används för ChangeTargetFeature klassen. Ta ej bort ännu. 
             if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
-            {
                 targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
-            }
 
             dataPoint = AssignDataBallAttributes_Instantiate(i, floatList);
             dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
@@ -171,19 +159,21 @@ public class ScatterplotDimensions : MonoBehaviour
     private GameObject AssignDataBallAttributes_Instantiate(int i, float[] floatList)
     {
         GameObject dataPoint = Instantiate(PointPrefab, new Vector3(floatList[0], floatList[1], floatList[2]) * plotScale, Quaternion.identity);
+        
         if (Dimensions > 3)
-        {
             dataPoint.GetComponent<Renderer>().material.color = new Color(1, floatList[3], 1, 1.0f);
-        }
+        
         if (Dimensions > 4)
             dataPoint.transform.localScale += new Vector3(floatList[4] / 2, floatList[4] / 2, floatList[4] / 2);
 
         dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][columnList[columnList.Count() - 1]];
         dataPoint.transform.parent = PointHolder.transform;
+        
         if (!pointList[i].ContainsKey("DataBall"))
             pointList[i].Add("DataBall", dataPoint);
         else
             pointList[i]["DataBall"] = dataPoint;
+        
         return dataPoint;
     }
 
@@ -201,11 +191,9 @@ public class ScatterplotDimensions : MonoBehaviour
 
     public void DropdownValueChanged()
     {
-        GameObject ScatterPlotter = GameObject.Find("Scatterplot");
-        foreach (Transform child in ScatterPlotter.transform)
-        {
+        foreach (Transform child in GameObject.Find("Scatterplot").transform)
             Destroy(child.gameObject);
-        }
+
         PlottData();
     }
 
@@ -218,23 +206,19 @@ public class ScatterplotDimensions : MonoBehaviour
         newDataPoint.Add("", (Convert.ToInt32(last[""], CultureInfo.InvariantCulture)) + 1);
 
         for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
-        {
             newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
-        }
 
         double[] unknown = new double[newPoint.Count];
 
         for (int i = 0; i < newPoint.Count; ++i)
-        {
             unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-
-        }
 
         var predict = dataClass.Knn(unknown, k, weightedOrNot);
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
         pointList.Add(newDataPoint);
         ThisInstans.teleportCamera = true;
         ThisInstans.PlottData();
+
         Blink(KNN.kPoints);
     }
 

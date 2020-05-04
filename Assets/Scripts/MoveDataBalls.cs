@@ -22,8 +22,6 @@ public class MoveDataBalls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-
         if (Input.GetMouseButtonDown(0))
         {
             if (grabItem == true)
@@ -43,6 +41,8 @@ public class MoveDataBalls : MonoBehaviour
 
             if (Input.GetMouseButton(0))
             {
+                eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
                 if (eventSys.IsPointerOverGameObject())
                     return;
 

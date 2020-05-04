@@ -18,9 +18,7 @@ public class Blink : MonoBehaviour
     void Blinking()
     {
         if (Ball.material.color == color)
-        {
             Ball.material.color = Color.white;
-        }
         else
             Ball.material.color = color;
     }

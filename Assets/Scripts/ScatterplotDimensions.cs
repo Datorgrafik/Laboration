@@ -21,9 +21,6 @@ public class ScatterplotDimensions : MonoBehaviour
     public GameObject PointPrefab;
     public GameObject LineSeparatorPrefab;
     public TMP_Text axisValueTextPrefab;
-
-    private Color ColorTop = new Color(1, 1, 1, 1.0f);
-    private Color ColorBottom = new Color(1, 0, 1, 1.0f);
     public GameObject GradientPlane;
 
     [SerializeField]

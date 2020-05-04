@@ -44,6 +44,9 @@ public class ScatterplotDimensions : MonoBehaviour
 
         ThisInstans = this;
         columnList = new List<string>(pointList[1].Keys);
+        List<string> columnListDropDown = new List<string>(pointList[1].Keys);
+        columnListDropDown.RemoveAt(columnList.Count() - 1);
+        columnListDropDown.RemoveAt(0);
 
         Dimensions = columnList.Count - 2;
         if (Dimensions > 5)
@@ -51,7 +54,7 @@ public class ScatterplotDimensions : MonoBehaviour
 
         for (int i = 0; i < Dimensions; i++)
         {
-            dropDownList[i].AddOptions(columnList);
+            dropDownList[i].AddOptions(columnListDropDown);
             dropDownList[i].value = i+1;
             dropDownList[i].onValueChanged.AddListener(delegate { DropdownValueChanged(); });
         }

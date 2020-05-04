@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
 	public GameObject PointHolder;
+
+	[SerializeField]
+	private GameObject newDataPanel;
+	[SerializeField]
+	private GameObject newDataInputFieldPrefab;
+	[SerializeField]
+	private GameObject saveAndCancelButtonsPrefab;
 
 	// Misc
 	public float plotScale = 10;
@@ -349,6 +357,47 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			if (i + 1 == 4)
 				break;
 		}
+	}
+
+	public void InputNewData()
+	{
+		// Set newDataPanel to active
+		newDataPanel.SetActive(true);
+
+		// Starting Y Position for inputFields
+		int inputFieldYAxis = -85;
+
+		// Populate newDataPanel with inputFields for each attribute in dataset
+		for (int i = 0; i < nFeatures; i++)
+		{
+			// Instatiate newDataPrefabs
+			GameObject newInput = Instantiate(newDataInputFieldPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+			inputFieldYAxis -= 62;
+			// Set parent
+			newInput.transform.SetParent(newDataPanel.transform, false);
+			// Get attribute textfield
+			newInput.GetComponentInChildren<TMP_Text>().text = featureList[i];
+		}
+
+		// Instantiate SaveAndCancel buttons
+		GameObject saveAndCancelButtons = Instantiate(saveAndCancelButtonsPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+		// Set parent
+		saveAndCancelButtons.transform.SetParent(newDataPanel.transform, false);
+		// Add onClick listener to saveButton
+		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(Save);
+		// Add onClick listener to cancelButton
+		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(Cancel);
+
+	}
+
+	private void Save()
+	{
+		throw new NotImplementedException();
+	}
+
+	private void Cancel()
+	{
+		throw new NotImplementedException();
 	}
 
 	#endregion

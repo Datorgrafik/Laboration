@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class KNN : MonoBehaviour
+public class KNN
 {
     #region Attributes
 

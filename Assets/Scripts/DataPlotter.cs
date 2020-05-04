@@ -182,7 +182,7 @@ public class DataPlotter : MonoBehaviour
 				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
 
-				Debug.Log(" punkt" + i.ToString());
+				//Debug.Log(" punkt" + i.ToString());
 
 				if (!pointList[i].ContainsKey("DataBall"))
 					pointList[i].Add("DataBall", dataPoint);
@@ -195,8 +195,6 @@ public class DataPlotter : MonoBehaviour
 
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 			bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
-
-			Debug.Log(ClassCheck);
 
 			if (!ClassCheck)
 				ChangeColor(dataPoint, index);

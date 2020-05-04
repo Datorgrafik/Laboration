@@ -182,8 +182,6 @@ public class DataPlotter : MonoBehaviour
 				dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][xName] + " " + pointList[i][yName] + " " + pointList[i][zName] + " " + pointList[i][columnList[columnList.Count() - 1]];
 				dataPoint.transform.parent = PointHolder.transform;
 
-				//Debug.Log(" punkt" + i.ToString());
-
 				if (!pointList[i].ContainsKey("DataBall"))
 					pointList[i].Add("DataBall", dataPoint);
 				else
@@ -211,26 +209,29 @@ public class DataPlotter : MonoBehaviour
 			}
 		}
 
-		if (ThisInstans.teleportCamera)
-		{
-			ThisInstans.teleportCamera = false;
-			GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
-			Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
-			Camera.main.transform.LookAt(newBall.transform);
+        if (ThisInstans.teleportCamera)
+        {
+            ThisInstans.teleportCamera = false;
+            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+            Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+            Camera.main.transform.LookAt(newBall.transform);
 
-			if (TargetingScript.selectedTarget != null)
-			{
-				TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
-				TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
-			}
+            if (TargetingScript.selectedTarget != null)
+            {
+                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+                TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+            }
 
-			TargetingScript.selectedTarget = newBall;
-			TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
-			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
-			TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
-		}
-	}
-
+            TargetingScript.selectedTarget = newBall;
+            TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+            TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+            TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+        }
+        if(KNN.kPoints != null )
+            if(KNN.kPoints.Count > 0)
+                Blink(KNN.kPoints);
+    }
+	
 	private static void DestroyDataBallsAndAxisValues()
 	{
 		// Destroy all DataBalls before rendering new plot
@@ -335,6 +336,7 @@ public class DataPlotter : MonoBehaviour
 
 	public void DropdownValueChanged()
 	{
+
 		PlottData();
 	}
 

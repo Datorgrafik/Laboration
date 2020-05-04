@@ -194,8 +194,6 @@ public class DataPlotter : MonoBehaviour
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 			bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
 
-			Debug.Log(ClassCheck);
-
 			if (!ClassCheck)
 				ChangeColor(dataPoint, index);
 			else
@@ -240,7 +238,6 @@ public class DataPlotter : MonoBehaviour
                 Blink(KNN.kPoints);
     }
 	
-
 	private static void DestroyDataBallsAndAxisValues()
 	{
 		// Destroy all DataBalls before rendering new plot
@@ -303,7 +300,6 @@ public class DataPlotter : MonoBehaviour
 			valuePointY.text = yValue.ToString("0.00");
 		}
 	}
-
 
 	private void RenderAxisValues()
 	{

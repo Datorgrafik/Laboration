@@ -30,7 +30,6 @@ public class NewDataButton : MonoBehaviour
 	private void Start()
 	{
 		newData.onClick.AddListener(OnClick);
-		k.text = "3";
 	}
 
 	private void Cancel()
@@ -46,8 +45,6 @@ public class NewDataButton : MonoBehaviour
 	private void OnClick()
 	{
 		List<string> attributes = CSVläsare.columnList;
-
-		Debug.Log(attributes.Count.ToString());
 
 		int ypos = 224;
 		for (int i = 1; i < attributes.Count - 1; ++i)

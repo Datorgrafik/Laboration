@@ -34,7 +34,8 @@ public class MainMenu : MonoBehaviour
 		renderModeDropdown.value = renderMode;
 		renderModeDropdown.onValueChanged.AddListener(delegate { DropdownValueChanged(renderModeDropdown); });
 		file.text = fileText;
-
+        if (KNN.kPoints != null)
+            KNN.kPoints.Clear();
 		CompileDatasetListToDropdown();
 	}
 

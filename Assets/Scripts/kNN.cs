@@ -87,7 +87,7 @@ public class KNN : MonoBehaviour
                 else
                     votes.Add(c, 1);
             }
-            kPoints.Add(Convert.ToInt32(trainData[idx - 1][""], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx - 1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
         var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
 
@@ -104,7 +104,7 @@ public class KNN : MonoBehaviour
             int idx = info[i].idx;
             double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
             sum += c;
-            kPoints.Add(Convert.ToInt32(trainData[idx - 1][""], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx - 1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
 
         return sum / kValue;

@@ -13,6 +13,10 @@ TagManager:
   - weightedToggle
   - 3D_Axis_ValueText
   - ScatterPlotButton
+  - PCPNewDataPanel
+  - PCPSaveButton
+  - PCPCancelButton
+  - PCPNewDataButton
   layers:
   - Default
   - TransparentFX

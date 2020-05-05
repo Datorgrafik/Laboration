@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,17 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
 	public GameObject PointHolder;
+
+	[SerializeField]
+	private GameObject newDataPanel;
+	[SerializeField]
+	private GameObject newDataContainer;
+	[SerializeField]
+	private GameObject kAndWeightedPrefab;
+	[SerializeField]
+	private GameObject newDataInputFieldPrefab;
+	[SerializeField]
+	private GameObject saveAndCancelButtonsPrefab;
 
 	// Misc
 	public float plotScale = 10;
@@ -349,6 +361,63 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			if (i + 1 == 4)
 				break;
 		}
+	}
+
+	public void InputNewData()
+	{
+		// Set newDataPanel to active
+		newDataPanel.SetActive(true);
+
+		// Starting Y Position for inputFields
+		float inputFieldYAxis = -17.5f;
+
+		// Instantiate kAndWeighted prefab
+		GameObject kAndWeighted = Instantiate(kAndWeightedPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+		// Set parent
+		kAndWeighted.transform.SetParent(newDataContainer.transform, false);
+		inputFieldYAxis -= 35;
+
+		// Populate newDataPanel with inputFields for each attribute in dataset
+		for (int i = 0; i < nFeatures; i++)
+		{
+			// Instatiate newDataPrefabs
+			GameObject newInput = Instantiate(newDataInputFieldPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+			inputFieldYAxis -= 62;
+			// Set parent
+			newInput.transform.SetParent(newDataContainer.transform, false);
+			// Get attribute textfield
+			newInput.GetComponentInChildren<TMP_Text>().text = featureList[i];
+		}
+
+		// Instantiate SaveAndCancel buttons
+		GameObject saveAndCancelButtons = Instantiate(saveAndCancelButtonsPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+		// Set parent
+		saveAndCancelButtons.transform.SetParent(newDataContainer.transform, false);
+		// Add onClick listener to saveButton
+		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(Save);
+		// Add onClick listener to cancelButton
+		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(Cancel);
+		
+		// While newDataPanel shows, newDataButton is none-Interactable
+		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = false;
+	}
+
+	private void Save()
+	{
+		throw new NotImplementedException();
+	}
+
+	private void Cancel()
+	{
+		// Empty the panel when leaving it
+		foreach (Transform child in newDataContainer.transform)
+			Destroy(child.gameObject);
+
+		// Hide the panel when leaving it
+		newDataPanel.SetActive(false);
+		
+		// Make newDataButton interactable again
+		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
 	}
 
 	#endregion

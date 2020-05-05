@@ -74,21 +74,24 @@ public class DataPlotter : MonoBehaviour
 
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
+        List<string> columnListDropDown = new List<string>(pointList[1].Keys);
+        columnListDropDown.RemoveAt(columnList.Count() - 1);
+        columnListDropDown.RemoveAt(0);
 
 		GetDistinctTargetFeatures();
 
 		// Assign column name from columnList to Name variables
-		xList.AddOptions(columnList);
+		xList.AddOptions(columnListDropDown);
 		xList.value = 1;
 		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
-		yList.AddOptions(columnList);
+		yList.AddOptions(columnListDropDown);
 		yList.value = 2;
 		yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
 		if (MainMenu.renderMode == 1)
 		{
-			zList.AddOptions(columnList);
+			zList.AddOptions(columnListDropDown);
 			zList.value = 3;
 			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 		}

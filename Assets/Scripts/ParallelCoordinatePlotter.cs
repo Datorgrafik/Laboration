@@ -28,6 +28,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	[SerializeField]
 	private GameObject newDataPanel;
 	[SerializeField]
+	private GameObject newDataContainer;
+	[SerializeField]
+	private GameObject kAndWeightedPrefab;
+	[SerializeField]
 	private GameObject newDataInputFieldPrefab;
 	[SerializeField]
 	private GameObject saveAndCancelButtonsPrefab;
@@ -365,7 +369,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		newDataPanel.SetActive(true);
 
 		// Starting Y Position for inputFields
-		int inputFieldYAxis = -85;
+		float inputFieldYAxis = -17.5f;
+
+		// Instantiate kAndWeighted prefab
+		GameObject kAndWeighted = Instantiate(kAndWeightedPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+		// Set parent
+		kAndWeighted.transform.SetParent(newDataContainer.transform, false);
+		inputFieldYAxis -= 35;
 
 		// Populate newDataPanel with inputFields for each attribute in dataset
 		for (int i = 0; i < nFeatures; i++)
@@ -374,7 +384,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			GameObject newInput = Instantiate(newDataInputFieldPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
 			inputFieldYAxis -= 62;
 			// Set parent
-			newInput.transform.SetParent(newDataPanel.transform, false);
+			newInput.transform.SetParent(newDataContainer.transform, false);
 			// Get attribute textfield
 			newInput.GetComponentInChildren<TMP_Text>().text = featureList[i];
 		}
@@ -382,12 +392,14 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Instantiate SaveAndCancel buttons
 		GameObject saveAndCancelButtons = Instantiate(saveAndCancelButtonsPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
 		// Set parent
-		saveAndCancelButtons.transform.SetParent(newDataPanel.transform, false);
+		saveAndCancelButtons.transform.SetParent(newDataContainer.transform, false);
 		// Add onClick listener to saveButton
 		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(Save);
 		// Add onClick listener to cancelButton
 		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(Cancel);
-
+		
+		// While newDataPanel shows, newDataButton is none-Interactable
+		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = false;
 	}
 
 	private void Save()
@@ -397,7 +409,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private void Cancel()
 	{
-		throw new NotImplementedException();
+		// Empty the panel when leaving it
+		foreach (Transform child in newDataContainer.transform)
+			Destroy(child.gameObject);
+
+		// Hide the panel when leaving it
+		newDataPanel.SetActive(false);
+		
+		// Make newDataButton interactable again
+		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
 	}
 
 	#endregion

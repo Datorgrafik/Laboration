@@ -4322,7 +4322,6 @@ MonoBehaviour:
   LineSeparatorPrefab: {fileID: 0}
   axisValueTextPrefab: {fileID: 6666518029258679039, guid: 7a39907ff732bf44181bf3724d799e2f,
     type: 3}
-  GradientPlane: {fileID: 0}
   valuePrefab: {fileID: 0}
   PointHolder: {fileID: 867012947}
   columnList: []
@@ -5637,11 +5636,13 @@ MonoBehaviour:
 
     Space - Up
 
-    Right click - Camera movement
+    Right
+    click - Camera movement
 
     Left click - Target DataBalls
 
-    E - Move targeted Databall'
+    E - Move targeted
+    Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6544,11 +6545,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -154
-      objectReference: {fileID: 0}
-    - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -72
       objectReference: {fileID: 0}
     - target: {fileID: 5603551208417156692, guid: 6e9bb53e807baec4687e9f812fb879ba,
         type: 3}

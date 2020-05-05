@@ -21,7 +21,6 @@ public class ScatterplotDimensions : MonoBehaviour
     public GameObject PointPrefab;
     public GameObject LineSeparatorPrefab;
     public TMP_Text axisValueTextPrefab;
-    public GameObject GradientPlane;
 
     [SerializeField]
     public TMP_Text valuePrefab;
@@ -55,7 +54,7 @@ public class ScatterplotDimensions : MonoBehaviour
         for (int i = 0; i < Dimensions; i++)
         {
             dropDownList[i].AddOptions(columnListDropDown);
-            dropDownList[i].value = i+1;
+            dropDownList[i].value = i;
             dropDownList[i].onValueChanged.AddListener(delegate { DropdownValueChanged(); });
         }
 
@@ -79,7 +78,7 @@ public class ScatterplotDimensions : MonoBehaviour
 
         for (int i = 0; i < Dimensions; i++)
         {
-            nameList[i] = columnList[dropDownList[i].value];
+            nameList[i] = columnList[dropDownList[i].value + 1];
             textList[i].text = nameList[i];
             Min[i] = CalculationHelpers.FindMinValue(nameList[i], pointList);
             Max[i] = CalculationHelpers.FindMaxValue(nameList[i], pointList);

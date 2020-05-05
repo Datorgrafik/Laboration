@@ -17,6 +17,9 @@ TagManager:
   - PCPSaveButton
   - PCPCancelButton
   - PCPNewDataButton
+  - PCPNewDataInputField
+  - PCPkValue
+  - PCPWeighted
   layers:
   - Default
   - TransparentFX

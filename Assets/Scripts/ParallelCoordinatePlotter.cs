@@ -36,6 +36,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	[SerializeField]
 	private GameObject saveAndCancelButtonsPrefab;
 
+	public static DataClass dataClass;
+
 	// Misc
 	public float plotScale = 10;
 	public TMP_Text valuePrefab;
@@ -62,7 +64,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	void Start()
 	{
 		// Set pointlist to results of function Reader with argument inputfile
-		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)
@@ -350,8 +352,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public void ReorderColumns()
 	{
 		// Destroy Datapoints
-		foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
-			Destroy(databall);
+		//foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
+		//	Destroy(databall);
 
 		// Plot data for the selected columns
 		for (int i = 0; i < nFeatures; i++)
@@ -404,7 +406,45 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private void Save()
 	{
-		throw new NotImplementedException();
+		List<string> newDataInputList = new List<string>();
+
+		// Get list of values from newData InputFields
+		foreach (GameObject dataInput in GameObject.FindGameObjectsWithTag("PCPNewDataInputField"))
+		{
+			newDataInputList.Add(dataInput.GetComponent<TMP_InputField>().text);
+			dataInput.GetComponent<TMP_InputField>().text = null;
+		};
+
+		string kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
+		bool weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
+
+		Cancel();
+		AddDataPoints(newDataInputList, kValue, weighted);
+	}
+
+	private void AddDataPoints(List<string> newDataInputList, string kValue, bool weighted)
+	{
+		Dictionary<string, object> last = pointList.Last();
+
+		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
+		{
+			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
+		};
+
+		for (int i = 0; i < columnList.Count - 2; i++)
+			newDataPoint.Add(columnList[i + 1], newDataInputList[i]);
+
+		double[] unknown = new double[newDataInputList.Count];
+
+		for (int i = 0; i < newDataInputList.Count; ++i)
+			unknown[i] = (Convert.ToDouble(newDataInputList[i], CultureInfo.InvariantCulture));
+
+		var predict = dataClass.Knn(unknown, kValue, weighted);
+		newDataPoint.Add(columnList[columnList.Count - 1], predict);
+
+		pointList.Add(newDataPoint);
+
+		ReorderColumns();
 	}
 
 	private void Cancel()

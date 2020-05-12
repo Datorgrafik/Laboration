@@ -92,16 +92,12 @@ public class MoveDataBalls : MonoBehaviour
     {
        if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
         {
-            string ColumnNumberString = TargetingScript.selectedTarget.name.Substring(TargetingScript.selectedTarget.name.Length - 1);
-            int ColumnNumber = int.Parse(ColumnNumberString);
-
-
-            float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.columnMaxList[ColumnNumber -1] - ParallelCoordinatePlotter.ThisInstans.columnMinList[ColumnNumber - 1];
-            string newPosition = (ParallelCoordinatePlotter.ThisInstans.columnMinList[ColumnNumber - 1] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+            float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
+            string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
             newPosition = newPosition.Replace(',', '.');
             index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-            ParallelCoordinatePlotter.ThisInstans.pointList[index][ParallelCoordinatePlotter.ThisInstans.featureList[ColumnNumber - 1].ToString()] = newPosition;
+            ParallelCoordinatePlotter.ThisInstans.pointList[index][selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
 
             ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
             ParallelCoordinatePlotter.ThisInstans.ReorderColumns();

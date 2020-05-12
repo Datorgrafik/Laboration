@@ -58,8 +58,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
     //Temporary static fix?
     public static ParallelCoordinatePlotter ThisInstans;
-    public float[] columnMaxList = new float[4];
-    public float[] columnMinList = new float[4];
+    public float yMax;
+    public float yMin;
 
     #endregion
 
@@ -166,8 +166,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 		}
 
-        float yMax = 0f;
-        float yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
+        yMax = 0f;
+        yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
 
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
@@ -261,14 +261,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Sets the correct X-Axis position for each column
 		float xPos = SetColumnPosition(columnPos);
 
-		// Get MaxValue
-		float columnMax = CalculationHelpers.FindMaxValue(columnName, pointList);
-		// Get MinValue
-		float columnMin = CalculationHelpers.FindMinValue(columnName, pointList);
-
-        columnMinList[columnPos - 1] = columnMin;
-        columnMaxList[columnPos - 1] = columnMax;
-
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)
 		{
@@ -278,7 +270,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Get original value
 			string valueString = pointList[i][columnName].ToString();
 			// Set normalized Y-value
-			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
+			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
 			InstantiateAndRenderDatapoints(xPos, i, y, columnPos);
 
@@ -300,6 +292,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
         //Store Index
         dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
+        dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
     }
 
 	private void InstantiateAndRenderLines(int columnPos, float xPos, int i, float y)

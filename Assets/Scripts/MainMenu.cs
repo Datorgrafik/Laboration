@@ -105,7 +105,6 @@ public class MainMenu : MonoBehaviour
 			file.text = errorMsg;
 			return;
 		}
-
 		// Keeps the camera settings as 2D in plot
 		renderMode = 0;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MoveDataBalls : MonoBehaviour
 {
@@ -51,7 +52,15 @@ public class MoveDataBalls : MonoBehaviour
                 if (timeChecker > 0.3F)
                 {
                     mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
-                    TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
+
+                    if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+                    {
+                        TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
+                    }
+                    else
+                    {
+                        TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
+                    }
                 }
             }
 

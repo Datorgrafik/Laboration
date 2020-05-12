@@ -355,7 +355,6 @@ public class DataPlotter : MonoBehaviour
 
     public void DropdownValueChanged()
     {
-
         PlottData();
     }
 
@@ -390,20 +389,18 @@ public class DataPlotter : MonoBehaviour
     static public void ChangeDataPoint(string k, bool weightedOrNot)
     { 
 
-            Dictionary<string, object> KnnPoint = pointList.Last();
-            pointList.Remove(KnnPoint);
+          Dictionary<string, object> KnnPoint = pointList.Last();
+        pointList.Remove(KnnPoint);
 
-            double[] unknown = new double[KnnPoint.Count-3];
+        double[] unknown = new double[KnnPoint.Count-3];
 
-            for (int i = 0; i < KnnPoint.Count-3; ++i)
-                unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+        for (int i = 0; i < KnnPoint.Count-3; ++i)
+             unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
 
-            var predict = dataClass.Knn(unknown, k, weightedOrNot);
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
         KnnPoint[ThisInstans.columnList.Last()] = predict;
         pointList.Add(KnnPoint);
-            ThisInstans.PlottData();
-        
-
+        ThisInstans.PlottData();
 
 	}
 

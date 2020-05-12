@@ -90,30 +90,50 @@ public class MoveDataBalls : MonoBehaviour
 
     private void Denormalize()
     {
-        float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
-        string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
-        newPosition = newPosition.Replace(',', '.');
-        index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-        DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
-
-        mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
-        newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
-        newPosition = newPosition.Replace(',', '.');
-        index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-        DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
-
-        if (MainMenu.renderMode == 1)
+       if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
         {
-            mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
-            newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+            string ColumnNumberString = TargetingScript.selectedTarget.name.Substring(TargetingScript.selectedTarget.name.Length - 1);
+            int ColumnNumber = int.Parse(ColumnNumberString);
+
+
+            float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.columnMaxList[ColumnNumber -1] - ParallelCoordinatePlotter.ThisInstans.columnMinList[ColumnNumber - 1];
+            string newPosition = (ParallelCoordinatePlotter.ThisInstans.columnMinList[ColumnNumber - 1] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
             newPosition = newPosition.Replace(',', '.');
             index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-            DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+
+            ParallelCoordinatePlotter.ThisInstans.pointList[index][ParallelCoordinatePlotter.ThisInstans.featureList[ColumnNumber - 1].ToString()] = newPosition;
+
+            ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
+            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
         }
 
-        if (DataPlotter.KNNMode)
-            DataPlotter.KNNMove = true;
-        DataPlotter.ThisInstans.PlottData();
+        else
+        {
+            float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
+            string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
+
+            mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
+            newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
+
+            if (MainMenu.renderMode == 1)
+            {
+                mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
+                newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+                newPosition = newPosition.Replace(',', '.');
+                index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+                DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+            }
+
+            if (DataPlotter.KNNMode)
+                DataPlotter.KNNMove = true;
+            DataPlotter.ThisInstans.PlottData();
+        }
     }
 
     #endregion

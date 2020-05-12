@@ -264,13 +264,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Set normalized Y-value
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
 
-			//InstantiateAndRenderDatapoints(xPos, i, y);
+			InstantiateAndRenderDatapoints(xPos, i, y, columnPos);
 
 			InstantiateAndRenderLines(columnPos, xPos, i, y);
 		}
 	}
 
-	private void InstantiateAndRenderDatapoints(float xPos, int i, float y)
+	private void InstantiateAndRenderDatapoints(float xPos, int i, float y, int columnPos)
 	{
 		// Create clone
 		GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
@@ -281,7 +281,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Set parent
 		dataPoint.transform.parent = PointHolder.transform;
 		// Set name
-		dataPoint.transform.name = Convert.ToString(pointList[i][columnName]);
+		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
 	}
 
 	private void InstantiateAndRenderLines(int columnPos, float xPos, int i, float y)

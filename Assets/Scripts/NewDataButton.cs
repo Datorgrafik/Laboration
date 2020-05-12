@@ -96,7 +96,7 @@ public class NewDataButton : MonoBehaviour
 
 		Cancel();
 		DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
-	}
 
+	}
 	#endregion
 }

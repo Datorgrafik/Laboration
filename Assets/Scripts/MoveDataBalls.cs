@@ -39,7 +39,6 @@ public class MoveDataBalls : MonoBehaviour
                 selectedTarget = TargetingScript.selectedTarget;
                 timeChecker = 0f;
             }
-
             if (Input.GetMouseButton(0))
             {
                 eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -63,6 +62,7 @@ public class MoveDataBalls : MonoBehaviour
                     }
                 }
             }
+
 
             if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
                 Denormalize();
@@ -111,6 +111,8 @@ public class MoveDataBalls : MonoBehaviour
             DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
         }
 
+        if (DataPlotter.KNNMode)
+            DataPlotter.KNNMove = true;
         DataPlotter.ThisInstans.PlottData();
     }
 

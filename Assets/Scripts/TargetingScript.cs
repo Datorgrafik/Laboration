@@ -18,7 +18,7 @@ public class TargetingScript : MonoBehaviour
 	void Update()
 	{
 		//Left mouse click. If object is clicked, target it.
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && !DataPlotter.KNNMode)
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -32,24 +32,12 @@ public class TargetingScript : MonoBehaviour
 					SelectDataBall(hit);
 					break;
 				}
-
-				else if (hit.collider.CompareTag("DataLine"))
-				{
-					missTarget = false;
-					SelectDataLine(hit);
-					break;
-				}
 			}
 
             // Deselect target 
 			if (missTarget == true && !eventSys.IsPointerOverGameObject() && selectedTarget != null)
 			{
-				if (selectedTarget.gameObject.CompareTag("DataBall"))
-					selectedTarget.GetComponent<Renderer>().material.color = colorOff;
-				
-				else if (selectedTarget.gameObject.CompareTag("DataLine"))
-					selectedTarget.GetComponent<LineRenderer>().material.color = colorOff;
-
+				selectedTarget.GetComponent<Renderer>().material.color = colorOff;
 				selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
 				selectedTarget = null;
 			}
@@ -67,20 +55,6 @@ public class TargetingScript : MonoBehaviour
 		selectedTarget = hit.transform.gameObject;
 		colorOff = selectedTarget.GetComponent<Renderer>().material.color;
 		selectedTarget.GetComponent<Renderer>().material.color = Color.white;
-		selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
-	}
-
-	private void SelectDataLine(RaycastHit hit)
-	{
-		if (selectedTarget != null)
-		{
-			selectedTarget.GetComponent<LineRenderer>().material.color = colorOff;
-			selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
-		}
-
-		selectedTarget = hit.transform.gameObject;
-		colorOff = selectedTarget.GetComponent<LineRenderer>().material.color;
-		selectedTarget.GetComponent<LineRenderer>().material.color = Color.white;
 		selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 	}
 

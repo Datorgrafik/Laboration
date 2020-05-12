@@ -160,7 +160,7 @@ public class ScatterplotDimensions : MonoBehaviour
         GameObject dataPoint = Instantiate(PointPrefab, new Vector3(floatList[0], floatList[1], floatList[2]) * plotScale, Quaternion.identity);
         
         if (Dimensions > 3)
-            dataPoint.GetComponent<Renderer>().material.color = new Color(1, floatList[3], 1, 1.0f);
+            dataPoint.GetComponent<Renderer>().material.color = new Color(1, floatList[3], 0, 1.0f);
         
         if (Dimensions > 4)
             dataPoint.transform.localScale += new Vector3(floatList[4] / 2, floatList[4] / 2, floatList[4] / 2);

@@ -22,10 +22,6 @@ public class ScatterplotDimensions : MonoBehaviour
     public GameObject LineSeparatorPrefab;
     public TMP_Text axisValueTextPrefab;
 
-    private Color ColorTop = new Color(1, 1, 1, 1.0f);
-    private Color ColorBottom = new Color(1, 0, 1, 1.0f);
-    public GameObject GradientPlane;
-
     [SerializeField]
     public TMP_Text valuePrefab;
 
@@ -47,6 +43,9 @@ public class ScatterplotDimensions : MonoBehaviour
 
         ThisInstans = this;
         columnList = new List<string>(pointList[1].Keys);
+        List<string> columnListDropDown = new List<string>(pointList[1].Keys);
+        columnListDropDown.RemoveAt(columnList.Count() - 1);
+        columnListDropDown.RemoveAt(0);
 
         Dimensions = columnList.Count - 2;
         if (Dimensions > 5)
@@ -54,8 +53,8 @@ public class ScatterplotDimensions : MonoBehaviour
 
         for (int i = 0; i < Dimensions; i++)
         {
-            dropDownList[i].AddOptions(columnList);
-            dropDownList[i].value = i+1;
+            dropDownList[i].AddOptions(columnListDropDown);
+            dropDownList[i].value = i;
             dropDownList[i].onValueChanged.AddListener(delegate { DropdownValueChanged(); });
         }
 
@@ -79,7 +78,7 @@ public class ScatterplotDimensions : MonoBehaviour
 
         for (int i = 0; i < Dimensions; i++)
         {
-            nameList[i] = columnList[dropDownList[i].value];
+            nameList[i] = columnList[dropDownList[i].value + 1];
             textList[i].text = nameList[i];
             Min[i] = CalculationHelpers.FindMinValue(nameList[i], pointList);
             Max[i] = CalculationHelpers.FindMaxValue(nameList[i], pointList);

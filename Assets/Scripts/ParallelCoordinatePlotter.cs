@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,19 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject LinePrefab;
 	public GameObject TargetFeaturePrefab;
 	public GameObject PointHolder;
+
+	[SerializeField]
+	private GameObject newDataPanel;
+	[SerializeField]
+	private GameObject newDataContainer;
+	[SerializeField]
+	private GameObject kAndWeightedPrefab;
+	[SerializeField]
+	private GameObject newDataInputFieldPrefab;
+	[SerializeField]
+	private GameObject saveAndCancelButtonsPrefab;
+
+	public static DataClass dataClass;
 
 	// Misc
 	public float plotScale = 10;
@@ -50,7 +64,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	void Start()
 	{
 		// Set pointlist to results of function Reader with argument inputfile
-		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)
@@ -250,13 +264,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Set normalized Y-value
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
 
-			//InstantiateAndRenderDatapoints(xPos, i, y);
+			InstantiateAndRenderDatapoints(xPos, i, y, columnPos);
 
 			InstantiateAndRenderLines(columnPos, xPos, i, y);
 		}
 	}
 
-	private void InstantiateAndRenderDatapoints(float xPos, int i, float y)
+	private void InstantiateAndRenderDatapoints(float xPos, int i, float y, int columnPos)
 	{
 		// Create clone
 		GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
@@ -267,7 +281,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Set parent
 		dataPoint.transform.parent = PointHolder.transform;
 		// Set name
-		dataPoint.transform.name = Convert.ToString(pointList[i][columnName]);
+		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
 	}
 
 	private void InstantiateAndRenderLines(int columnPos, float xPos, int i, float y)
@@ -338,8 +352,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public void ReorderColumns()
 	{
 		// Destroy Datapoints
-		foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
-			Destroy(databall);
+		//foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
+		//	Destroy(databall);
 
 		// Plot data for the selected columns
 		for (int i = 0; i < nFeatures; i++)
@@ -349,6 +363,101 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			if (i + 1 == 4)
 				break;
 		}
+	}
+
+	public void InputNewData()
+	{
+		// Set newDataPanel to active
+		newDataPanel.SetActive(true);
+
+		// Starting Y Position for inputFields
+		float inputFieldYAxis = -17.5f;
+
+		// Instantiate kAndWeighted prefab
+		GameObject kAndWeighted = Instantiate(kAndWeightedPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+		// Set parent
+		kAndWeighted.transform.SetParent(newDataContainer.transform, false);
+		inputFieldYAxis -= 35;
+
+		// Populate newDataPanel with inputFields for each attribute in dataset
+		for (int i = 0; i < nFeatures; i++)
+		{
+			// Instatiate newDataPrefabs
+			GameObject newInput = Instantiate(newDataInputFieldPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+			inputFieldYAxis -= 62;
+			// Set parent
+			newInput.transform.SetParent(newDataContainer.transform, false);
+			// Get attribute textfield
+			newInput.GetComponentInChildren<TMP_Text>().text = featureList[i];
+		}
+
+		// Instantiate SaveAndCancel buttons
+		GameObject saveAndCancelButtons = Instantiate(saveAndCancelButtonsPrefab, new Vector2(115, inputFieldYAxis), Quaternion.identity);
+		// Set parent
+		saveAndCancelButtons.transform.SetParent(newDataContainer.transform, false);
+		// Add onClick listener to saveButton
+		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(Save);
+		// Add onClick listener to cancelButton
+		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(Cancel);
+		
+		// While newDataPanel shows, newDataButton is none-Interactable
+		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = false;
+	}
+
+	private void Save()
+	{
+		List<string> newDataInputList = new List<string>();
+
+		// Get list of values from newData InputFields
+		foreach (GameObject dataInput in GameObject.FindGameObjectsWithTag("PCPNewDataInputField"))
+		{
+			newDataInputList.Add(dataInput.GetComponent<TMP_InputField>().text);
+			dataInput.GetComponent<TMP_InputField>().text = null;
+		};
+
+		string kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
+		bool weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
+
+		Cancel();
+		AddDataPoints(newDataInputList, kValue, weighted);
+	}
+
+	private void AddDataPoints(List<string> newDataInputList, string kValue, bool weighted)
+	{
+		Dictionary<string, object> last = pointList.Last();
+
+		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
+		{
+			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
+		};
+
+		for (int i = 0; i < columnList.Count - 2; i++)
+			newDataPoint.Add(columnList[i + 1], newDataInputList[i]);
+
+		double[] unknown = new double[newDataInputList.Count];
+
+		for (int i = 0; i < newDataInputList.Count; ++i)
+			unknown[i] = (Convert.ToDouble(newDataInputList[i], CultureInfo.InvariantCulture));
+
+		var predict = dataClass.Knn(unknown, kValue, weighted);
+		newDataPoint.Add(columnList[columnList.Count - 1], predict);
+
+		pointList.Add(newDataPoint);
+
+		ReorderColumns();
+	}
+
+	private void Cancel()
+	{
+		// Empty the panel when leaving it
+		foreach (Transform child in newDataContainer.transform)
+			Destroy(child.gameObject);
+
+		// Hide the panel when leaving it
+		newDataPanel.SetActive(false);
+		
+		// Make newDataButton interactable again
+		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
 	}
 
 	#endregion

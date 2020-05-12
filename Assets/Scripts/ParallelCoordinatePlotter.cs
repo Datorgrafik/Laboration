@@ -51,11 +51,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Column Text Fields
 	public List<TMP_Text> columnTextList = new List<TMP_Text>();
 
-	// ChangePanel Lists
-	public List<TMP_Text> ChangePanelColumnText = new List<TMP_Text>();
-	public List<TMP_Text> ChangePanelColumnValueText = new List<TMP_Text>();
-	public List<TMP_InputField> ChangePanelColumnInputfield = new List<TMP_InputField>();
-
     //Temporary static fix?
     public static ParallelCoordinatePlotter ThisInstans;
     public float yMax;
@@ -91,16 +86,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		AddDropdownListeners();
 
-		// Default values for each columntext at start, depending on nFeatures (max 4)
-		for (int i = 0; i < nFeatures; i++)
-		{
-			columnTextList[i].text = featureList[i];
-			ChangePanelColumnText[i].text = featureList[i];
-
-			if (i+1 == 4)
-				break;
-		}
-
 		GetDistinctTargetFeatures();
 
 		InstantiateTargetFeatureList();
@@ -132,7 +117,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 				.AddListener(delegate 
 				{
 					columnTextList[iLocal].text = featureList[columnDropdownList[iLocal].value];
-					ChangePanelColumnText[iLocal].text = featureList[columnDropdownList[iLocal].value];
 				});
 
 			if (i + 1 == 4)

@@ -42,8 +42,7 @@ public class NewDataButton : MonoBehaviour
 		foreach (Transform child in newDataWindow.transform)
 			Destroy(child.gameObject);
 
-		newDataList.SetActive(false);
-		newDataWindow.SetActive(false);
+	    newDataList.SetActive(false);
 		newData.interactable = true;
 	}
 
@@ -78,7 +77,6 @@ public class NewDataButton : MonoBehaviour
 		CancelButton.transform.SetParent(newDataWindow.transform, false);
 
 		newDataList.SetActive(true);
-		newDataWindow.SetActive(true);
 		newData.interactable = false;
 	}
 
@@ -106,6 +104,10 @@ public class NewDataButton : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
                 ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
+        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+            ScatterplotDimensions.ThisInstans.PlottData();
+        
         else
                 DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
 

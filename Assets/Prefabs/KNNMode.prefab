@@ -368,8 +368,8 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'You are now in KNN Mode!
 
-    You can darg and drop your new databall
-    and see have the move effekts the KNN algotim but only your new databall '
+    You can drag and drop your new databall
+    and see how the move effects the KNN algorithm'
 --- !u!114 &6512798675672035085
 MonoBehaviour:
   m_ObjectHideFlags: 0

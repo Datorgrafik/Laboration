@@ -98,7 +98,7 @@ public class ScatterPlotMatrix : MonoBehaviour
         }
     }
 
-            private void AddDropdownListeners()
+    private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
 		for (int i = 0; i < nFeatures; i++)
@@ -154,9 +154,11 @@ public class ScatterPlotMatrix : MonoBehaviour
 						float yMin = CalculationHelpers.FindMinValue(feature2Name, pointList);
 
 						string valueString;
+                        
 
-						//Loop through Pointlist
-						for (var i = 0; i < pointList.Count; i++)
+
+                        //Loop through Pointlist
+                        for (var i = 0; i < pointList.Count; i++)
 						{
 							GameObject dataPoint;
 
@@ -189,6 +191,7 @@ public class ScatterPlotMatrix : MonoBehaviour
                             else
                                 pointList[i]["DataBall"] = dataPoint;
 
+
                             // Set color
                             if (targetFeatures.Count() <= 10)
                             {
@@ -196,7 +199,13 @@ public class ScatterPlotMatrix : MonoBehaviour
                             }
                             else
                                 dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
-						}
+
+                            if (KNNMode && i == pointList.Count() - 1)
+                            {
+                                dataPoint.GetComponent<Renderer>().material.color = Color.white;
+                                dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+                            }
+                        }
 					}
 				}
 				catch (Exception) { }
@@ -278,10 +287,9 @@ public class ScatterPlotMatrix : MonoBehaviour
         pointList.Add(newDataPoint);
 
         ThisInstans.teleportCamera = true;
-
+        KNNMode = true;
         ThisInstans.PlottData();
         Blink(KNN.kPoints);
-        KNNMode = true;
         ThisInstans.KNNWindow.SetActive(true);
     }
     static public void ChangeDataPoint(string k, bool weightedOrNot)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LeaveKNNMode : MonoBehaviour
@@ -21,9 +22,25 @@ public class LeaveKNNMode : MonoBehaviour
 
     public void Leave()
     {
-        DataPlotter.KNNMode = false;
         KNNWindow.SetActive(false);
         KNN.kPoints.Clear();
-        DataPlotter.ThisInstans.PlottData();
+
+        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+        {
+            ScatterPlotMatrix.KNNMode = false;
+            ScatterPlotMatrix.ThisInstans.PlottData();
+        }
+        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+            ScatterplotDimensions.KNNMode = false;
+            ScatterplotDimensions.ThisInstans.PlottData();
+        }
+        else
+        {
+            DataPlotter.KNNMode = false;
+            DataPlotter.ThisInstans.PlottData();
+
+        }
+
     }
 }

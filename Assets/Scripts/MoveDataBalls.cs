@@ -126,9 +126,27 @@ public class MoveDataBalls : MonoBehaviour
                 DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
             }
 
-            if (DataPlotter.KNNMode)
-                DataPlotter.KNNMove = true;
-            DataPlotter.ThisInstans.PlottData();
+            if (DataPlotter.KNNMode || ScatterPlotMatrix.KNNMode || ScatterplotDimensions.KNNMode)
+            {
+                if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+                {
+                    ScatterplotDimensions.KNNMove = true;
+                    ScatterplotDimensions.ThisInstans.PlottData();
+                }
+                if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+                {
+                    ScatterPlotMatrix.KNNMove = true;
+                    ScatterPlotMatrix.ThisInstans.PlottData();
+                }
+                else
+                {
+                    DataPlotter.KNNMove = true;
+                    DataPlotter.ThisInstans.PlottData();
+
+                }
+
+            }
+
         }
     }
 

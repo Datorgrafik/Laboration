@@ -83,14 +83,14 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	//Temporary static fix?
 	public static ParallelCoordinatePlotter ThisInstans;
 
-    #endregion
+	#endregion
 
-    #region Methods
+	#region Methods
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
-        ThisInstans = this;
+		ThisInstans = this;
 
 		// Set pointlist to results of function Reader with argument inputfile
 		dataClass = CSVläsare.Read(MainMenu.fileData);
@@ -113,6 +113,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			LinePrefab.GetComponent<LineRenderer>().positionCount = 4;
 
 		AddDropdownListeners();
+
+		// Default values for each columntext at start, depending on nFeatures (max 4)
+		for (int i = 0; i < nFeatures; i++)
+		{
+			columnTextList[i].text = featureList[i];
+
+			if (i + 1 == 4)
+				break;
+		}
 
 		GetDistinctTargetFeatures();
 
@@ -168,18 +177,18 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	public void DrawBackgroundGrid()
 	{
-        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("dataValues"))
-            Destroy(dataValues);
-        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataLineGrid"))
-            Destroy(dataValues);
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("dataValues"))
+			Destroy(dataValues);
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataLineGrid"))
+			Destroy(dataValues);
 
-        // Draw vertical lines
-        for (int i = 1; i <= 4; i++)
+		// Draw vertical lines
+		for (int i = 1; i <= 4; i++)
 		{
 			float xPos = SetColumnPosition(i);
 
 			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
-            xLine.transform.tag = "DataLineGrid";
+			xLine.transform.tag = "DataLineGrid";
 			xLine.transform.parent = PointHolder.transform;
 			xLine.transform.name = $"Column{i}Line";
 
@@ -192,8 +201,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 		}
 
-        yMax = 0f;
-        yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
+		yMax = 0f;
+		yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
 
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
@@ -212,8 +221,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		{
 			// Instantiate lines, set parent, set transform name
 			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
-            yLine.transform.tag = "DataLineGrid";
-            yLine.transform.parent = PointHolder.transform;
+			yLine.transform.tag = "DataLineGrid";
+			yLine.transform.parent = PointHolder.transform;
 			yLine.transform.name = $"Value{i}Line";
 
 			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
@@ -319,8 +328,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		//Store Index
 		dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
-        dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
-    }
+		dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
+	}
 
 	private void InstantiateAndRenderLines(int columnPos, float xPos, int i, float y)
 	{

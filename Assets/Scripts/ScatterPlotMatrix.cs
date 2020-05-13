@@ -41,11 +41,11 @@ public class ScatterPlotMatrix : MonoBehaviour
 	public TMP_Text ScatterplotMatrixText;
 	public List<string> columnList;
 	public List<string> targetFeatures;
+    public static ScatterPlotMatrix ThisInstans;
     private static Color[] colorList = { new Color(52, 152, 219, 1), new Color(192, 57, 43,1), new Color(46, 204, 113,1), new Color(26, 188, 156,1), new Color(155, 89, 182,1),
                                          new Color(52, 73, 94,1), new Color(241, 196, 15,1), new Color(230, 126, 34,1), new Color(189, 195, 199,1), new Color(149, 165, 166,1)};
 
 
-    public static ScatterPlotMatrix ThisInstans;
     public static DataClass dataClass;
     private int selectedIndex = -1;
     public bool teleportCamera = false;
@@ -112,7 +112,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 		}
 	}
 
-	private void PlottData()
+	public void PlottData()
 	{
 		ResetDataPlot();
         GetDistinctTargetFeatures();
@@ -181,6 +181,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[j];
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[k];
 
                             if (!pointList[i].ContainsKey("DataBall"))
                                 pointList[i].Add("DataBall", dataPoint);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class KNN
@@ -71,7 +72,13 @@ public class KNN
         for (int i = 0; i < kValue; ++i)
         {   // Just first k
             int idx = info[i].idx; // Which train item
-            string c = (string)trainData[idx][attributes[attributes.Count - 2]];   // Class in last cell
+            string c;
+
+            // Special cast because of how PCP works
+            if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+                c = (string)trainData[idx][attributes[attributes.Count - 5]];   // Class in last cell
+            else
+                c = (string)trainData[idx][attributes[attributes.Count - 2]];   // Class in last cell
 
             if (votes.ContainsKey(c))
             {

@@ -76,14 +76,19 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public TMP_InputField ChangePanelColumnInputfield;
 	private string newValue;
 
+	// NewData Attributes
+	string kValue;
+	bool weighted;
+
 	// KNN Attributes
 	public static bool KNNMode = false;
+	public static bool KNNMove = false;
 	public GameObject KNNWindow;
 
-	//Temporary static fix?
 	public static ParallelCoordinatePlotter ThisInstans;
 
 	#endregion
+
 
 	#region Methods
 
@@ -151,6 +156,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 		else
 			EditPanel.SetActive(false);
+
+		if (KNNMode && KNNMove)
+		{
+			ChangeDataPoint(kValue, weighted);
+			KNNMove = false;
+		}
 	}
 
 	private void AddDropdownListeners()
@@ -321,10 +332,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
 
 		// Add dataPoints as DataBalls to pointList
-		if (!pointList[i].ContainsKey("DataBall"))
-			pointList[i].Add("DataBall", dataPoint);
+		if (!pointList[i].ContainsKey($"DataBall{columnPos}"))
+			pointList[i].Add($"DataBall{columnPos}", dataPoint);
 		else
-			pointList[i]["DataBall"] = dataPoint;
+			pointList[i][$"DataBall{columnPos}"] = dataPoint;
 
 		//Store Index
 		dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
@@ -420,6 +431,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 	}
 
+
 	#region AddNewData Methods
 
 	public void InputNewData()
@@ -474,8 +486,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		};
 
 		// Get kValue InputField and weighted Toggle
-		string kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
-		bool weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
+		kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
+		weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
 
 		// Run Cancel() to clear and hide the NewData Panel after the values have been stored
 		Cancel();
@@ -506,11 +518,28 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		pointList.Add(newDataPoint);
 
 		// Render the dataPlot again with newly added data
+		DrawBackgroundGrid();
 		ReorderColumns();
 
 		Blink(KNN.kPoints);
 		KNNMode = true;
 		KNNWindow.SetActive(true);
+	}
+
+	public void ChangeDataPoint(string k, bool weightedOrNot)
+	{
+		Dictionary<string, object> KnnPoint = pointList.Last();
+		pointList.Remove(KnnPoint);
+
+		double[] unknown = new double[KnnPoint.Count - 3];
+
+		for (int i = 0; i < KnnPoint.Count - 3; ++i)
+			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+
+		var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		KnnPoint[ThisInstans.columnList.Last()] = predict;
+		pointList.Add(KnnPoint);
+		ReorderColumns();
 	}
 
 	private void Cancel()
@@ -530,12 +559,16 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	{
 		foreach (int data in kPoints)
 		{
-			GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-			ball.GetComponent<Blink>().enabled = true;
+			for (int i = 1; i <= 4; i++)
+			{
+				GameObject ball = (GameObject)pointList[data - 1][$"DataBall{i}"];
+				ball.GetComponent<Blink>().enabled = true;
+			}
 		}
 	}
 
 	#endregion
+
 
 	#region EditPosition Methods
 
@@ -550,6 +583,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			ChangePanelColumnInputfield.text = string.Empty;
 		}
 
+		KNNMove = true;
+
 		DrawBackgroundGrid();
 		ReorderColumns();
 	}
@@ -561,6 +596,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	}
 
 	#endregion
+
 
 	#endregion
 }

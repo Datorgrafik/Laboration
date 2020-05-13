@@ -147,7 +147,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-		// Codeblock for EditPosition that shows the EditPanel
+		// Codeblock for EditPosition
 		if (TargetingScript.selectedTarget != null)
 		{
 			EditPanel.SetActive(true);
@@ -157,6 +157,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		else
 			EditPanel.SetActive(false);
 
+		// Codeblock for KNN
 		if (KNNMode && KNNMove)
 		{
 			ChangeDataPoint(kValue, weighted);
@@ -524,6 +525,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		Blink(KNN.kPoints);
 		KNNMode = true;
 		KNNWindow.SetActive(true);
+
+		GameObject newBall = (GameObject)pointList.Last()["DataBall4"] as GameObject;
+		TargetingScript.selectedTarget = newBall;
+		TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+		TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+		TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 	}
 
 	public void ChangeDataPoint(string k, bool weightedOrNot)
@@ -531,13 +538,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		Dictionary<string, object> KnnPoint = pointList.Last();
 		pointList.Remove(KnnPoint);
 
-		double[] unknown = new double[KnnPoint.Count - 3];
+		double[] unknown = new double[KnnPoint.Count - 6]; //TODO: "[KnnPoint.Count - 6]" är nog bara ok för dataset >= 4 features.
 
-		for (int i = 0; i < KnnPoint.Count - 3; ++i)
-			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+		for (int i = 0; i < KnnPoint.Count - 6; ++i) //TODO: "KnnPoint.Count - 6" är nog bara ok för dataset >= 4 features.
+			unknown[i] = (Convert.ToDouble(KnnPoint[columnList[i + 1]], CultureInfo.InvariantCulture));
 
 		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		KnnPoint[ThisInstans.columnList.Last()] = predict;
+		KnnPoint[columnList.Last()] = predict;
 		pointList.Add(KnnPoint);
 		ReorderColumns();
 	}

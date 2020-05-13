@@ -64,10 +64,15 @@ public class DataPlotter : MonoBehaviour
     public static bool KNNMove = false;
     public GameObject KNNWindow;
 
+
     public static string K;
     public static bool  Weighted;
-    #endregion
 
+    private static Color[] colorList = { new Color(52, 152, 219, 1), new Color(192, 57, 43,1), new Color(46, 204, 113,1), new Color(26, 188, 156,1), new Color(155, 89, 182,1),
+                                         new Color(52, 73, 94,1), new Color(241, 196, 15,1), new Color(230, 126, 34,1), new Color(189, 195, 199,1), new Color(149, 165, 166,1)};
+
+    #endregion
+    
     #region Methods
 
     // Use this for initialization
@@ -183,6 +188,7 @@ public class DataPlotter : MonoBehaviour
 
             float z = 1;
 
+            //Instantiate datapoints
             if (MainMenu.renderMode == 0)
             {
                 dataPoint = Instantiate(PointPrefab, new Vector3(x, y, 0) * plotScale, Quaternion.identity);
@@ -198,22 +204,24 @@ public class DataPlotter : MonoBehaviour
                 dataPoint.transform.parent = PointHolder.transform;
 
             }
+
             if (!pointList[i].ContainsKey("DataBall"))
                 pointList[i].Add("DataBall", dataPoint);
             else
                 pointList[i]["DataBall"] = dataPoint;
 
+            //Store values in dataPoint
             dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
             dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 
+            //Assign color to dataPoint
             int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
-            bool ClassCheck = float.TryParse((pointList[i][columnList[columnList.Count() - 1]].ToString().Replace('.', ',')), out float n);
-
-            if (!ClassCheck)
+            if (targetFeatures.Count() <= 10)
                 ChangeColor(dataPoint, index);
             else
                 dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, z, 1.0f);
 
+            //Reselect target if one was selected before.
             if (selectedIndex == i)
             {
                 TargetingScript.selectedTarget = dataPoint;
@@ -224,6 +232,7 @@ public class DataPlotter : MonoBehaviour
             }
         }
 
+        //Focus camera on new dataPoint
         if (ThisInstans.teleportCamera)
         {
 
@@ -231,7 +240,6 @@ public class DataPlotter : MonoBehaviour
             GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
             if (MainMenu.renderMode == 1)
                 Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
-
             else
                 Camera.main.transform.position = new Vector3(newBall.transform.position.x, newBall.transform.position.y, newBall.transform.position.z - 8f);
 
@@ -343,16 +351,7 @@ public class DataPlotter : MonoBehaviour
 
     public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
     {
-        float colorValue = (float)1 / (targetFeatureIndex + 1);
-
-        if (targetFeatureIndex % 3 == 0)
-            dataPoint.GetComponent<Renderer>().material.color = new Color(0, colorValue, 0, 1.0f);
-
-        else if (targetFeatureIndex % 3 == 1)
-            dataPoint.GetComponent<Renderer>().material.color = new Color(1, 0, colorValue, 1.0f);
-
-        else if (targetFeatureIndex % 3 == 2)
-            dataPoint.GetComponent<Renderer>().material.color = new Color(colorValue, 0, 1, 1.0f);
+        dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[targetFeatureIndex].r/255, colorList[targetFeatureIndex].g / 255, colorList[targetFeatureIndex].b / 255, 1.0f);
     }
 
     public void DropdownValueChanged()

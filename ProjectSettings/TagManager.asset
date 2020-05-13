@@ -20,6 +20,7 @@ TagManager:
   - PCPNewDataInputField
   - PCPkValue
   - PCPWeighted
+  - DataLineGrid
   layers:
   - Default
   - TransparentFX

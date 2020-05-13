@@ -12,7 +12,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	#region Attributes
 
 	// List for holding data from CSV reader
-	private List<Dictionary<string, object>> pointList;
+	public List<Dictionary<string, object>> pointList;
 
 	// Lists
 	public List<string> columnList;
@@ -42,7 +42,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public float plotScale = 10;
 	public TMP_Text valuePrefab;
 	private Color targetColor;
-	private string columnName;
+	public string columnName;
 	private int nFeatures;
 
 	// PlotColumns
@@ -51,18 +51,19 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Column Text Fields
 	public List<TMP_Text> columnTextList = new List<TMP_Text>();
 
-	// ChangePanel Lists
-	public List<TMP_Text> ChangePanelColumnText = new List<TMP_Text>();
-	public List<TMP_Text> ChangePanelColumnValueText = new List<TMP_Text>();
-	public List<TMP_InputField> ChangePanelColumnInputfield = new List<TMP_InputField>();
+    //Temporary static fix?
+    public static ParallelCoordinatePlotter ThisInstans;
+    public float yMax;
+    public float yMin;
 
-	#endregion
+    #endregion
 
-	#region Methods
+    #region Methods
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
+        ThisInstans = this;
 		// Set pointlist to results of function Reader with argument inputfile
 		//dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
@@ -84,16 +85,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			LinePrefab.GetComponent<LineRenderer>().positionCount = 4;
 
 		AddDropdownListeners();
-
-		// Default values for each columntext at start, depending on nFeatures (max 4)
-		for (int i = 0; i < nFeatures; i++)
-		{
-			columnTextList[i].text = featureList[i];
-			ChangePanelColumnText[i].text = featureList[i];
-
-			if (i+1 == 4)
-				break;
-		}
 
 		GetDistinctTargetFeatures();
 
@@ -126,7 +117,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 				.AddListener(delegate 
 				{
 					columnTextList[iLocal].text = featureList[columnDropdownList[iLocal].value];
-					ChangePanelColumnText[iLocal].text = featureList[columnDropdownList[iLocal].value];
 				});
 
 			if (i + 1 == 4)
@@ -134,14 +124,20 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 	}
 
-	private void DrawBackgroundGrid()
+	public void DrawBackgroundGrid()
 	{
-		// Draw vertical lines
-		for (int i = 1; i <= 4; i++)
+        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("dataValues"))
+            Destroy(dataValues);
+        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataLineGrid"))
+            Destroy(dataValues);
+
+        // Draw vertical lines
+        for (int i = 1; i <= 4; i++)
 		{
 			float xPos = SetColumnPosition(i);
 
 			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
+            xLine.transform.tag = "DataLineGrid";
 			xLine.transform.parent = PointHolder.transform;
 			xLine.transform.name = $"Column{i}Line";
 
@@ -154,8 +150,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 		}
 
-		float yMax = 0f;
-		float yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
+        yMax = 0f;
+        yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
 
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
@@ -174,7 +170,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		{
 			// Instantiate lines, set parent, set transform name
 			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
-			yLine.transform.parent = PointHolder.transform;
+            yLine.transform.tag = "DataLineGrid";
+            yLine.transform.parent = PointHolder.transform;
 			yLine.transform.name = $"Value{i}Line";
 
 			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
@@ -248,11 +245,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Sets the correct X-Axis position for each column
 		float xPos = SetColumnPosition(columnPos);
 
-		// Get MaxValue
-		float columnMax = CalculationHelpers.FindMaxValue(columnName, pointList);
-		// Get MinValue
-		float columnMin = CalculationHelpers.FindMinValue(columnName, pointList);
-
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)
 		{
@@ -262,7 +254,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			// Get original value
 			string valueString = pointList[i][columnName].ToString();
 			// Set normalized Y-value
-			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - columnMin) / (columnMax - columnMin);
+			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
 			InstantiateAndRenderDatapoints(xPos, i, y, columnPos);
 
@@ -282,7 +274,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		dataPoint.transform.parent = PointHolder.transform;
 		// Set name
 		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
-	}
+        //Store Index
+        dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
+        dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
+    }
 
 	private void InstantiateAndRenderLines(int columnPos, float xPos, int i, float y)
 	{
@@ -352,8 +347,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public void ReorderColumns()
 	{
 		// Destroy Datapoints
-		//foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
-		//	Destroy(databall);
+		foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
+			Destroy(databall);
 
 		// Plot data for the selected columns
 		for (int i = 0; i < nFeatures; i++)

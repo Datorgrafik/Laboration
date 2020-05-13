@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MoveDataBalls : MonoBehaviour
 {
@@ -50,7 +51,15 @@ public class MoveDataBalls : MonoBehaviour
                 if (timeChecker > 0.3F)
                 {
                     mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
-                    TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
+
+                    if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+                    {
+                        TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
+                    }
+                    else
+                    {
+                        TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
+                    }
                 }
             }
 
@@ -81,30 +90,46 @@ public class MoveDataBalls : MonoBehaviour
 
     private void Denormalize()
     {
-        float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
-        string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
-        newPosition = newPosition.Replace(',', '.');
-        index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-        DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
-
-        mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
-        newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
-        newPosition = newPosition.Replace(',', '.');
-        index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-        DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
-
-        if (MainMenu.renderMode == 1)
+       if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
         {
-            mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
-            newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+            float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
+            string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
             newPosition = newPosition.Replace(',', '.');
             index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-            DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+
+            ParallelCoordinatePlotter.ThisInstans.pointList[index][selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
+
+            ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
+            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
         }
 
-        if (DataPlotter.KNNMode)
-            DataPlotter.KNNMove = true;
-        DataPlotter.ThisInstans.PlottData();
+        else
+        {
+            float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
+            string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
+
+            mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
+            newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
+
+            if (MainMenu.renderMode == 1)
+            {
+                mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
+                newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+                newPosition = newPosition.Replace(',', '.');
+                index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+                DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+            }
+
+            if (DataPlotter.KNNMode)
+                DataPlotter.KNNMove = true;
+            DataPlotter.ThisInstans.PlottData();
+        }
     }
 
     #endregion

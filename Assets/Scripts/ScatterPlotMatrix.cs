@@ -52,7 +52,8 @@ public class ScatterPlotMatrix : MonoBehaviour
     public static bool KNNMode = false;
     public static bool KNNMove = false;
     public GameObject KNNWindow;
-   
+    public Color colorOff;
+
 
     public static string K;
     public static bool Weighted;
@@ -97,7 +98,7 @@ public class ScatterPlotMatrix : MonoBehaviour
         }
     }
 
-            private void AddDropdownListeners()
+    private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
 		for (int i = 0; i < nFeatures; i++)
@@ -153,9 +154,11 @@ public class ScatterPlotMatrix : MonoBehaviour
 						float yMin = CalculationHelpers.FindMinValue(feature2Name, pointList);
 
 						string valueString;
+                        
 
-						//Loop through Pointlist
-						for (var i = 0; i < pointList.Count; i++)
+
+                        //Loop through Pointlist
+                        for (var i = 0; i < pointList.Count; i++)
 						{
 							GameObject dataPoint;
 
@@ -188,6 +191,7 @@ public class ScatterPlotMatrix : MonoBehaviour
                             else
                                 pointList[i]["DataBall"] = dataPoint;
 
+
                             // Set color
                             if (targetFeatures.Count() <= 10)
                             {
@@ -195,15 +199,39 @@ public class ScatterPlotMatrix : MonoBehaviour
                             }
                             else
                                 dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
-						}
+
+                            if (KNNMode && i == pointList.Count() - 1)
+                            {
+                                dataPoint.GetComponent<Renderer>().material.color = Color.white;
+                                dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+                            }
+                        }
 					}
 				}
 				catch (Exception) { }
+
                 if (KNN.kPoints != null)
                     if (KNN.kPoints.Count > 0)
                         Blink(KNN.kPoints);
             }
+        }
 
+        if (ThisInstans.teleportCamera)
+        {
+
+            // ThisInstans.teleportCamera = false;
+            GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+
+            if (TargetingScript.selectedTarget != null)
+            {
+                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+                TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+            }
+
+            TargetingScript.selectedTarget = newBall;
+            TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+            TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+            TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
         }
 
     }
@@ -258,11 +286,10 @@ public class ScatterPlotMatrix : MonoBehaviour
         newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
         pointList.Add(newDataPoint);
 
-        //ThisInstans.teleportCamera = true;
-
+        ThisInstans.teleportCamera = true;
+        KNNMode = true;
         ThisInstans.PlottData();
         Blink(KNN.kPoints);
-        KNNMode = true;
         ThisInstans.KNNWindow.SetActive(true);
     }
     static public void ChangeDataPoint(string k, bool weightedOrNot)

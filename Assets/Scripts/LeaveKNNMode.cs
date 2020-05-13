@@ -17,19 +17,34 @@ public class LeaveKNNMode : MonoBehaviour
 
     public void Leave()
     {
-        if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+
+        KNNWindow.SetActive(false);
+        KNN.kPoints.Clear();
+
+        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
-            ParallelCoordinatePlotter.KNNMode = false;
-            KNNWindow.SetActive(false);
-            KNN.kPoints.Clear();
-            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+            ScatterPlotMatrix.KNNMode = false;
+            ScatterPlotMatrix.ThisInstans.PlottData();
         }
-        else
+        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
-            DataPlotter.KNNMode = false;
-            KNNWindow.SetActive(false);
-            KNN.kPoints.Clear();
-            DataPlotter.ThisInstans.PlottData();
+            ScatterplotDimensions.KNNMode = false;
+            ScatterplotDimensions.ThisInstans.PlottData();
+
+            if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+            {
+                ParallelCoordinatePlotter.KNNMode = false;
+                KNN.kPoints.Clear();
+                ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+
+            }
+            else
+            {
+                DataPlotter.KNNMode = false;
+                DataPlotter.ThisInstans.PlottData();
+
+            }
+
         }
     }
 }

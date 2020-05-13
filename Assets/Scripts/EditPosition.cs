@@ -116,11 +116,19 @@ public class EditPosition : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
+            ScatterPlotMatrix.KNNMove = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
+        }
+        if(SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+            ScatterplotDimensions.KNNMove = true;
+            ScatterplotDimensions.ThisInstans.PlottData();
         }
         else
         {
-            dataPlotter.GetComponent<DataPlotter>().PlottData();
+            DataPlotter.KNNMove = true;
+            DataPlotter.ThisInstans.PlottData();
+
         }
     }
 

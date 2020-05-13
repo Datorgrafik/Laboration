@@ -32,7 +32,7 @@ public class MoveDataBalls : MonoBehaviour
             }
         }
 
-        if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0)
+        if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0 && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -67,7 +67,7 @@ public class MoveDataBalls : MonoBehaviour
             if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
                 Denormalize();
         }
-        else if (TargetingScript.selectedTarget != null)
+        else if (TargetingScript.selectedTarget != null && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
         {
             if (Input.GetKeyDown(KeyCode.E))
             {

@@ -6,6 +6,8 @@ public class StoreIndexInDataBall : MonoBehaviour
 
 	public int Index { get; set; }
 	public string TargetFeature { get; set; }
+    public string Column { get; set; }
+    public string Row { get; set; }
 
-	#endregion
+    #endregion
 }

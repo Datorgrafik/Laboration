@@ -332,10 +332,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
 
 		// Add dataPoints as DataBalls to pointList
-		if (!pointList[i].ContainsKey("DataBall"))
-			pointList[i].Add("DataBall", dataPoint);
+		if (!pointList[i].ContainsKey($"DataBall{columnPos}"))
+			pointList[i].Add($"DataBall{columnPos}", dataPoint);
 		else
-			pointList[i]["DataBall"] = dataPoint;
+			pointList[i][$"DataBall{columnPos}"] = dataPoint;
 
 		//Store Index
 		dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
@@ -559,8 +559,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	{
 		foreach (int data in kPoints)
 		{
-			GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-			ball.GetComponent<Blink>().enabled = true;
+			for (int i = 1; i <= 4; i++)
+			{
+				GameObject ball = (GameObject)pointList[data - 1][$"DataBall{i}"];
+				ball.GetComponent<Blink>().enabled = true;
+			}
 		}
 	}
 

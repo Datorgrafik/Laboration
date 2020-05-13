@@ -8,20 +8,16 @@ public class LeaveKNNMode : MonoBehaviour
 {
     public Button LeaveKNN;
     public GameObject KNNWindow;
+
     // Start is called before the first frame update
     void Start()
     {
         LeaveKNN.onClick.AddListener(Leave);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Leave()
     {
+
         KNNWindow.SetActive(false);
         KNN.kPoints.Clear();
 
@@ -34,13 +30,21 @@ public class LeaveKNNMode : MonoBehaviour
         {
             ScatterplotDimensions.KNNMode = false;
             ScatterplotDimensions.ThisInstans.PlottData();
-        }
-        else
-        {
-            DataPlotter.KNNMode = false;
-            DataPlotter.ThisInstans.PlottData();
+
+            if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+            {
+                ParallelCoordinatePlotter.KNNMode = false;
+                KNN.kPoints.Clear();
+                ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+
+            }
+            else
+            {
+                DataPlotter.KNNMode = false;
+                DataPlotter.ThisInstans.PlottData();
+
+            }
 
         }
-
     }
 }

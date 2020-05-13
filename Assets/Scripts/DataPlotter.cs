@@ -63,6 +63,9 @@ public class DataPlotter : MonoBehaviour
     public static bool KNNMode = false;
     public static bool KNNMove = false;
     public GameObject KNNWindow;
+
+    public static string K;
+    public static bool  Weighted;
     #endregion
 
     #region Methods
@@ -102,9 +105,8 @@ public class DataPlotter : MonoBehaviour
     private void Update()
     {
         if (KNNMode && KNNMove)
-        {
-            KNNWindow.SetActive(true);
-            ChangeDataPoint("3", true);
+        {  
+            ChangeDataPoint(K, Weighted);
             KNNMove = false; 
         }
     }
@@ -360,6 +362,8 @@ public class DataPlotter : MonoBehaviour
 
     static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
     {
+        K = k;
+        Weighted = weightedOrNot;
 
         Dictionary<string, object> last = pointList.Last();
 
@@ -385,11 +389,12 @@ public class DataPlotter : MonoBehaviour
         ThisInstans.PlottData();
         Blink(KNN.kPoints);
         KNNMode = true;
+        ThisInstans.KNNWindow.SetActive(true);
     }
     static public void ChangeDataPoint(string k, bool weightedOrNot)
     { 
 
-          Dictionary<string, object> KnnPoint = pointList.Last();
+        Dictionary<string, object> KnnPoint = pointList.Last();
         pointList.Remove(KnnPoint);
 
         double[] unknown = new double[KnnPoint.Count-3];
@@ -413,16 +418,5 @@ public class DataPlotter : MonoBehaviour
 			ball.GetComponent<Blink>().enabled = true;
 		}
 	}
-    static void StopBlink(List<int> kPoints)
-    {
-        foreach (int data in kPoints)
-        {
-
-            GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-            ball.GetComponent<Blink>().enabled = false;
-        }
-    }
-
-
     #endregion
 }

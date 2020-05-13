@@ -42,16 +42,27 @@ public class ScatterPlotMatrix : MonoBehaviour
 	public List<string> columnList;
 	public List<string> targetFeatures;
 
-	#endregion
+    public static DataPlotter ThisInstans;
+    public static DataClass dataClass;
+    private int selectedIndex = -1;
+    public bool teleportCamera = false;
+    public static bool KNNMode = false;
+    public static bool KNNMove = false;
+    public GameObject KNNWindow;
 
-	#region Methods
+    public static string K;
+    public static bool Weighted;
 
-	// Use this for initialization
-	void Start()
+    #endregion
+
+    #region Methods
+
+    // Use this for initialization
+    void Start()
 	{
-		// Set pointlist to results of function Reader with argument inputfile
-		DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
-		pointList = dataClass.CSV;
+        // Set pointlist to results of function Reader with argument inputfile
+        DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+        pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
@@ -70,8 +81,17 @@ public class ScatterPlotMatrix : MonoBehaviour
 		// Set Camera position
 		Camera.main.transform.position = new Vector3(19.3F, 22.5F, -45.7F);
 	}
+    private void Update()
+    {
+        if (KNNMode && KNNMove)
+        {
+            ChangeDataPoint(K, Weighted);
+            KNNMove = false;
 
-	private void AddDropdownListeners()
+        }
+    }
+
+            private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
 		for (int i = 0; i < nFeatures; i++)
@@ -203,6 +223,63 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 		PlottData();
 	}
+    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
+    {
+        K = k;
+        Weighted = weightedOrNot;
 
-	#endregion
+        Dictionary<string, object> last = pointList.Last();
+
+        Dictionary<string, object> newDataPoint = new Dictionary<string, object>
+        {
+            { last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
+        };
+
+        for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
+            newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
+
+        double[] unknown = new double[newPoint.Count];
+
+        for (int i = 0; i < newPoint.Count; ++i)
+            unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
+        newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+        pointList.Add(newDataPoint);
+
+        //ThisInstans.teleportCamera = true;
+
+        ThisInstans.PlottData();
+        Blink(KNN.kPoints);
+        KNNMode = true;
+        ThisInstans.KNNWindow.SetActive(true);
+    }
+    static public void ChangeDataPoint(string k, bool weightedOrNot)
+    {
+
+        Dictionary<string, object> KnnPoint = pointList.Last();
+        pointList.Remove(KnnPoint);
+
+        double[] unknown = new double[KnnPoint.Count - 3];
+
+        for (int i = 0; i < KnnPoint.Count - 3; ++i)
+            unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+
+        var predict = dataClass.Knn(unknown, k, weightedOrNot);
+        KnnPoint[ThisInstans.columnList.Last()] = predict;
+        pointList.Add(KnnPoint);
+        ThisInstans.PlottData();
+
+    }
+    static void Blink(List<int> kPoints)
+    {
+        foreach (int data in kPoints)
+        {
+
+            GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
+            ball.GetComponent<Blink>().enabled = true;
+        }
+    }
+
+    #endregion
 }

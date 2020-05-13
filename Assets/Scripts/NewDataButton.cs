@@ -21,15 +21,19 @@ public class NewDataButton : MonoBehaviour
 	public Toggle weighted;
 	public static string kValue;
 	public static bool weightedOrNot;
+    public DataClass dataClass;
+    public static List<Dictionary<string, object>> pointList;
 
-	#endregion
+    #endregion
 
-	#region Methods
+    #region Methods
 
-	// Start is called before the first frame update
-	private void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
-		newData.onClick.AddListener(OnClick);
+        dataClass = CSVläsare.Read(MainMenu.fileData);
+        pointList = dataClass.CSV;
+        newData.onClick.AddListener(OnClick);
 	}
 
 	private void Cancel()
@@ -57,7 +61,7 @@ public class NewDataButton : MonoBehaviour
 			InputField inputfield = Instantiate(input, new Vector2(71, ypos), Quaternion.identity) as InputField;
 			inputfield.transform.SetParent(newDataWindow.transform, false);
 			inputfield.name = attributes[i];
-			inputfield.text = CalculationHelpers.FindAverage(attributes[i]);
+			inputfield.text = CalculationHelpers.FindAverage(attributes[i], pointList);
 
 			ypos -= 20;
 		}
@@ -95,6 +99,7 @@ public class NewDataButton : MonoBehaviour
 			weightedOrNot = false;
 
 		Cancel();
+        
 		DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
 
 	}

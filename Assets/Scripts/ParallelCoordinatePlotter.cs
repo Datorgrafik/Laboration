@@ -64,7 +64,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	void Start()
 	{
 		// Set pointlist to results of function Reader with argument inputfile
-		dataClass = CSVläsare.Read(MainMenu.fileData);
+		//dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)

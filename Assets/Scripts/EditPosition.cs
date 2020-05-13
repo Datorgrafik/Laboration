@@ -81,17 +81,15 @@ public class EditPosition : MonoBehaviour
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-            {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
-            }
+            
             if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
             }
+
             else
-            {
                 DataPlotter.pointList[index][DataPlotter.xName] = newValue;
-            }
 
 			inputX.text = string.Empty;
         }
@@ -103,18 +101,15 @@ public class EditPosition : MonoBehaviour
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-            {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
-            }
+
 
             if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
             }
             else
-            {
                 DataPlotter.pointList[index][DataPlotter.yName] = newValue;
-            }
 
 			inputY.text = string.Empty;
         }
@@ -136,7 +131,7 @@ public class EditPosition : MonoBehaviour
             ScatterPlotMatrix.KNNMove = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
         }
-        if(SceneManager.GetActiveScene().name == "ValfriTeknik")
+        else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
             ScatterplotDimensions.KNNMove = true;
             ScatterplotDimensions.ThisInstans.PlottData();
@@ -145,7 +140,6 @@ public class EditPosition : MonoBehaviour
         {
             DataPlotter.KNNMove = true;
             DataPlotter.ThisInstans.PlottData();
-
         }
     }
 

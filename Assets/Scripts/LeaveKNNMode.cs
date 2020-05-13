@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class LeaveKNNMode : MonoBehaviour
 {
+
     public Button LeaveKNN;
     public GameObject KNNWindow;
     public Button NewData;

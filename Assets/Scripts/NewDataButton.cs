@@ -22,20 +22,22 @@ public class NewDataButton : MonoBehaviour
 	public Toggle weighted;
 	public static string kValue;
 	public static bool weightedOrNot;
+
     public DataClass dataClass;
     private Button SaveData;
     public static List<Dictionary<string, object>> pointList;
 
-    #endregion
 
-    #region Methods
+	#endregion
 
-    // Start is called before the first frame update
-    void Start()
+	#region Methods
+
+	// Start is called before the first frame update
+	void Start()
 	{
-        dataClass = CSVläsare.Read(MainMenu.fileData);
-        pointList = dataClass.CSV;
-        newData.onClick.AddListener(OnClick);
+		dataClass = CSVläsare.Read(MainMenu.fileData);
+		pointList = dataClass.CSV;
+		newData.onClick.AddListener(OnClick);
 	}
 
     private void Cancel()
@@ -43,9 +45,11 @@ public class NewDataButton : MonoBehaviour
 		foreach (Transform child in newDataWindow.transform)
 			Destroy(child.gameObject);
 
+
 	    newDataList.SetActive(false);
         newData.interactable = true;
 		
+
 	}
 
 	private void OnClick()
@@ -109,6 +113,7 @@ public class NewDataButton : MonoBehaviour
 		else
 			weightedOrNot = false;
 
+
         foreach (Transform child in newDataWindow.transform)
             Destroy(child.gameObject);
 
@@ -140,7 +145,7 @@ public class NewDataButton : MonoBehaviour
                 Empty = true;
                 break;
             }
-           
+
         }
         if (k.text == "")
         {
@@ -150,7 +155,8 @@ public class NewDataButton : MonoBehaviour
         }
         if (!Empty)
             SaveData.interactable = true;
-
     }
+
+
 	#endregion
 }

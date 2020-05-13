@@ -45,13 +45,14 @@ public class ScatterPlotMatrix : MonoBehaviour
                                          new Color(52, 73, 94,1), new Color(241, 196, 15,1), new Color(230, 126, 34,1), new Color(189, 195, 199,1), new Color(149, 165, 166,1)};
 
 
-    public static DataPlotter ThisInstans;
+    public static ScatterPlotMatrix ThisInstans;
     public static DataClass dataClass;
     private int selectedIndex = -1;
     public bool teleportCamera = false;
     public static bool KNNMode = false;
     public static bool KNNMove = false;
     public GameObject KNNWindow;
+   
 
     public static string K;
     public static bool Weighted;
@@ -64,7 +65,7 @@ public class ScatterPlotMatrix : MonoBehaviour
     void Start()
 	{
         // Set pointlist to results of function Reader with argument inputfile
-        DataClass dataClass = CSVläsare.Read(MainMenu.fileData);
+        dataClass = CSVläsare.Read(MainMenu.fileData);
         pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)
@@ -76,8 +77,10 @@ public class ScatterPlotMatrix : MonoBehaviour
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
 		nFeatures = featureList.Count;
+        ThisInstans = this;
 
-		AddDropdownListeners();
+
+        AddDropdownListeners();
 
 		PlottData();
 
@@ -178,6 +181,11 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
 
+                            if (!pointList[i].ContainsKey("DataBall"))
+                                pointList[i].Add("DataBall", dataPoint);
+                            else
+                                pointList[i]["DataBall"] = dataPoint;
+
                             // Set color
                             if (targetFeatures.Count() <= 10)
                             {
@@ -189,9 +197,14 @@ public class ScatterPlotMatrix : MonoBehaviour
 					}
 				}
 				catch (Exception) { }
-			}
-		}
-	}
+                if (KNN.kPoints != null)
+                    if (KNN.kPoints.Count > 0)
+                        Blink(KNN.kPoints);
+            }
+
+        }
+
+    }
 
 	private void GetDistinctTargetFeatures()
 	{

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NewDataButton : MonoBehaviour
@@ -99,9 +100,16 @@ public class NewDataButton : MonoBehaviour
 			weightedOrNot = false;
 
 		Cancel();
-        
-		DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+        //if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
 
-	}
+            //ParallelCoordinatePlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
+        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+                ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
+        else
+                DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
+
+    }
 	#endregion
 }

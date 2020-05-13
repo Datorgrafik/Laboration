@@ -42,6 +42,7 @@ public class TargetingScript : MonoBehaviour
 				selectedTarget = null;
 			}
 		}
+
 	}
 
 	private void SelectDataBall(RaycastHit hit)

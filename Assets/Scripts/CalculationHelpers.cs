@@ -58,18 +58,18 @@ public static class CalculationHelpers
         return minValue;
     }
 
-    public static string FindAverage(string attribute)
+    public static string FindAverage(string attribute, List<Dictionary<string, object>> pointlist)
     {
         double sum = 0.0;
         int n = 0;
         
-        for (int i = 0; i < DataPlotter.dataClass.CSV.Count - 1; ++i)
+        for (int i = 0; i < pointlist.Count - 1; ++i)
         {
-            sum += Convert.ToDouble(DataPlotter.dataClass.CSV[i][attribute], CultureInfo.InvariantCulture);
+            sum += Convert.ToDouble(pointlist[i][attribute], CultureInfo.InvariantCulture);
             ++n;
         }
 
-        return Convert.ToString(Math.Round((sum / (DataPlotter.dataClass.CSV.Count - 1)), 2), CultureInfo.InvariantCulture);
+        return Convert.ToString(Math.Round((sum / (pointlist.Count - 1)), 2), CultureInfo.InvariantCulture);
     }
 
     #endregion

@@ -63,10 +63,16 @@ public class DataPlotter : MonoBehaviour
     public static bool KNNMode = false;
     public static bool KNNMove = false;
     public GameObject KNNWindow;
+
+
+    public static string K;
+    public static bool Weighted;
+
     private static Color[] colorList = { new Color(52, 152, 219, 1), new Color(192, 57, 43,1), new Color(46, 204, 113,1), new Color(26, 188, 156,1), new Color(155, 89, 182,1),
                                          new Color(52, 73, 94,1), new Color(241, 196, 15,1), new Color(230, 126, 34,1), new Color(189, 195, 199,1), new Color(149, 165, 166,1)};
+
     #endregion
-    
+
     #region Methods
 
     // Use this for initialization
@@ -105,9 +111,8 @@ public class DataPlotter : MonoBehaviour
     {
         if (KNNMode && KNNMove)
         {
-            KNNWindow.SetActive(true);
-            ChangeDataPoint("3", true);
-            KNNMove = false; 
+            ChangeDataPoint(K, Weighted);
+            KNNMove = false;
         }
     }
 
@@ -346,7 +351,7 @@ public class DataPlotter : MonoBehaviour
 
     public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
     {
-        dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[targetFeatureIndex].r/255, colorList[targetFeatureIndex].g / 255, colorList[targetFeatureIndex].b / 255, 1.0f);
+        dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[targetFeatureIndex].r / 255, colorList[targetFeatureIndex].g / 255, colorList[targetFeatureIndex].b / 255, 1.0f);
     }
 
     public void DropdownValueChanged()
@@ -356,6 +361,8 @@ public class DataPlotter : MonoBehaviour
 
     static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
     {
+        K = k;
+        Weighted = weightedOrNot;
 
         Dictionary<string, object> last = pointList.Last();
 
@@ -381,44 +388,34 @@ public class DataPlotter : MonoBehaviour
         ThisInstans.PlottData();
         Blink(KNN.kPoints);
         KNNMode = true;
+        ThisInstans.KNNWindow.SetActive(true);
     }
     static public void ChangeDataPoint(string k, bool weightedOrNot)
-    { 
+    {
 
-          Dictionary<string, object> KnnPoint = pointList.Last();
+        Dictionary<string, object> KnnPoint = pointList.Last();
         pointList.Remove(KnnPoint);
 
-        double[] unknown = new double[KnnPoint.Count-3];
+        double[] unknown = new double[KnnPoint.Count - 3];
 
-        for (int i = 0; i < KnnPoint.Count-3; ++i)
-             unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+        for (int i = 0; i < KnnPoint.Count - 3; ++i)
+            unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
 
         var predict = dataClass.Knn(unknown, k, weightedOrNot);
         KnnPoint[ThisInstans.columnList.Last()] = predict;
         pointList.Add(KnnPoint);
         ThisInstans.PlottData();
 
-	}
 
-	static void Blink(List<int> kPoints)
-	{
-		foreach (int data in kPoints)
-		{
-            
-			GameObject ball = (GameObject)pointList[data-1]["DataBall"];
-			ball.GetComponent<Blink>().enabled = true;
-		}
-	}
-    static void StopBlink(List<int> kPoints)
+    }
+    static void Blink(List<int> kPoints)
     {
         foreach (int data in kPoints)
         {
 
             GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-            ball.GetComponent<Blink>().enabled = false;
+            ball.GetComponent<Blink>().enabled = true;
         }
     }
-
-
     #endregion
 }

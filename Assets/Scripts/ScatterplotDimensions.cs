@@ -38,7 +38,7 @@ public class ScatterplotDimensions : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        dataClass = CSVläsare.Read(MainMenu.fileData);
+       // dataClass = CSVläsare.Read(MainMenu.fileData);
         pointList = dataClass.CSV;
 
         ThisInstans = this;

@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
-public class CSVläsare
+public class CSVläsare : MonoBehaviour
 {
+    
 	public static List<string> columnList;
 
-	// Define delimiters, regular expression craziness
-	static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+
+
+    // Define delimiters, regular expression craziness
+    static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
 	// Define line delimiters, regular experession craziness
 	static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 	static char[] TRIM_CHARS = { '\"' };
@@ -69,6 +72,7 @@ public class CSVläsare
 		else
 			dataClass = new Classification(list);
 
-		return dataClass;
+      return dataClass;
+
 	}
 }

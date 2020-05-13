@@ -25,6 +25,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject TargetFeaturePrefab;
 	public GameObject PointHolder;
 
+	// AddNewData Attributes
 	[SerializeField]
 	private GameObject newDataPanel;
 	[SerializeField]
@@ -44,6 +45,23 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private Color targetColor;
 	public string columnName;
 	private int nFeatures;
+	public float yMax;
+	public float yMin;
+
+	// ColorList
+	private static readonly Color[] colorList = 
+	{ 
+		new Color(52, 152, 219, 1), 
+		new Color(192, 57, 43,1), 
+		new Color(46, 204, 113,1), 
+		new Color(26, 188, 156,1), 
+		new Color(155, 89, 182,1),
+		new Color(52, 73, 94,1), 
+		new Color(241, 196, 15,1), 
+		new Color(230, 126, 34,1), 
+		new Color(189, 195, 199,1), 
+		new Color(149, 165, 166,1)
+	};
 
 	// PlotColumns
 	public List<Dropdown> columnDropdownList = new List<Dropdown>();
@@ -51,10 +69,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Column Text Fields
 	public List<TMP_Text> columnTextList = new List<TMP_Text>();
 
-    //Temporary static fix?
-    public static ParallelCoordinatePlotter ThisInstans;
-    public float yMax;
-    public float yMin;
+	// EditPosition Attributes
+	public GameObject EditPanel;
+	public TMP_Text ChangePanelColumnText;
+	public TMP_Text ChangePanelColumnValueText;
+	public TMP_InputField ChangePanelColumnInputfield;
+	private string newValue;
+
+	//Temporary static fix?
+	public static ParallelCoordinatePlotter ThisInstans;
 
     #endregion
 
@@ -64,6 +87,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
     void Start()
 	{
         ThisInstans = this;
+
 		// Set pointlist to results of function Reader with argument inputfile
 		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
@@ -100,6 +124,20 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			if (i + 1 == 4)
 				break;
 		}
+	}
+
+	// Update is called once per frame
+	private void Update()
+	{
+		// Codeblock for EditPosition that shows the EditPanel
+		if (TargetingScript.selectedTarget != null)
+		{
+			EditPanel.SetActive(true);
+			ChangePanelColumnText.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
+			Denormalize();
+		}
+		else
+			EditPanel.SetActive(false);
 	}
 
 	private void AddDropdownListeners()
@@ -215,17 +253,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			GameObject targetFeaturePoint = Instantiate(TargetFeaturePrefab, new Vector3(targetXpos, targetYpos, targetZpos), Quaternion.identity);
 			targetFeaturePoint.name = targetFeature;
 
-			float index = targetFeatures.IndexOf(targetFeature.ToString());
-			float colorValue = 1 / (index + 1);
-
-			if (index % 3 == 0)
-				targetColor = new Color(0, colorValue, 0);
-			else if (index % 3 == 1)
-				targetColor = new Color(0, 0, colorValue);
-			else if (index % 3 == 2)
-				targetColor = new Color(colorValue, 0, 0);
-			else
-				targetColor = Color.black;
+			int index = targetFeatures.IndexOf(targetFeature.ToString());
+			// Set correct color
+			targetColor = SetColors(targetFeatures, index);
 
 			// Set color and text
 			targetFeaturePoint.GetComponentInChildren<Renderer>().material.color = targetColor;
@@ -248,8 +278,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		//Loop through Pointlist & Render dataset
 		for (var i = 0; i < pointList.Count; i++)
 		{
+			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+			
 			// Set correct color
-			targetColor = SetColors(targetFeatures, i);
+			targetColor = SetColors(targetFeatures, index);
 
 			// Get original value
 			string valueString = pointList[i][columnName].ToString();
@@ -326,22 +358,30 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		return xPos;
 	}
 
-	private Color SetColors(List<string> targetFeatures, int i)
+	private Color SetColors(List<string> targetFeatures, int index)
 	{
 		Color targetColor;
-		float index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 		float colorValue = 1 / (index + 1);
 
-		if (index % 3 == 0)
-			targetColor = new Color(0, colorValue, 0);
-		else if (index % 3 == 1)
-			targetColor = new Color(0, 0, colorValue);
-		else if (index % 3 == 2)
-			targetColor = new Color(colorValue, 0, 0);
+		if (targetFeatures.Count() <= 10)
+		{
+			return new Color(colorList[index].r / 255,
+							colorList[index].g / 255,
+							colorList[index].b / 255, 1.0f);
+		}
 		else
-			targetColor = Color.black;
+		{
+			if (index % 3 == 0)
+				targetColor = new Color(0, colorValue, 0);
+			else if (index % 3 == 1)
+				targetColor = new Color(0, 0, colorValue);
+			else if (index % 3 == 2)
+				targetColor = new Color(colorValue, 0, 0);
+			else
+				targetColor = Color.black;
 
-		return targetColor;
+			return targetColor;
+		}
 	}
 
 	public void ReorderColumns()
@@ -359,6 +399,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 				break;
 		}
 	}
+
+	#region AddNewData Methods
 
 	public void InputNewData()
 	{
@@ -394,7 +436,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(Save);
 		// Add onClick listener to cancelButton
 		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(Cancel);
-		
+
 		// While newDataPanel shows, newDataButton is none-Interactable
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = false;
 	}
@@ -450,10 +492,37 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Hide the panel when leaving it
 		newDataPanel.SetActive(false);
-		
+
 		// Make newDataButton interactable again
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
 	}
+
+	#endregion
+
+	#region EditPosition Methods
+
+	public void ChangeButtonOnClick()
+	{
+		if (ChangePanelColumnInputfield.text.Length > 0)
+		{
+			newValue = ChangePanelColumnInputfield.GetComponent<TMP_InputField>().text;
+			newValue = newValue.Replace(',', '.');
+			int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+			pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newValue;
+			ChangePanelColumnInputfield.text = string.Empty;
+		}
+
+		DrawBackgroundGrid();
+		ReorderColumns();
+	}
+
+	private void Denormalize()
+	{
+		float mellanskillnad = yMax - yMin;
+		ChangePanelColumnValueText.text = (yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString("0.0");
+	}
+
+	#endregion
 
 	#endregion
 }

@@ -22,19 +22,19 @@ public class NewDataButton : MonoBehaviour
 	public Toggle weighted;
 	public static string kValue;
 	public static bool weightedOrNot;
-    public DataClass dataClass;
-    public static List<Dictionary<string, object>> pointList;
+	public DataClass dataClass;
+	public static List<Dictionary<string, object>> pointList;
 
-    #endregion
+	#endregion
 
-    #region Methods
+	#region Methods
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
-        dataClass = CSVläsare.Read(MainMenu.fileData);
-        pointList = dataClass.CSV;
-        newData.onClick.AddListener(OnClick);
+		dataClass = CSVläsare.Read(MainMenu.fileData);
+		pointList = dataClass.CSV;
+		newData.onClick.AddListener(OnClick);
 	}
 
 	private void Cancel()
@@ -42,7 +42,7 @@ public class NewDataButton : MonoBehaviour
 		foreach (Transform child in newDataWindow.transform)
 			Destroy(child.gameObject);
 
-	    newDataList.SetActive(false);
+		newDataList.SetActive(false);
 		newData.interactable = true;
 	}
 
@@ -99,15 +99,15 @@ public class NewDataButton : MonoBehaviour
 
 		Cancel();
 
-        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
+		if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+				ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
 
-        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-            ScatterplotDimensions.ThisInstans.PlottData();
-        
-        else
-                DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
-    }
+		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+			ScatterplotDimensions.ThisInstans.PlottData();
+		
+		else
+			DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+	}
 
 	#endregion
 }

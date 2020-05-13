@@ -22,8 +22,11 @@ public class NewDataButton : MonoBehaviour
 	public Toggle weighted;
 	public static string kValue;
 	public static bool weightedOrNot;
-	public DataClass dataClass;
-	public static List<Dictionary<string, object>> pointList;
+
+    public DataClass dataClass;
+    private Button SaveData;
+    public static List<Dictionary<string, object>> pointList;
+
 
 	#endregion
 
@@ -37,13 +40,16 @@ public class NewDataButton : MonoBehaviour
 		newData.onClick.AddListener(OnClick);
 	}
 
-	private void Cancel()
+    private void Cancel()
 	{
 		foreach (Transform child in newDataWindow.transform)
 			Destroy(child.gameObject);
 
-		newDataList.SetActive(false);
-		newData.interactable = true;
+
+	    newDataList.SetActive(false);
+        newData.interactable = true;
+		
+
 	}
 
 	private void OnClick()
@@ -66,10 +72,13 @@ public class NewDataButton : MonoBehaviour
 			ypos -= 20;
 		}
 
-		Button SaveData = Instantiate(button, new Vector2(71, ypos), Quaternion.identity) as Button;
+		SaveData = Instantiate(button, new Vector2(71, ypos), Quaternion.identity) as Button;
 		SaveData.GetComponentInChildren<Text>().text = "Save";
 		SaveData.transform.SetParent(newDataWindow.transform, false);
 		SaveData.onClick.AddListener(SaveInput);
+        SaveData.interactable = false;
+
+        
 
 		Button CancelButton = Instantiate(button, new Vector2(71, ypos - 20), Quaternion.identity) as Button;
 		CancelButton.GetComponentInChildren<Text>().text = "Cancel";
@@ -78,6 +87,7 @@ public class NewDataButton : MonoBehaviour
 
 		newDataList.SetActive(true);
 		newData.interactable = false;
+        InvokeRepeating("SaveCheck", 0, 0.2f);
 	}
 
 	private void SaveInput()
@@ -92,22 +102,61 @@ public class NewDataButton : MonoBehaviour
 
 		kValue = k.GetComponent<InputField>().text;
 
+        if (Convert.ToInt32(kValue) < 1)
+            kValue = "1";
+
+        if (Convert.ToInt32(kValue) > pointList.Count())
+            kValue = pointList.Count().ToString();
+
 		if (weighted.GetComponent<Toggle>().isOn == true)
 			weightedOrNot = true;
 		else
 			weightedOrNot = false;
 
-		Cancel();
 
-		if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-				ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
+        foreach (Transform child in newDataWindow.transform)
+            Destroy(child.gameObject);
 
-		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-			ScatterplotDimensions.ThisInstans.PlottData();
-		
-		else
-			DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
-	}
+        newDataList.SetActive(false);
+
+        //if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+
+        //ParallelCoordinatePlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
+        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+                ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
+        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+            ScatterplotDimensions.AddDataPoint(dataPoint, kValue, weightedOrNot);
+        
+        else
+            DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
+    }
+    private void SaveCheck()
+    {
+        bool Empty = false;
+
+        foreach (InputField data in newDataWindow.GetComponentsInChildren<InputField>())
+        {
+            if (data.text == "")
+            {
+                SaveData.interactable = false;
+                Empty = true;
+                break;
+            }
+
+        }
+        if (k.text == "")
+        {
+            Empty = true;
+            SaveData.interactable = false;
+
+        }
+        if (!Empty)
+            SaveData.interactable = true;
+    }
+
 
 	#endregion
 }

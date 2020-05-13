@@ -76,14 +76,19 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public TMP_InputField ChangePanelColumnInputfield;
 	private string newValue;
 
+	// NewData Attributes
+	string kValue;
+	bool weighted;
+
 	// KNN Attributes
 	public static bool KNNMode = false;
+	public static bool KNNMove = false;
 	public GameObject KNNWindow;
 
-	//Temporary static fix?
 	public static ParallelCoordinatePlotter ThisInstans;
 
 	#endregion
+
 
 	#region Methods
 
@@ -151,6 +156,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 		else
 			EditPanel.SetActive(false);
+
+		if (KNNMode && KNNMove)
+		{
+			ChangeDataPoint(kValue, weighted);
+			KNNMove = false;
+		}
 	}
 
 	private void AddDropdownListeners()
@@ -420,6 +431,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 	}
 
+
 	#region AddNewData Methods
 
 	public void InputNewData()
@@ -474,8 +486,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		};
 
 		// Get kValue InputField and weighted Toggle
-		string kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
-		bool weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
+		kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
+		weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
 
 		// Run Cancel() to clear and hide the NewData Panel after the values have been stored
 		Cancel();
@@ -506,11 +518,28 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		pointList.Add(newDataPoint);
 
 		// Render the dataPlot again with newly added data
+		DrawBackgroundGrid();
 		ReorderColumns();
 
 		Blink(KNN.kPoints);
 		KNNMode = true;
 		KNNWindow.SetActive(true);
+	}
+
+	public void ChangeDataPoint(string k, bool weightedOrNot)
+	{
+		Dictionary<string, object> KnnPoint = pointList.Last();
+		pointList.Remove(KnnPoint);
+
+		double[] unknown = new double[KnnPoint.Count - 3];
+
+		for (int i = 0; i < KnnPoint.Count - 3; ++i)
+			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+
+		var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		KnnPoint[ThisInstans.columnList.Last()] = predict;
+		pointList.Add(KnnPoint);
+		ReorderColumns();
 	}
 
 	private void Cancel()
@@ -537,6 +566,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	#endregion
 
+
 	#region EditPosition Methods
 
 	public void ChangeButtonOnClick()
@@ -561,6 +591,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	}
 
 	#endregion
+
 
 	#endregion
 }

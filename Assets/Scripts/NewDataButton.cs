@@ -100,16 +100,12 @@ public class NewDataButton : MonoBehaviour
 			weightedOrNot = false;
 
 		Cancel();
-        //if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-
-            //ParallelCoordinatePlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
                 ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
         else
                 DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
-
-
     }
+
 	#endregion
 }

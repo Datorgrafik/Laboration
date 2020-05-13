@@ -99,6 +99,9 @@ public class MoveDataBalls : MonoBehaviour
 
             ParallelCoordinatePlotter.ThisInstans.pointList[index][selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
 
+            if (ParallelCoordinatePlotter.KNNMode)
+                ParallelCoordinatePlotter.KNNMove = true;
+
             ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
             ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
         }

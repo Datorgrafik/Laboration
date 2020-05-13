@@ -13,7 +13,6 @@ public class DataPlotter : MonoBehaviour
 	#region Attributes
 
 	public static List<Dictionary<string, object>> pointList;
-	public static List<Dictionary<string, object>> trainList;
 
 	// Indices for columns to be assigned
 	public int columnX = 1;
@@ -92,26 +91,26 @@ public class DataPlotter : MonoBehaviour
 		// Set pointlist to results of function Reader with argument inputfile
 		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
-		trainList = dataClass.CSV;
 		ThisInstans = this;
 
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
+        List<string> features = columnList.GetRange(1, columnList.Count - 2);
 
 		GetDistinctTargetFeatures();
 
 		// Assign column name from columnList to Name variables
-		xList.AddOptions(columnList);
+		xList.AddOptions(features);
 		xList.value = 1;
 		xList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
-		yList.AddOptions(columnList);
+		yList.AddOptions(features);
 		yList.value = 2;
 		yList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 
 		if (MainMenu.renderMode == 1)
 		{
-			zList.AddOptions(columnList);
+			zList.AddOptions(features);
 			zList.value = 3;
 			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
 		}
@@ -274,6 +273,7 @@ public class DataPlotter : MonoBehaviour
 
 	private static void DestroyDataBallsAndAxisValues()
 	{
+		// Destroy all DataBalls before rendering new plot
 		// Destroy all DataBalls before rendering new plot
 		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataBall"))
 			Destroy(dataValues);

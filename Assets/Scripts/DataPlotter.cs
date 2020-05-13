@@ -64,12 +64,23 @@ public class DataPlotter : MonoBehaviour
     public static bool KNNMove = false;
     public GameObject KNNWindow;
 
-
     public static string K;
     public static bool Weighted;
 
-    private static Color[] colorList = { new Color(52, 152, 219, 1), new Color(192, 57, 43,1), new Color(46, 204, 113,1), new Color(26, 188, 156,1), new Color(155, 89, 182,1),
-                                         new Color(52, 73, 94,1), new Color(241, 196, 15,1), new Color(230, 126, 34,1), new Color(189, 195, 199,1), new Color(149, 165, 166,1)};
+    // ColorList
+    private static readonly Color[] colorList =
+    {
+        new Color(52, 152, 219, 1),
+        new Color(192, 57, 43,1),
+        new Color(46, 204, 113,1),
+        new Color(26, 188, 156,1),
+        new Color(155, 89, 182,1),
+        new Color(52, 73, 94,1),
+        new Color(241, 196, 15,1),
+        new Color(230, 126, 34,1),
+        new Color(189, 195, 199,1),
+        new Color(149, 165, 166,1)
+    };
 
     #endregion
 
@@ -390,9 +401,9 @@ public class DataPlotter : MonoBehaviour
         KNNMode = true;
         ThisInstans.KNNWindow.SetActive(true);
     }
+
     static public void ChangeDataPoint(string k, bool weightedOrNot)
     {
-
         Dictionary<string, object> KnnPoint = pointList.Last();
         pointList.Remove(KnnPoint);
 
@@ -405,17 +416,16 @@ public class DataPlotter : MonoBehaviour
         KnnPoint[ThisInstans.columnList.Last()] = predict;
         pointList.Add(KnnPoint);
         ThisInstans.PlottData();
-
-
     }
+
     static void Blink(List<int> kPoints)
     {
         foreach (int data in kPoints)
         {
-
             GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
             ball.GetComponent<Blink>().enabled = true;
         }
     }
+
     #endregion
 }

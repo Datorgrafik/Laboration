@@ -76,6 +76,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public TMP_InputField ChangePanelColumnInputfield;
 	private string newValue;
 
+	// KNN Attributes
+	public static bool KNNMode = false;
+	public GameObject KNNWindow;
+
 	//Temporary static fix?
 	public static ParallelCoordinatePlotter ThisInstans;
 
@@ -306,8 +310,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		dataPoint.transform.parent = PointHolder.transform;
 		// Set name
 		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
-        //Store Index
-        dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
+
+		// Add dataPoints as DataBalls to pointList
+		if (!pointList[i].ContainsKey("DataBall"))
+			pointList[i].Add("DataBall", dataPoint);
+		else
+			pointList[i]["DataBall"] = dataPoint;
+
+		//Store Index
+		dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
         dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
     }
 
@@ -443,6 +454,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private void Save()
 	{
+		// Create a list to hold new dataValues
 		List<string> newDataInputList = new List<string>();
 
 		// Get list of values from newData InputFields
@@ -452,10 +464,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			dataInput.GetComponent<TMP_InputField>().text = null;
 		};
 
+		// Get kValue InputField and weighted Toggle
 		string kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
 		bool weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
 
+		// Run Cancel() to clear and hide the NewData Panel after the values have been stored
 		Cancel();
+		// Add the new data
 		AddDataPoints(newDataInputList, kValue, weighted);
 	}
 
@@ -481,7 +496,12 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		pointList.Add(newDataPoint);
 
+		// Render the dataPlot again with newly added data
 		ReorderColumns();
+
+		Blink(KNN.kPoints);
+		KNNMode = true;
+		KNNWindow.SetActive(true);
 	}
 
 	private void Cancel()
@@ -495,6 +515,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Make newDataButton interactable again
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
+	}
+
+	void Blink(List<int> kPoints)
+	{
+		foreach (int data in kPoints)
+		{
+			GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
+			ball.GetComponent<Blink>().enabled = true;
+		}
 	}
 
 	#endregion

@@ -134,7 +134,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newData: {fileID: 5059764551376628781}
   newDataWindow: {fileID: 0}
-  newDataList: {fileID: 0}
+  newDataList: {fileID: 8312943438748152870, guid: 6ef8f831a179e4b488719e88af35067c,
+    type: 3}
   input: {fileID: 3231395952022082170, guid: 6f3a74a2d9282bd49bdbbebf8fc5e209, type: 3}
   description: {fileID: 1046346778859513792, guid: d0bb9b96d0e5c4a478c3198713ad987d,
     type: 3}

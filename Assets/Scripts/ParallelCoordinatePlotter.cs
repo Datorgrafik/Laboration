@@ -580,6 +580,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			ChangePanelColumnInputfield.text = string.Empty;
 		}
 
+		KNNMove = true;
+
 		DrawBackgroundGrid();
 		ReorderColumns();
 	}

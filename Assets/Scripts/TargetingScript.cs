@@ -20,7 +20,7 @@ public class TargetingScript : MonoBehaviour
 	void Update()
 	{
 		//Left mouse click. If object is clicked, target it.
-		if (Input.GetMouseButtonDown(0) && !DataPlotter.KNNMode && !ScatterPlotMatrix.KNNMode && !ScatterplotDimensions.KNNMode)
+		if (Input.GetMouseButtonDown(0) && !DataPlotter.KNNMode && !ScatterPlotMatrix.KNNMode && !ScatterplotDimensions.KNNMode && !ParallelCoordinatePlotter.KNNMode)
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();

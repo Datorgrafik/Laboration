@@ -241,11 +241,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			yLineRenderer.positionCount = 2;
 			yLineRenderer.startWidth = 0.025f;
 			yLineRenderer.endWidth = 0.025f;
-			yLineRenderer.SetPosition(0, new Vector3(0.1f, (float)i / 10, -0.001f) * plotScale);
-			yLineRenderer.SetPosition(1, new Vector3(1.5f, (float)i / 10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(0, new Vector3(0.15f, (float)i / 10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(1, new Vector3(1.45f, (float)i / 10, -0.001f) * plotScale);
 			yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
 
-			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1.25f, 0 + i, 0), Quaternion.identity);
+			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1f, 0 + i, 0), Quaternion.identity);
 			valuePointY.transform.name = $"Value{i}LineText";
 
 			float yValue = ((yMax - yMin) / 10) * i + yMin;
@@ -526,6 +526,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		KNNMode = true;
 		KNNWindow.SetActive(true);
 
+		// Target the last DataBall (column4) within the newly added instance
 		GameObject newBall = (GameObject)pointList.Last()["DataBall4"] as GameObject;
 		TargetingScript.selectedTarget = newBall;
 		TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
@@ -547,6 +548,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		KnnPoint[columnList.Last()] = predict;
 		pointList.Add(KnnPoint);
 		ReorderColumns();
+
+		if (KNN.kPoints != null && KNN.kPoints.Count > 0)
+			Blink(KNN.kPoints);
 	}
 
 	private void Cancel()

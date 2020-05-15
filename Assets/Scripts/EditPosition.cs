@@ -34,7 +34,6 @@ public class EditPosition : MonoBehaviour
 
             if(SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
             {
-                Debug.Log(SceneManager.GetActiveScene().name);
                 Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
                 Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
@@ -85,10 +84,8 @@ public class EditPosition : MonoBehaviour
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
             
             else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-            {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
-            }
-
+            
             else
                 DataPlotter.pointList[index][DataPlotter.xName] = newValue;
 
@@ -104,11 +101,9 @@ public class EditPosition : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
 
-
             else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-            {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
-            }
+
             else
                 DataPlotter.pointList[index][DataPlotter.yName] = newValue;
 

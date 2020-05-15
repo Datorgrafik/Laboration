@@ -37,22 +37,20 @@ public class NewDataButton : MonoBehaviour
 	{
 		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
-		newData.onClick.AddListener(OnClick);
+		newData.onClick.AddListener(CreateWindow);
 	}
 
     private void Cancel()
 	{
-		foreach (Transform child in newDataWindow.transform)
-			Destroy(child.gameObject);
-
-
-	    newDataList.SetActive(false);
+        newDataList.SetActive(false);
         newData.interactable = true;
-		
+
+        foreach (Transform child in newDataWindow.transform)
+			Destroy(child.gameObject);
 
 	}
 
-	private void OnClick()
+	private void CreateWindow()
 	{
 		List<string> attributes = CSVläsare.columnList;
 
@@ -92,6 +90,7 @@ public class NewDataButton : MonoBehaviour
 
 	private void SaveInput()
 	{
+        CancelInvoke("SaveCheck");
 		dataPoint.Clear();
 
 		foreach (InputField data in newDataWindow.GetComponentsInChildren<InputField>())
@@ -113,24 +112,22 @@ public class NewDataButton : MonoBehaviour
 		else
 			weightedOrNot = false;
 
+        newDataList.SetActive(false);
 
         foreach (Transform child in newDataWindow.transform)
             Destroy(child.gameObject);
 
-        newDataList.SetActive(false);
 
-        //if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-
-        //ParallelCoordinatePlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
+            ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
 
-        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+        else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             ScatterplotDimensions.AddDataPoint(dataPoint, kValue, weightedOrNot);
         
         else
             DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+
 
     }
     private void SaveCheck()
@@ -156,7 +153,5 @@ public class NewDataButton : MonoBehaviour
         if (!Empty)
             SaveData.interactable = true;
     }
-
-
-	#endregion
+    #endregion
 }

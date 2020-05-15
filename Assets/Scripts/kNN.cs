@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class KNN
@@ -53,7 +54,7 @@ public class KNN
         {
             IndexAndDistance curr = new IndexAndDistance();
             double dist = Distance(unknown, trainData[i]);
-            curr.idx = i+1;
+            curr.idx = i;
             curr.dist = dist;
             info[i] = curr;
         }
@@ -71,7 +72,13 @@ public class KNN
         for (int i = 0; i < kValue; ++i)
         {   // Just first k
             int idx = info[i].idx; // Which train item
-            string c = (string)trainData[idx][attributes[attributes.Count - 2]];   // Class in last cell
+            string c;
+
+            // Special cast because of how PCP works
+            if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+                c = (string)trainData[idx][attributes[attributes.Count - 5]];   // Class in last cell
+            else
+                c = (string)trainData[idx][attributes[attributes.Count - 2]];   // Class in last cell
 
             if (votes.ContainsKey(c))
             {
@@ -87,7 +94,7 @@ public class KNN
                 else
                     votes.Add(c, 1);
             }
-            kPoints.Add(Convert.ToInt32(trainData[idx - 1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
         var Maxvotes = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
 
@@ -104,7 +111,7 @@ public class KNN
             int idx = info[i].idx;
             double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
             sum += c;
-            kPoints.Add(Convert.ToInt32(trainData[idx - 1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx-1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
 
         return sum / kValue;
@@ -133,7 +140,7 @@ public class KNN
             sumWeight += weight;
             double reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 2]], CultureInfo.InvariantCulture);
             sumWeightXReg += weight * reg;
-            kPoints.Add(Convert.ToInt32(trainData[idx][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
+            kPoints.Add(Convert.ToInt32(trainData[idx-1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
 
         return sumWeightXReg / sumWeight;

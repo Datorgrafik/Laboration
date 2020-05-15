@@ -41,32 +41,45 @@ public class ScatterPlotMatrix : MonoBehaviour
 	public TMP_Text ScatterplotMatrixText;
 	public List<string> columnList;
 	public List<string> targetFeatures;
-    public static ScatterPlotMatrix ThisInstans;
-    private static Color[] colorList = { new Color(52, 152, 219, 1), new Color(192, 57, 43,1), new Color(46, 204, 113,1), new Color(26, 188, 156,1), new Color(155, 89, 182,1),
-                                         new Color(52, 73, 94,1), new Color(241, 196, 15,1), new Color(230, 126, 34,1), new Color(189, 195, 199,1), new Color(149, 165, 166,1)};
+	public static ScatterPlotMatrix ThisInstans;
 
-
-    public static DataClass dataClass;
-    private int selectedIndex = -1;
-    public bool teleportCamera = false;
-    public static bool KNNMode = false;
-    public static bool KNNMove = false;
-    public GameObject KNNWindow;
-   
-
-    public static string K;
-    public static bool Weighted;
-
-    #endregion
-
-    #region Methods
-
-    // Use this for initialization
-    void Start()
+	// ColorList
+	private static readonly Color[] colorList =
 	{
-        // Set pointlist to results of function Reader with argument inputfile
-        dataClass = CSVläsare.Read(MainMenu.fileData);
-        pointList = dataClass.CSV;
+		new Color(52, 152, 219, 1),
+		new Color(192, 57, 43,1),
+		new Color(46, 204, 113,1),
+		new Color(26, 188, 156,1),
+		new Color(155, 89, 182,1),
+		new Color(52, 73, 94,1),
+		new Color(241, 196, 15,1),
+		new Color(230, 126, 34,1),
+		new Color(189, 195, 199,1),
+		new Color(149, 165, 166,1)
+	};
+
+	public static DataClass dataClass;
+	private int selectedIndex = -1;
+	public bool teleportCamera = false;
+	public static bool KNNMode = false;
+	public static bool KNNMove = false;
+	public GameObject KNNWindow;
+	public Color colorOff;
+
+
+	public static string K;
+	public static bool Weighted;
+
+	#endregion
+
+	#region Methods
+
+	// Use this for initialization
+	void Start()
+	{
+		// Set pointlist to results of function Reader with argument inputfile
+		dataClass = CSVläsare.Read(MainMenu.fileData);
+		pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
@@ -77,27 +90,25 @@ public class ScatterPlotMatrix : MonoBehaviour
 		featureList.RemoveAt(columnList.Count - 1);
 		featureList.RemoveAt(0);
 		nFeatures = featureList.Count;
-        ThisInstans = this;
+		ThisInstans = this;
 
-
-        AddDropdownListeners();
+		AddDropdownListeners();
 
 		PlottData();
 
 		// Set Camera position
 		Camera.main.transform.position = new Vector3(19.3F, 22.5F, -45.7F);
 	}
-    private void Update()
-    {
-        if (KNNMode && KNNMove)
-        {
-            ChangeDataPoint(K, Weighted);
-            KNNMove = false;
+	private void Update()
+	{
+		if (KNNMode && KNNMove)
+		{
+			ChangeDataPoint(K, Weighted);
+			KNNMove = false;
+		}
+	}
 
-        }
-    }
-
-            private void AddDropdownListeners()
+	private void AddDropdownListeners()
 	{
 		// Assign column name from columnList to Name variables
 		for (int i = 0; i < nFeatures; i++)
@@ -114,9 +125,9 @@ public class ScatterPlotMatrix : MonoBehaviour
 	public void PlottData()
 	{
 		ResetDataPlot();
-        GetDistinctTargetFeatures();
+		GetDistinctTargetFeatures();
 
-        for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 4; j++)
 		{
 			for (int k = 0; k < 4; k++)
 			{
@@ -127,12 +138,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 					if (j == k)
 					{
-                        GameObject summonPlane = Instantiate(planePointBackground,
-                                    new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
-                                    Quaternion.Euler(0, 90, -90));
-                        
+						GameObject summonPlane = Instantiate(planePointBackground,
+									new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
+									Quaternion.Euler(0, 90, -90));
+						
 						//Le textfält
-                        TMP_Text textField = Instantiate(ScatterplotMatrixText,
+						TMP_Text textField = Instantiate(ScatterplotMatrixText,
 														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, -0.01f) * plotScale,
 														Quaternion.identity);
 
@@ -140,12 +151,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 					}
 					else if(k < j)
 					{
-                        GameObject summonPlane = Instantiate(planePointBackground,
-                                    new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
-                                    Quaternion.Euler(0, 90, -90));
+						GameObject summonPlane = Instantiate(planePointBackground,
+									new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
+									Quaternion.Euler(0, 90, -90));
 
-                        // Get maxes of each axis
-                        float xMax = CalculationHelpers.FindMaxValue(feature1Name, pointList);
+						// Get maxes of each axis
+						float xMax = CalculationHelpers.FindMaxValue(feature1Name, pointList);
 						float yMax = CalculationHelpers.FindMaxValue(feature2Name, pointList);
 
 						// Get minimums of each axis
@@ -153,7 +164,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 						float yMin = CalculationHelpers.FindMinValue(feature2Name, pointList);
 
 						string valueString;
-
+						
 						//Loop through Pointlist
 						for (var i = 0; i < pointList.Count; i++)
 						{
@@ -180,33 +191,54 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[j];
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[k];
+							dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[j];
+							dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[k];
 
-                            if (!pointList[i].ContainsKey("DataBall"))
-                                pointList[i].Add("DataBall", dataPoint);
-                            else
-                                pointList[i]["DataBall"] = dataPoint;
+							if (!pointList[i].ContainsKey("DataBall"))
+								pointList[i].Add("DataBall", dataPoint);
+							else
+								pointList[i]["DataBall"] = dataPoint;
 
-                            // Set color
-                            if (targetFeatures.Count() <= 10)
-                            {
-                                dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[index].r / 255, colorList[index].g / 255, colorList[index].b / 255, 1.0f);
-                            }
-                            else
-                                dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
+							// Set color
+							if (targetFeatures.Count() <= 10)
+								dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[index].r / 255, colorList[index].g / 255, colorList[index].b / 255, 1.0f);
+							else
+								dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
+
+							if (KNNMode && i == pointList.Count() - 1)
+							{
+								dataPoint.GetComponent<Renderer>().material.color = Color.white;
+								dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+							}
 						}
 					}
 				}
 				catch (Exception) { }
-                if (KNN.kPoints != null)
-                    if (KNN.kPoints.Count > 0)
-                        Blink(KNN.kPoints);
-            }
 
-        }
+				if (KNN.kPoints != null)
+					if (KNN.kPoints.Count > 0)
+						Blink(KNN.kPoints);
+			}
+		}
 
-    }
+		if (ThisInstans.teleportCamera)
+		{
+			// ThisInstans.teleportCamera = false;
+			GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+
+			if (TargetingScript.selectedTarget != null)
+			{
+				TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+				TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+			}
+
+			TargetingScript.selectedTarget = newBall;
+			TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+			TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+		}
+
+	}
 
 	private void GetDistinctTargetFeatures()
 	{
@@ -234,63 +266,63 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 		PlottData();
 	}
-    static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
-    {
-        K = k;
-        Weighted = weightedOrNot;
 
-        Dictionary<string, object> last = pointList.Last();
+	static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
+	{
+		K = k;
+		Weighted = weightedOrNot;
 
-        Dictionary<string, object> newDataPoint = new Dictionary<string, object>
-        {
-            { last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
-        };
+		Dictionary<string, object> last = pointList.Last();
 
-        for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
-            newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
+		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
+		{
+			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
+		};
 
-        double[] unknown = new double[newPoint.Count];
+		for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
+			newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
 
-        for (int i = 0; i < newPoint.Count; ++i)
-            unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+		double[] unknown = new double[newPoint.Count];
 
-        var predict = dataClass.Knn(unknown, k, weightedOrNot);
-        newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
-        pointList.Add(newDataPoint);
+		for (int i = 0; i < newPoint.Count; ++i)
+			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
 
-        //ThisInstans.teleportCamera = true;
+		var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+		pointList.Add(newDataPoint);
 
-        ThisInstans.PlottData();
-        Blink(KNN.kPoints);
-        KNNMode = true;
-        ThisInstans.KNNWindow.SetActive(true);
-    }
-    static public void ChangeDataPoint(string k, bool weightedOrNot)
-    {
+		ThisInstans.teleportCamera = true;
+		KNNMode = true;
+		ThisInstans.PlottData();
+		Blink(KNN.kPoints);
+		ThisInstans.KNNWindow.SetActive(true);
+	}
 
-        Dictionary<string, object> KnnPoint = pointList.Last();
-        pointList.Remove(KnnPoint);
+	static public void ChangeDataPoint(string k, bool weightedOrNot)
+	{
+		Dictionary<string, object> KnnPoint = pointList.Last();
+		pointList.Remove(KnnPoint);
 
-        double[] unknown = new double[KnnPoint.Count - 3];
+		double[] unknown = new double[KnnPoint.Count - 3];
 
-        for (int i = 0; i < KnnPoint.Count - 3; ++i)
-            unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+		for (int i = 0; i < KnnPoint.Count - 3; ++i)
+			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
 
-        var predict = dataClass.Knn(unknown, k, weightedOrNot);
-        KnnPoint[ThisInstans.columnList.Last()] = predict;
-        pointList.Add(KnnPoint);
-        ThisInstans.PlottData();
+		var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		KnnPoint[ThisInstans.columnList.Last()] = predict;
+		pointList.Add(KnnPoint);
+		ThisInstans.PlottData();
 
-    }
-    static void Blink(List<int> kPoints)
-    {
-        foreach (int data in kPoints)
-        {
+	}
 
-            GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-            ball.GetComponent<Blink>().enabled = true;
-        }
-    }
+	static void Blink(List<int> kPoints)
+	{
+		foreach (int data in kPoints)
+		{
+			GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
+			ball.GetComponent<Blink>().enabled = true;
+		}
+	}
 
-    #endregion
+	#endregion
 }

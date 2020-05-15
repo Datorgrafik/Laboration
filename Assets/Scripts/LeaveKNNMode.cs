@@ -1,29 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LeaveKNNMode : MonoBehaviour
 {
-    public Button LeaveKNN;
-    public GameObject KNNWindow;
-    // Start is called before the first frame update
-    void Start()
-    {
-        LeaveKNN.onClick.AddListener(Leave);
-    }
+	public Button LeaveKNN;
+	public GameObject KNNWindow;
+	public Button NewData;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		LeaveKNN.onClick.AddListener(Leave);
+	}
 
-    public void Leave()
-    {
-        DataPlotter.KNNMode = false;
-        KNNWindow.SetActive(false);
-        KNN.kPoints.Clear();
-        DataPlotter.ThisInstans.PlottData();
-    }
+	public void Leave()
+	{
+		KNNWindow.SetActive(false);
+		KNN.kPoints.Clear();
+
+		if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+		{
+			ScatterPlotMatrix.KNNMode = false;
+			ScatterPlotMatrix.ThisInstans.PlottData();
+			NewData.interactable = true;
+		}
+		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+		{
+			ScatterplotDimensions.KNNMode = false;
+			ScatterplotDimensions.ThisInstans.PlottData();
+			NewData.interactable = true;
+		}
+		else if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+		{
+			ParallelCoordinatePlotter.KNNMode = false;
+			ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+		}
+		else
+		{
+			DataPlotter.KNNMode = false;
+			DataPlotter.ThisInstans.PlottData();
+			NewData.interactable = true;
+		}
+	}
 }
+	

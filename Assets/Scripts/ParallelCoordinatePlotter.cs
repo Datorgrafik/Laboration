@@ -76,17 +76,26 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public TMP_InputField ChangePanelColumnInputfield;
 	private string newValue;
 
-	//Temporary static fix?
+	// NewData Attributes
+	string kValue;
+	bool weighted;
+
+	// KNN Attributes
+	public static bool KNNMode = false;
+	public static bool KNNMove = false;
+	public GameObject KNNWindow;
+
 	public static ParallelCoordinatePlotter ThisInstans;
 
-    #endregion
+	#endregion
 
-    #region Methods
 
-    // Start is called before the first frame update
-    void Start()
+	#region Methods
+
+	// Start is called before the first frame update
+	void Start()
 	{
-        ThisInstans = this;
+		ThisInstans = this;
 
 		// Set pointlist to results of function Reader with argument inputfile
 		dataClass = CSVläsare.Read(MainMenu.fileData);
@@ -110,6 +119,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		AddDropdownListeners();
 
+		// Default values for each columntext at start, depending on nFeatures (max 4)
+		for (int i = 0; i < nFeatures; i++)
+		{
+			columnTextList[i].text = featureList[i];
+
+			if (i + 1 == 4)
+				break;
+		}
+
 		GetDistinctTargetFeatures();
 
 		InstantiateTargetFeatureList();
@@ -129,7 +147,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-		// Codeblock for EditPosition that shows the EditPanel
+		// Codeblock for EditPosition
 		if (TargetingScript.selectedTarget != null)
 		{
 			EditPanel.SetActive(true);
@@ -138,6 +156,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 		else
 			EditPanel.SetActive(false);
+
+		// Codeblock for KNN
+		if (KNNMode && KNNMove)
+		{
+			ChangeDataPoint(kValue, weighted);
+			KNNMove = false;
+		}
 	}
 
 	private void AddDropdownListeners()
@@ -164,18 +189,18 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	public void DrawBackgroundGrid()
 	{
-        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("dataValues"))
-            Destroy(dataValues);
-        foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataLineGrid"))
-            Destroy(dataValues);
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("dataValues"))
+			Destroy(dataValues);
+		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataLineGrid"))
+			Destroy(dataValues);
 
-        // Draw vertical lines
-        for (int i = 1; i <= 4; i++)
+		// Draw vertical lines
+		for (int i = 1; i <= 4; i++)
 		{
 			float xPos = SetColumnPosition(i);
 
 			GameObject xLine = Instantiate(LinePrefab, new Vector3(xPos, 0f, -0.001f) * plotScale, Quaternion.identity);
-            xLine.transform.tag = "DataLineGrid";
+			xLine.transform.tag = "DataLineGrid";
 			xLine.transform.parent = PointHolder.transform;
 			xLine.transform.name = $"Column{i}Line";
 
@@ -188,8 +213,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			xLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 		}
 
-        yMax = 0f;
-        yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
+		yMax = 0f;
+		yMin = float.Parse(pointList[0][featureList[0]].ToString(), CultureInfo.InvariantCulture);
 
 		// Find and render Max- & Min-values on Y-Axis
 		for (int i = 0; i < featureList.Count; i++)
@@ -208,19 +233,19 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		{
 			// Instantiate lines, set parent, set transform name
 			GameObject yLine = Instantiate(LinePrefab, new Vector3(0, 0f, -0.001f) * plotScale, Quaternion.identity);
-            yLine.transform.tag = "DataLineGrid";
-            yLine.transform.parent = PointHolder.transform;
+			yLine.transform.tag = "DataLineGrid";
+			yLine.transform.parent = PointHolder.transform;
 			yLine.transform.name = $"Value{i}Line";
 
 			LineRenderer yLineRenderer = yLine.GetComponent<LineRenderer>();
 			yLineRenderer.positionCount = 2;
 			yLineRenderer.startWidth = 0.025f;
 			yLineRenderer.endWidth = 0.025f;
-			yLineRenderer.SetPosition(0, new Vector3(0.1f, (float)i / 10, -0.001f) * plotScale);
-			yLineRenderer.SetPosition(1, new Vector3(1.5f, (float)i / 10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(0, new Vector3(0.15f, (float)i / 10, -0.001f) * plotScale);
+			yLineRenderer.SetPosition(1, new Vector3(1.45f, (float)i / 10, -0.001f) * plotScale);
 			yLineRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
 
-			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1.25f, 0 + i, 0), Quaternion.identity);
+			TMP_Text valuePointY = Instantiate(valuePrefab, new Vector3(1f, 0 + i, 0), Quaternion.identity);
 			valuePointY.transform.name = $"Value{i}LineText";
 
 			float yValue = ((yMax - yMin) / 10) * i + yMin;
@@ -306,10 +331,17 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		dataPoint.transform.parent = PointHolder.transform;
 		// Set name
 		dataPoint.transform.name = Convert.ToString($"Point {i+1}.{columnPos}");
-        //Store Index
-        dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
-        dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
-    }
+
+		// Add dataPoints as DataBalls to pointList
+		if (!pointList[i].ContainsKey($"DataBall{columnPos}"))
+			pointList[i].Add($"DataBall{columnPos}", dataPoint);
+		else
+			pointList[i][$"DataBall{columnPos}"] = dataPoint;
+
+		//Store Index
+		dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
+		dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = featureList[columnDropdownList[columnPos - 1].value];
+	}
 
 	private void InstantiateAndRenderLines(int columnPos, float xPos, int i, float y)
 	{
@@ -400,6 +432,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 	}
 
+
 	#region AddNewData Methods
 
 	public void InputNewData()
@@ -443,6 +476,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private void Save()
 	{
+		// Create a list to hold new dataValues
 		List<string> newDataInputList = new List<string>();
 
 		// Get list of values from newData InputFields
@@ -452,10 +486,13 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			dataInput.GetComponent<TMP_InputField>().text = null;
 		};
 
-		string kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
-		bool weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
+		// Get kValue InputField and weighted Toggle
+		kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
+		weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
 
+		// Run Cancel() to clear and hide the NewData Panel after the values have been stored
 		Cancel();
+		// Add the new data
 		AddDataPoints(newDataInputList, kValue, weighted);
 	}
 
@@ -481,7 +518,39 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		pointList.Add(newDataPoint);
 
+		// Render the dataPlot again with newly added data
+		DrawBackgroundGrid();
 		ReorderColumns();
+
+		Blink(KNN.kPoints);
+		KNNMode = true;
+		KNNWindow.SetActive(true);
+
+		// Target the last DataBall (column4) within the newly added instance
+		GameObject newBall = (GameObject)pointList.Last()["DataBall4"] as GameObject;
+		TargetingScript.selectedTarget = newBall;
+		TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+		TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+		TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+	}
+
+	public void ChangeDataPoint(string k, bool weightedOrNot)
+	{
+		Dictionary<string, object> KnnPoint = pointList.Last();
+		pointList.Remove(KnnPoint);
+
+		double[] unknown = new double[KnnPoint.Count - 6]; //TODO: "[KnnPoint.Count - 6]" är nog bara ok för dataset >= 4 features.
+
+		for (int i = 0; i < KnnPoint.Count - 6; ++i) //TODO: "KnnPoint.Count - 6" är nog bara ok för dataset >= 4 features.
+			unknown[i] = (Convert.ToDouble(KnnPoint[columnList[i + 1]], CultureInfo.InvariantCulture));
+
+		var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		KnnPoint[columnList.Last()] = predict;
+		pointList.Add(KnnPoint);
+		ReorderColumns();
+
+		if (KNN.kPoints != null && KNN.kPoints.Count > 0)
+			Blink(KNN.kPoints);
 	}
 
 	private void Cancel()
@@ -497,7 +566,20 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
 	}
 
+	void Blink(List<int> kPoints)
+	{
+		foreach (int data in kPoints)
+		{
+			for (int i = 1; i <= 4; i++)
+			{
+				GameObject ball = (GameObject)pointList[data - 1][$"DataBall{i}"];
+				ball.GetComponent<Blink>().enabled = true;
+			}
+		}
+	}
+
 	#endregion
+
 
 	#region EditPosition Methods
 
@@ -512,6 +594,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			ChangePanelColumnInputfield.text = string.Empty;
 		}
 
+		KNNMove = true;
+
 		DrawBackgroundGrid();
 		ReorderColumns();
 	}
@@ -523,6 +607,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	}
 
 	#endregion
+
 
 	#endregion
 }

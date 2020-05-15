@@ -40,6 +40,14 @@ public class EditPosition : MonoBehaviour
                 Xvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column].ToString();
                 Yvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row].ToString();
             }
+            if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+            {
+                Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
+                Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
+                int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+                Xvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column].ToString();
+                Yvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row].ToString();
+            }
             else
             {
                 Xname.text = DataPlotter.xName;
@@ -73,13 +81,15 @@ public class EditPosition : MonoBehaviour
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
+            
+            if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
             }
+
             else
-            {
                 DataPlotter.pointList[index][DataPlotter.xName] = newValue;
-            }
 
 			inputX.text = string.Empty;
         }
@@ -91,13 +101,15 @@ public class EditPosition : MonoBehaviour
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
+
+
+            if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
             }
             else
-            {
                 DataPlotter.pointList[index][DataPlotter.yName] = newValue;
-            }
 
 			inputY.text = string.Empty;
         }
@@ -116,16 +128,28 @@ public class EditPosition : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
+            ScatterPlotMatrix.KNNMove = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
+        }
+        else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+            ScatterplotDimensions.KNNMove = true;
+            ScatterplotDimensions.ThisInstans.PlottData();
         }
         else
         {
-            dataPlotter.GetComponent<DataPlotter>().PlottData();
+            DataPlotter.KNNMove = true;
+            DataPlotter.ThisInstans.PlottData();
         }
     }
 
     private void Denormalize()
     {
+        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+
+        }
+
         float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
         Xvalue.text = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString("0.0");
 

@@ -54,7 +54,6 @@ public class MoveDataBalls : MonoBehaviour
 				if (timeChecker > 0.3F)
 				{
 					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, Camera.main.transform.position.z) * -1);
-                    Debug.Log(mousePosition);
 
 					if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
 						TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
@@ -125,23 +124,23 @@ public class MoveDataBalls : MonoBehaviour
 				DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
 			}
 
-			if (DataPlotter.KNNMode || ScatterPlotMatrix.KNNMode || ScatterplotDimensions.KNNMode)
+			if (SceneManager.GetActiveScene().name == "ValfriTeknik")
 			{
-				if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-				{
+                if(ScatterplotDimensions.KNNMode)
 					ScatterplotDimensions.KNNMove = true;
-					ScatterplotDimensions.ThisInstans.PlottData();
-				}
-				else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-				{
+				ScatterplotDimensions.ThisInstans.PlottData();
+			}
+			else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+			{
+                if(ScatterPlotMatrix.KNNMode)
 					ScatterPlotMatrix.KNNMove = true;
-					ScatterPlotMatrix.ThisInstans.PlottData();
-				}
-				else
-				{
+				ScatterPlotMatrix.ThisInstans.PlottData();
+			}
+			else
+			{
+                if(DataPlotter.KNNMode)
 					DataPlotter.KNNMove = true;
-					DataPlotter.ThisInstans.PlottData();
-				}
+				DataPlotter.ThisInstans.PlottData();
 			}
 		}
 	}

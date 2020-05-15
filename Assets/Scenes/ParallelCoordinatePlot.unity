@@ -7945,6 +7945,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1701465379}
   - component: {fileID: 1701465378}
+  - component: {fileID: 1701465381}
+  - component: {fileID: 1701465380}
   m_Layer: 0
   m_Name: ParallelCoordinatePlot
   m_TagString: Untagged
@@ -8016,6 +8018,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1701465380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701465377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61758d1f07b30b2419c82e6c6fe11398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1701465381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701465377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7d2a8a74dfdc3429eb4feab2d5a22d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1764942098
 GameObject:
   m_ObjectHideFlags: 0

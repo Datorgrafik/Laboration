@@ -32,7 +32,10 @@ public class MoveDataBalls : MonoBehaviour
 			}
 		}
 
-		if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0 && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+        if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
+            Denormalize();
+
+        if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -50,7 +53,8 @@ public class MoveDataBalls : MonoBehaviour
 
 				if (timeChecker > 0.3F)
 				{
-					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
+					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, Camera.main.transform.position.z) * -1);
+                    Debug.Log(mousePosition);
 
 					if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
 						TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
@@ -58,12 +62,8 @@ public class MoveDataBalls : MonoBehaviour
 						TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
 				}
 			}
-
-
-			if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
-				Denormalize();
 		}
-		else if (TargetingScript.selectedTarget != null && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+		else if (TargetingScript.selectedTarget != null)
 		{
 			if (Input.GetKeyDown(KeyCode.E))
 			{

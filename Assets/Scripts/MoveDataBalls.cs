@@ -23,6 +23,7 @@ public class MoveDataBalls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetMouseButtonDown(0))
         {
             if (grabItem == true)
@@ -50,6 +51,7 @@ public class MoveDataBalls : MonoBehaviour
 
                 if (timeChecker > 0.3F)
                 {
+                    //Här det blir fel för 2D problemet? 
                     mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
 
                     if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")

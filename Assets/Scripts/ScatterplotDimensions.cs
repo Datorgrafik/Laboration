@@ -149,7 +149,6 @@ public class ScatterplotDimensions : MonoBehaviour
 			for (int j = 0; j < Dimensions; j++)
 				floatList[j] = (float.Parse(pointList[i][nameList[j]].ToString(), CultureInfo.InvariantCulture) - Min[j]) / (Max[j] - Min[j]);
 
-			//Används för ChangeTargetFeature klassen. Ta ej bort ännu. 
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
 				targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
 

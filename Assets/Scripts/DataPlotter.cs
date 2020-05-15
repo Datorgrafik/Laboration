@@ -246,7 +246,7 @@ public class DataPlotter : MonoBehaviour
 		if (ThisInstans.teleportCamera)
 		{
 
-			// ThisInstans.teleportCamera = false;
+			//ThisInstans.teleportCamera = false;
 			GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
 			if (MainMenu.renderMode == 1)
 				Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);

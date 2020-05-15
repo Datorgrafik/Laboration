@@ -34,13 +34,14 @@ public class EditPosition : MonoBehaviour
 
             if(SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
             {
+                Debug.Log(SceneManager.GetActiveScene().name);
                 Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
                 Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
                 Xvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column].ToString();
                 Yvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row].ToString();
             }
-            if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+            else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
                 Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
@@ -83,7 +84,7 @@ public class EditPosition : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
             
-            if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+            else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
             }
@@ -104,7 +105,7 @@ public class EditPosition : MonoBehaviour
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
 
 
-            if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+            else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
                 ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
             }

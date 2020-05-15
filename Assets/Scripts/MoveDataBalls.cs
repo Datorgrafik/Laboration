@@ -6,133 +6,145 @@ using UnityEngine.SceneManagement;
 
 public class MoveDataBalls : MonoBehaviour
 {
-    #region Attributes
+	#region Attributes
 
-    private bool grabItem = false;
-    private Vector3 mousePosition;
-    private GameObject selectedTarget;
-    private EventSystem eventSys;
+	private bool grabItem = false;
+	private Vector3 mousePosition;
+	private GameObject selectedTarget;
+	private EventSystem eventSys;
 
-    private float timeChecker = 0f;
-    private int index;
+	private float timeChecker = 0f;
+	private int index;
 
-    #endregion
+	#endregion
 
-    #region Methods
+	#region Methods
 
-    // Update is called once per frame
-    void Update()
-    {
+	// Update is called once per frame
+	void Update()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			if (grabItem == true)
+			{
+				Denormalize();
+				grabItem = false;
+			}
+		}
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (grabItem == true)
-            {
-                Denormalize();
-                grabItem = false;
-            }
-        }
+		if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0 && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+		{
+			if (Input.GetMouseButtonDown(0))
+			{
+				selectedTarget = TargetingScript.selectedTarget;
+				timeChecker = 0f;
+			}
+			if (Input.GetMouseButton(0))
+			{
+				eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
-        if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0 && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                selectedTarget = TargetingScript.selectedTarget;
-                timeChecker = 0f;
-            }
-            if (Input.GetMouseButton(0))
-            {
-                eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+				if (eventSys.IsPointerOverGameObject())
+					return;
 
-                if (eventSys.IsPointerOverGameObject())
-                    return;
+				timeChecker += Time.unscaledDeltaTime;
 
-                timeChecker += Time.unscaledDeltaTime;
+				if (timeChecker > 0.3F)
+				{
+					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
 
-                if (timeChecker > 0.3F)
-                {
-                    //Här det blir fel för 2D problemet? 
-                    mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
-
-                    if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-                    {
-                        TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
-                    }
-                    else
-                    {
-                        TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
-                    }
-                }
-            }
+					if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+						TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
+					else
+						TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
+				}
+			}
 
 
-            if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
-                Denormalize();
-        }
-        else if (TargetingScript.selectedTarget != null && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                if (grabItem == true)
-                {
-                    grabItem = false;
-                    Denormalize();
-                }
-                else
-                {
-                    grabItem = true;
-                    selectedTarget = TargetingScript.selectedTarget;
-                }
-            }
+			if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
+				Denormalize();
+		}
+		else if (TargetingScript.selectedTarget != null && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+		{
+			if (Input.GetKeyDown(KeyCode.E))
+			{
+				if (grabItem == true)
+				{
+					grabItem = false;
+					Denormalize();
+				}
+				else
+				{
+					grabItem = true;
+					selectedTarget = TargetingScript.selectedTarget;
+				}
+			}
 
-            if (grabItem == true)
-                TargetingScript.selectedTarget.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 1;
-        }
-    }
+			if (grabItem == true)
+				TargetingScript.selectedTarget.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 1;
+		}
+	}
 
-    private void Denormalize()
-    {
-       if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-        {
-            float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
-            string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
-            newPosition = newPosition.Replace(',', '.');
-            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+	private void Denormalize()
+	{
+		if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+		{
+			float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
+			string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+			newPosition = newPosition.Replace(',', '.');
+			index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-            ParallelCoordinatePlotter.ThisInstans.pointList[index][selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
+			ParallelCoordinatePlotter.ThisInstans.pointList[index][selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
 
-            ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
-            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
-        }
+			if (ParallelCoordinatePlotter.KNNMode)
+				ParallelCoordinatePlotter.KNNMove = true;
 
-        else
-        {
-            float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
-            string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
-            newPosition = newPosition.Replace(',', '.');
-            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-            DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
+			ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
+			ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+		}
 
-            mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
-            newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
-            newPosition = newPosition.Replace(',', '.');
-            index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-            DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
+		else
+		{
+			float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
+			string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+			newPosition = newPosition.Replace(',', '.');
+			index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+			DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
 
-            if (MainMenu.renderMode == 1)
-            {
-                mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
-                newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
-                newPosition = newPosition.Replace(',', '.');
-                index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-                DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
-            }
+			mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
+			newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+			newPosition = newPosition.Replace(',', '.');
+			index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+			DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
 
-            if (DataPlotter.KNNMode)
-                DataPlotter.KNNMove = true;
-            DataPlotter.ThisInstans.PlottData();
-        }
-    }
+			if (MainMenu.renderMode == 1)
+			{
+				mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
+				newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+				newPosition = newPosition.Replace(',', '.');
+				index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+				DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+			}
 
-    #endregion
+			if (DataPlotter.KNNMode || ScatterPlotMatrix.KNNMode || ScatterplotDimensions.KNNMode)
+			{
+				if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+				{
+					ScatterplotDimensions.KNNMove = true;
+					ScatterplotDimensions.ThisInstans.PlottData();
+				}
+				else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+				{
+					ScatterPlotMatrix.KNNMove = true;
+					ScatterPlotMatrix.ThisInstans.PlottData();
+				}
+				else
+				{
+					DataPlotter.KNNMove = true;
+					DataPlotter.ThisInstans.PlottData();
+				}
+			}
+		}
+	}
+
+	#endregion
 }

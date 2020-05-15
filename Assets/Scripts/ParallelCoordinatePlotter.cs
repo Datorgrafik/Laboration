@@ -359,8 +359,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			dataLine.transform.name = Convert.ToString("Line " + (i + 1));
 			// Get the LineRenderer
 			lineRenderer = dataLine.GetComponent<LineRenderer>();
-			// Set line color
-			lineRenderer.material.color = targetColor;
 		}
 		else
 		{
@@ -370,6 +368,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			lineRenderer = dataLine.GetComponent<LineRenderer>();
 		}
 
+		// Set line color
+		lineRenderer.material.color = targetColor;
 		// Set line position
 		lineRenderer.SetPosition((columnPos - 1), new Vector3(xPos, y, -0.001f) * plotScale);
 	}
@@ -459,6 +459,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			newInput.transform.SetParent(newDataContainer.transform, false);
 			// Get attribute textfield
 			newInput.GetComponentInChildren<TMP_Text>().text = featureList[i];
+			// Set AverageValue in inputField
+			newInput.GetComponentInChildren<TMP_InputField>().text = CalculationHelpers.FindAverage(featureList[i], pointList);
 		}
 
 		// Instantiate SaveAndCancel buttons

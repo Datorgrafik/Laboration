@@ -3478,6 +3478,16 @@ PrefabInstance:
       propertyPath: NewData
       value: 
       objectReference: {fileID: 2101935193}
+    - target: {fileID: 4134803999020924725, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+        type: 3}
+      propertyPath: LeaveKNN
+      value: 
+      objectReference: {fileID: 1497126796}
+    - target: {fileID: 4134803999020924725, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+        type: 3}
+      propertyPath: NewData
+      value: 
+      objectReference: {fileID: 2101935193}
     - target: {fileID: 6512798675392476227, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
         type: 3}
       propertyPath: m_Name
@@ -3595,6 +3605,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e5c85e5a923eeb4d8797c7bdca30923, type: 3}
+--- !u!114 &1497126796 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6512798675117439154, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+    type: 3}
+  m_PrefabInstance: {fileID: 1497126795}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1503668472
 GameObject:
   m_ObjectHideFlags: 0
@@ -4969,15 +4991,13 @@ MonoBehaviour:
 
     UpArrow - Zoom in
 
-    DownArrow
-    - Zoom out
+    DownArrow - Zoom out
 
     Right click - Camera movement
 
     Left click - Target DataBalls
 
-    Left
-    click and move mouse - Move targeted DataBall'
+    Left click and move mouse - Move targeted DataBall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5161,6 +5181,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2009003295}
     m_Modifications:
+    - target: {fileID: -1564825325037630344, guid: 04f7c0f6f158541449d88383faea8c89,
+        type: 3}
+      propertyPath: newDataList
+      value: 
+      objectReference: {fileID: 1886789757}
+    - target: {fileID: -1564825325037630344, guid: 04f7c0f6f158541449d88383faea8c89,
+        type: 3}
+      propertyPath: newDataWindow
+      value: 
+      objectReference: {fileID: 1625508953}
+    - target: {fileID: -1564825325037630344, guid: 04f7c0f6f158541449d88383faea8c89,
+        type: 3}
+      propertyPath: k
+      value: 
+      objectReference: {fileID: 636734196}
+    - target: {fileID: -1564825325037630344, guid: 04f7c0f6f158541449d88383faea8c89,
+        type: 3}
+      propertyPath: weighted
+      value: 
+      objectReference: {fileID: 176814581}
     - target: {fileID: 5059764551376628776, guid: 04f7c0f6f158541449d88383faea8c89,
         type: 3}
       propertyPath: m_Name
@@ -5295,7 +5335,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 04f7c0f6f158541449d88383faea8c89, type: 3}
 --- !u!114 &2101935193 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5059764551376628781, guid: 04f7c0f6f158541449d88383faea8c89,
+  m_CorrespondingSourceObject: {fileID: -7165789160881275105, guid: 04f7c0f6f158541449d88383faea8c89,
     type: 3}
   m_PrefabInstance: {fileID: 2101935192}
   m_PrefabAsset: {fileID: 0}

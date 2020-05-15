@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 5059764551376628783}
   - component: {fileID: 5059764551376628771}
   - component: {fileID: 5059764551376628780}
-  - component: {fileID: 5059764551376628781}
-  - component: {fileID: 5059764551376628782}
+  - component: {fileID: -7165789160881275105}
+  - component: {fileID: -1564825325037630344}
+  - component: {fileID: 174437174784845405}
   m_Layer: 5
   m_Name: NewDataButton
   m_TagString: Untagged
@@ -77,7 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5059764551376628781
+--- !u!114 &-7165789160881275105
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +98,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.5066305, g: 0.5188679, b: 0.5071625, a: 0.9137255}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -120,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5059764551376628782
+--- !u!114 &-1564825325037630344
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,16 +133,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c7ecd2515952354ba16aedc1eb4ad3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newData: {fileID: 5059764551376628781}
+  newData: {fileID: -7165789160881275105}
   newDataWindow: {fileID: 0}
-  newDataList: {fileID: 0}
+  newDataList: {fileID: 8312943438748152870, guid: 6ef8f831a179e4b488719e88af35067c,
+    type: 3}
   input: {fileID: 3231395952022082170, guid: 6f3a74a2d9282bd49bdbbebf8fc5e209, type: 3}
   description: {fileID: 1046346778859513792, guid: d0bb9b96d0e5c4a478c3198713ad987d,
     type: 3}
-  button: {fileID: 7677215751960860652, guid: a795d0f2cf41fba489bab1cb36be9d05, type: 3}
+  button: {fileID: 6821733034106571629, guid: 0d3025c3e5678a244b1d32c2f7393a7e, type: 3}
   dataPoint: []
   k: {fileID: 0}
   weighted: {fileID: 0}
+--- !u!114 &174437174784845405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059764551376628776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbebf200a3a23b42890e41637642624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LeaveKNN: {fileID: 6512798675117439154, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+    type: 3}
+  KNNWindow: {fileID: 6512798675392476227, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+    type: 3}
+  NewData: {fileID: -7165789160881275105}
 --- !u!1 &5059764551455391063
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.33333334, g: 0.33333334, b: 0.33333334, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:

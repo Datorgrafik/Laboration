@@ -6969,8 +6969,7 @@ MonoBehaviour:
 
     CTRL - Down
 
-    Right click -
-    Camera movement
+    Right click - Camera movement
 
     Left click - Target DataBalls
 
@@ -9557,6 +9556,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1551077719}
     m_Modifications:
+    - target: {fileID: 4134803999020924725, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+        type: 3}
+      propertyPath: LeaveKNN
+      value: 
+      objectReference: {fileID: 2103790195}
     - target: {fileID: 6512798675392476227, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
         type: 3}
       propertyPath: m_Name
@@ -9686,6 +9690,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2103790192}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2103790195 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6512798675117439154, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+    type: 3}
+  m_PrefabInstance: {fileID: 2103790192}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2130172626
 GameObject:
   m_ObjectHideFlags: 0

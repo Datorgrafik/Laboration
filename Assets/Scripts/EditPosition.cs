@@ -10,16 +10,20 @@ public class EditPosition : MonoBehaviour
 	public InputField inputX;
 	public InputField inputY;
 	public InputField inputZ;
-    public InputField inputÅ;
+    public InputField inputA;
+    public InputField inputB;
 
     public Text Xvalue;
 	public Text Yvalue;
 	public Text Zvalue;
-    public Text Åvalue;
+    public Text Avalue;
+    public Text Bvalue;
+
     public Text Xname;
 	public Text Yname;
 	public Text Zname;
-    public Text Åname;
+    public Text Aname;
+    public Text Bname;
 
     public Button ChangeX;
 
@@ -35,26 +39,33 @@ public class EditPosition : MonoBehaviour
 
             string[] newName = TargetingScript.selectedTarget.name.Split(' ');
 
-            if(SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+            if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
             {
-                Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
-                Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
+                Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1;
+                Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2;
                 Zname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3;
-                Åname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4;
+                Aname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4;
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-                Xvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column].ToString();
-                Yvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row].ToString();
+                Xvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1].ToString();
+                Yvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2].ToString();
                 Zvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3].ToString();
-                Åvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4].ToString();
+                Avalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4].ToString();
 
             }
             else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             {
-                Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
-                Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
+                Xname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1;
+                Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2;
+                Zname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3;
+                Aname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4;
+                Bname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature5;
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-                Xvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column].ToString();
-                Yvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row].ToString();
+                Xvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1].ToString();
+                Yvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2].ToString();
+                Zvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3].ToString();
+                Avalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4].ToString();
+                if(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature5 != null)
+                    Bvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature5].ToString();
             }
             else
             {
@@ -63,7 +74,7 @@ public class EditPosition : MonoBehaviour
                 Denormalize();
             }
 
-			if (MainMenu.renderMode == 1)
+			if (MainMenu.renderMode == 1 && SceneManager.GetActiveScene().name == "ScatterPlot")
 				Zname.text = DataPlotter.zName;
 
             if (!addedListener)
@@ -89,11 +100,11 @@ public class EditPosition : MonoBehaviour
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
+                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1] = newValue;
             
             else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newValue;
-            
+                ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1] = newValue;
+
             else
                 DataPlotter.pointList[index][DataPlotter.xName] = newValue;
 
@@ -107,10 +118,10 @@ public class EditPosition : MonoBehaviour
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
+                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2] = newValue;
 
             else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-                ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newValue;
+                ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2] = newValue;
 
             else
                 DataPlotter.pointList[index][DataPlotter.yName] = newValue;
@@ -118,15 +129,20 @@ public class EditPosition : MonoBehaviour
 			inputY.text = string.Empty;
         }
 
-		if (MainMenu.renderMode == 1 || SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+		if (MainMenu.renderMode == 1 || SceneManager.GetActiveScene().name == "ScatterPlotMatrix" || SceneManager.GetActiveScene().name == "ValfriTeknik")
 		{
 			if (inputZ.text.Length > 0)
 			{
 				newValue = inputZ.GetComponent<InputField>().text;
                 newValue = newValue.Replace(',', '.');
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+
                 if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
                     ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature3Name] = newValue;
+
+                else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+                    ScatterplotDimensions.pointList[index][ScatterplotDimensions.feature3Name] = newValue;
+
                 else
                     DataPlotter.pointList[index][DataPlotter.zName] = newValue;
 
@@ -134,13 +150,27 @@ public class EditPosition : MonoBehaviour
 			}
 		}
 
-        if (inputÅ.text.Length > 0 && SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+        if (inputA.text.Length > 0 && SceneManager.GetActiveScene().name == "ScatterPlotMatrix" || SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
-            newValue = inputÅ.GetComponent<InputField>().text;
+            newValue = inputA.GetComponent<InputField>().text;
             newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-            ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature4Name] = newValue;
-            inputÅ.text = string.Empty;
+
+            if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+                ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature4Name] = newValue;
+            else
+               ScatterplotDimensions.pointList[index][ScatterplotDimensions.feature4Name] = newValue;
+
+            inputA.text = string.Empty;
+        }
+
+        if (inputB.text.Length > 0 && SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+            newValue = inputB.GetComponent<InputField>().text;
+            newValue = newValue.Replace(',', '.');
+            int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            ScatterplotDimensions.pointList[index][ScatterplotDimensions.feature5Name] = newValue;
+            inputB.text = string.Empty;
         }
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")

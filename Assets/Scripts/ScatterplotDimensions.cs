@@ -39,16 +39,23 @@ public class ScatterplotDimensions : MonoBehaviour
 	public static bool KNNMove;
 	public static string K;
 	public static bool Weighted;
+    List<string> columnListDropDown;
 
-	// Use this for initialization
-	void Start()
+    public static string feature1Name;
+    public static string feature2Name;
+    public static string feature3Name;
+    public static string feature4Name;
+    public static string feature5Name;
+
+    // Use this for initialization
+    void Start()
 	{
 		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
 
 		ThisInstans = this;
 		columnList = new List<string>(pointList[1].Keys);
-		List<string> columnListDropDown = new List<string>(pointList[1].Keys);
+		columnListDropDown = new List<string>(pointList[1].Keys);
 		columnListDropDown.RemoveAt(columnList.Count() - 1);
 		columnListDropDown.RemoveAt(0);
 
@@ -81,7 +88,16 @@ public class ScatterplotDimensions : MonoBehaviour
 		foreach (var axisValue in GameObject.FindGameObjectsWithTag("3D_Axis_ValueText"))
 			Destroy(axisValue);
 
-		for (int i = 0; i < Dimensions; i++)
+        feature1Name = columnListDropDown[dropDownList[0].value];
+        feature2Name = columnListDropDown[dropDownList[1].value];
+        feature3Name = columnListDropDown[dropDownList[2].value];
+        feature4Name = columnListDropDown[dropDownList[3].value];
+        feature5Name = columnListDropDown[dropDownList[4].value];
+        if(Dimensions < 5)
+            feature5Name = null;
+
+
+        for (int i = 0; i < Dimensions; i++)
 		{
 			nameList[i] = columnList[dropDownList[i].value + 1];
 			textList[i].text = nameList[i];
@@ -156,7 +172,12 @@ public class ScatterplotDimensions : MonoBehaviour
 			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
 			ReselectDataball_IfDataballWasSelected(i, dataPoint);
-		}
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature1 = feature1Name;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature2 = feature2Name;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3Name;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4Name;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature5 = feature5Name;
+        }
 	}
 
 	private GameObject AssignDataBallAttributes_Instantiate(int i, float[] floatList)

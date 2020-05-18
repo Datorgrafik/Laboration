@@ -200,6 +200,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 								pointList[i][columnList[columnList.Count - 1]].ToString();
                             dataPoint.GetComponent<StoreIndexInDataBall>().Column = feature1Name;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Row = feature2Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature1 = feature1Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature2 = feature2Name;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3Name;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4Name;
 

@@ -75,6 +75,7 @@ public class CSVläsare : MonoBehaviour
 			dataClass = new Classification(list);
 
         targetFeatures = new List<string>();
+
         for (int i = 0; i < list.Count; i++)
             targetFeatures.Add(list[i][columnList[columnList.Count - 1]].ToString());
 

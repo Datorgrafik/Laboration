@@ -4,11 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Linq;
 
 public class CSVläsare : MonoBehaviour
 {
     
 	public static List<string> columnList;
+    public static List<string> targetFeatures;
 
 
 
@@ -72,7 +74,14 @@ public class CSVläsare : MonoBehaviour
 		else
 			dataClass = new Classification(list);
 
-      return dataClass;
+        targetFeatures = new List<string>();
+        for (int i = 0; i < list.Count; i++)
+            targetFeatures.Add(list[i][columnList[columnList.Count - 1]].ToString());
+
+        // Only keep distinct targetFeatures
+        targetFeatures = targetFeatures.Distinct().ToList();
+
+        return dataClass;
 
 	}
 }

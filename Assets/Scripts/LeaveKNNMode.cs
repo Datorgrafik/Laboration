@@ -25,6 +25,7 @@ public class LeaveKNNMode : MonoBehaviour
 		{
 			ScatterPlotMatrix.KNNMode = false;
 			ScatterPlotMatrix.ThisInstans.PlottData();
+      
 			NewData.interactable = true;
 		}
 		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
@@ -42,8 +43,10 @@ public class LeaveKNNMode : MonoBehaviour
 		{
 			DataPlotter.KNNMode = false;
 			DataPlotter.ThisInstans.PlottData();
+            DataPlotter.ThisInstans.teleportCamera = false;
 			NewData.interactable = true;
 		}
+
 	}
 }
 	

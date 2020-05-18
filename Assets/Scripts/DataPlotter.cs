@@ -45,8 +45,9 @@ public class DataPlotter : MonoBehaviour
 
 	public GameObject PointHolder;
 	public List<string> columnList;
-	public List<string> targetFeatures;
-	public TMP_Text axisValueTextPrefab;
+    public List<string> targetFeatures;
+
+    public TMP_Text axisValueTextPrefab;
 
 	public float xMax;
 	public float yMax;
@@ -58,7 +59,7 @@ public class DataPlotter : MonoBehaviour
 	public static DataPlotter ThisInstans;
 	public static DataClass dataClass;
 	private int selectedIndex = -1;
-	private bool teleportCamera = false;
+	public bool teleportCamera = false;
 	public static bool KNNMode = false;
 	public static bool KNNMove = false;
 	public GameObject KNNWindow;
@@ -92,12 +93,10 @@ public class DataPlotter : MonoBehaviour
 		dataClass = CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
 		ThisInstans = this;
-
-		// Declare list of strings, fill with keys (column names)
-		columnList = new List<string>(pointList[1].Keys);
+        targetFeatures = CSVläsare.targetFeatures;
+        // Declare list of strings, fill with keys (column names)
+        columnList = new List<string>(pointList[1].Keys);
         List<string> features = columnList.GetRange(1, columnList.Count - 2);
-
-		GetDistinctTargetFeatures();
 
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(features);
@@ -124,16 +123,6 @@ public class DataPlotter : MonoBehaviour
 			ChangeDataPoint(K, Weighted);
 			KNNMove = false;
 		}
-	}
-
-	private void GetDistinctTargetFeatures()
-	{
-		// Add targetFeatures to a seperate list
-		for (int i = 0; i < pointList.Count; i++)
-			targetFeatures.Add(pointList[i][columnList[columnList.Count - 1]].ToString());
-
-		// Only keep distinct targetFeatures
-		targetFeatures = targetFeatures.Distinct().ToList();
 	}
 
 	public void PlottData()
@@ -261,6 +250,7 @@ public class DataPlotter : MonoBehaviour
 				TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
 			}
 
+         
 			TargetingScript.selectedTarget = newBall;
 			TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
 			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;

@@ -6,7 +6,7 @@ public abstract class DataClass
 {
     #region Attributes
 
-    public List<Dictionary<string, object>> CSV { get; set; }
+    public List<Dictionary<string, object>> CSV { get; set;}
 
     #endregion
 

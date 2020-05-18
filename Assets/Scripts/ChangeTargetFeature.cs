@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ChangeTargetFeature : MonoBehaviour
@@ -26,7 +27,7 @@ public class ChangeTargetFeature : MonoBehaviour
 			trueOrFalse = true;
 			changeTargetFeaturePanel.SetActive(true);
 			colorOfTargetFeature.GetComponent<Image>().color = TargetingScript.colorOff;
-			changeTargetFeature.AddOptions(DataPlotter.ThisInstans.targetFeatures);
+			changeTargetFeature.AddOptions(CSVläsare.targetFeatures);
 			targetFeatureText.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
 		}
 		else if (TargetingScript.selectedTarget != selTarget)
@@ -41,10 +42,22 @@ public class ChangeTargetFeature : MonoBehaviour
 	{
 		// Ändra targetfeature
 		selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature = DataPlotter.ThisInstans.targetFeatures[changeTargetFeature.GetComponent<Dropdown>().value];
-		// Lägg in den nya feature i pointlist och spara
-		DataPlotter.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
-		DataPlotter.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
-
+        // Lägg in den nya feature i pointlist och spara
+        if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+            ScatterplotDimensions.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][ScatterplotDimensions.ThisInstans.columnList[ScatterplotDimensions.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
+            
+        }
+        else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+        {
+            ScatterPlotMatrix.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][ScatterplotDimensions.ThisInstans.columnList[ScatterplotDimensions.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
+           
+        }
+        else
+        {
+            DataPlotter.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
+            DataPlotter.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
+        }
 		TargetingScript.colorOff = selTarget.GetComponent<Renderer>().material.color;
 		colorOfTargetFeature.GetComponent<Image>().color = selTarget.GetComponent<Renderer>().material.color;
 

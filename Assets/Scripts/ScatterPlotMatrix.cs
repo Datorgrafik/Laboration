@@ -62,6 +62,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 	public static DataClass dataClass;
 	private int selectedIndex = -1;
+    private string selectedRow = "";
+    private string selectedColumn = "";
 	public bool teleportCamera = false;
 	public static bool KNNMode = false;
 	public static bool KNNMove = false;
@@ -127,7 +129,13 @@ public class ScatterPlotMatrix : MonoBehaviour
 	public void PlottData()
 	{
         if (TargetingScript.selectedTarget != null)
+        {
             selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            selectedRow = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
+            selectedColumn = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
+        }
+        Debug.Log(selectedRow);
+        Debug.Log(selectedColumn);
 
         ResetDataPlot();
 		GetDistinctTargetFeatures();
@@ -154,7 +162,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, -0.01f) * plotScale,
 														Quaternion.identity);
 
-						textField.text = feature2Name;
+						textField.text = featureList[columnDropdownList[j].value];
 					}
 					else if(k < j)
 					{
@@ -198,10 +206,11 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Column = feature1Name;
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Row = feature2Name;
+
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature1 = feature1Name;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature2 = feature2Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[columnDropdownList[j].value];
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[columnDropdownList[k].value];
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3Name;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4Name;
 
@@ -223,7 +232,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 								dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
 							}
                             //Reselect target if one was selected before.
-                            if (selectedIndex == i)
+                            if (selectedIndex == i && dataPoint.GetComponent<StoreIndexInDataBall>().Column == selectedColumn && dataPoint.GetComponent<StoreIndexInDataBall>().Row == selectedRow)
                             {
                                 TargetingScript.selectedTarget = dataPoint;
                                 TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;

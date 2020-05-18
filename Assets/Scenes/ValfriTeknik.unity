@@ -4495,6 +4495,7 @@ MonoBehaviour:
   columnList: []
   targetFeatures: []
   Dimensions: 0
+  teleportCamera: 0
   KNNWindow: {fileID: 1310921936}
 --- !u!4 &867012949
 Transform:
@@ -6963,6 +6964,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 5603551209947022986, guid: 6e9bb53e807baec4687e9f812fb879ba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e9bb53e807baec4687e9f812fb879ba, type: 3}

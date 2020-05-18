@@ -468,15 +468,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Set parent
 		saveAndCancelButtons.transform.SetParent(newDataContainer.transform, false);
 		// Add onClick listener to saveButton
-		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(Save);
+		saveAndCancelButtons.transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(SaveButton);
 		// Add onClick listener to cancelButton
-		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(Cancel);
+		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(CancelButton);
 
 		// While newDataPanel shows, newDataButton is none-Interactable
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = false;
 	}
 
-	private void Save()
+	private void SaveButton()
 	{
 		// Create a list to hold new dataValues
 		List<string> newDataInputList = new List<string>();
@@ -493,7 +493,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
 
 		// Run Cancel() to clear and hide the NewData Panel after the values have been stored
-		Cancel();
+		CancelButton();
 		// Add the new data
 		AddDataPoints(newDataInputList, kValue, weighted);
 	}
@@ -541,9 +541,9 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		Dictionary<string, object> KnnPoint = pointList.Last();
 		pointList.Remove(KnnPoint);
 
-		double[] unknown = new double[KnnPoint.Count - 6]; //TODO: "[KnnPoint.Count - 6]" är nog bara ok för dataset >= 4 features.
+		double[] unknown = new double[KnnPoint.Count - 6];
 
-		for (int i = 0; i < KnnPoint.Count - 6; ++i) //TODO: "KnnPoint.Count - 6" är nog bara ok för dataset >= 4 features.
+		for (int i = 0; i < KnnPoint.Count - 6; ++i)
 			unknown[i] = (Convert.ToDouble(KnnPoint[columnList[i + 1]], CultureInfo.InvariantCulture));
 
 		var predict = dataClass.Knn(unknown, k, weightedOrNot);
@@ -555,7 +555,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			Blink(KNN.kPoints);
 	}
 
-	private void Cancel()
+	private void CancelButton()
 	{
 		// Empty the panel when leaving it
 		foreach (Transform child in newDataContainer.transform)
@@ -598,6 +598,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		KNNMove = true;
 
+		// ReRenders the BackgroundGrid and updates the Y-Axis numbers for the new plot
 		DrawBackgroundGrid();
 		ReorderColumns();
 	}

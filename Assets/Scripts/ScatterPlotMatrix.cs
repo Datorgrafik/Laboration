@@ -126,7 +126,10 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 	public void PlottData()
 	{
-		ResetDataPlot();
+        if (TargetingScript.selectedTarget != null)
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+
+        ResetDataPlot();
 		GetDistinctTargetFeatures();
 
 		for (int j = 0; j < 4; j++)
@@ -217,7 +220,16 @@ public class ScatterPlotMatrix : MonoBehaviour
 								dataPoint.GetComponent<Renderer>().material.color = Color.white;
 								dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
 							}
-						}
+                            //Reselect target if one was selected before.
+                            if (selectedIndex == i)
+                            {
+                                TargetingScript.selectedTarget = dataPoint;
+                                TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+                                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+                                TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+                                selectedIndex = -1;
+                            }
+                        }
 					}
 				}
 				catch (Exception) { }
@@ -226,7 +238,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 					if (KNN.kPoints.Count > 0)
 						Blink(KNN.kPoints);
 			}
-		}
+        }
 
 		if (ThisInstans.teleportCamera)
 		{

@@ -7,15 +7,25 @@ public class ColorManager : MonoBehaviour
     // ColorList
     private static readonly Color[] colorList =
     {
+        //Peter River (Blue)
         new Color(52, 152, 219, 1),
+        //Pomegranate (Red)
         new Color(192, 57, 43,1),
+        //Emerald (Green)
         new Color(46, 204, 113,1),
+        //Turquoise
         new Color(26, 188, 156,1),
+        //Amethyst (Purple)
         new Color(155, 89, 182,1),
+        //Wet Asphalt (Gray)
         new Color(52, 73, 94,1),
+        //Sun Flower (Yellow)
         new Color(241, 196, 15,1),
+        //Carrot (Orange)
         new Color(230, 126, 34,1),
+        //Silver
         new Color(189, 195, 199,1),
+        //Concrete (Gray)
         new Color(149, 165, 166,1)
     };
 

@@ -4,25 +4,41 @@ using UnityEngine;
 
 public class ColorManager : MonoBehaviour
 {
+	#region Attributes
+
 	// ColorList
 	private static readonly Color[] colorList =
 	{
-		new Color(52, 152, 219, 1),
-		new Color(192, 57, 43,1),
-		new Color(46, 204, 113,1),
-		new Color(26, 188, 156,1),
-		new Color(155, 89, 182,1),
-		new Color(52, 73, 94,1),
-		new Color(241, 196, 15,1),
-		new Color(230, 126, 34,1),
-		new Color(189, 195, 199,1),
-		new Color(149, 165, 166,1)
+        // Peter River (Blue)
+        new Color(52, 152, 219, 1),
+        // Pomegranate (Red)
+        new Color(192, 57, 43,1),
+        // Emerald (Green)
+        new Color(46, 204, 113,1),
+        // Turquoise
+        new Color(26, 188, 156,1),
+        // Amethyst (Purple)
+        new Color(155, 89, 182,1),
+        // Wet Asphalt (Gray)
+        new Color(52, 73, 94,1),
+        // Sun Flower (Yellow)
+        new Color(241, 196, 15,1),
+        // Carrot (Orange)
+        new Color(230, 126, 34,1),
+        // Silver
+        new Color(189, 195, 199,1),
+        // Concrete (Gray)
+        new Color(149, 165, 166,1)
 	};
+
+	#endregion
+
+	#region Methods
 
 	public static void ChangeColor(GameObject dataPoint, int targetFeatureIndex)
 	{
-		dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[targetFeatureIndex].r / 255, 
-																		colorList[targetFeatureIndex].g / 255, 
+		dataPoint.GetComponent<Renderer>().material.color = new Color(colorList[targetFeatureIndex].r / 255,
+																		colorList[targetFeatureIndex].g / 255,
 																		colorList[targetFeatureIndex].b / 255, 1.0f);
 	}
 
@@ -42,4 +58,6 @@ public class ColorManager : MonoBehaviour
 			ball.GetComponent<Blink>().enabled = true;
 		}
 	}
+
+	#endregion
 }

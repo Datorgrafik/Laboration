@@ -143,21 +143,16 @@ public class EditPosition : MonoBehaviour
             inputÅ.text = string.Empty;
         }
 
+        KNN.KNNMove = true;
+
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-        {
-            ScatterPlotMatrix.KNNMove = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
-        }
+
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-        {
-            ScatterplotDimensions.KNNMove = true;
             ScatterplotDimensions.ThisInstans.PlottData();
-        }
+
         else
-        {
-            DataPlotter.KNNMove = true;
             DataPlotter.ThisInstans.PlottData();
-        }
     }
 
     private void Denormalize()

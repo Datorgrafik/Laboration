@@ -92,8 +92,8 @@ public class MoveDataBalls : MonoBehaviour
 
 			ParallelCoordinatePlotter.ThisInstans.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
 
-			if (ParallelCoordinatePlotter.KNNMode)
-				ParallelCoordinatePlotter.KNNMove = true;
+			if (KNN.KNNMode)
+				KNN.KNNMove = true;
 
 			ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
 			ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
@@ -122,24 +122,17 @@ public class MoveDataBalls : MonoBehaviour
 				DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
 			}
 
+			if (KNN.KNNMode)
+				KNN.KNNMove = true;
+
 			if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-			{
-                if(ScatterplotDimensions.KNNMode)
-					ScatterplotDimensions.KNNMove = true;
 				ScatterplotDimensions.ThisInstans.PlottData();
-			}
+
 			else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-			{
-                if(ScatterPlotMatrix.KNNMode)
-					ScatterPlotMatrix.KNNMove = true;
 				ScatterPlotMatrix.ThisInstans.PlottData();
-			}
+
 			else
-			{
-                if(DataPlotter.KNNMode)
-					DataPlotter.KNNMove = true;
 				DataPlotter.ThisInstans.PlottData();
-			}
 		}
 	}
 

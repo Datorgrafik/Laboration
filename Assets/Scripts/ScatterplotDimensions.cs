@@ -33,10 +33,8 @@ public class ScatterplotDimensions : MonoBehaviour
 	public static ScatterplotDimensions ThisInstans;
 	public static DataClass dataClass;
 	private int selectedIndex = -1;
-	private bool teleportCamera = false;
+	public bool teleportCamera = false;
 	public GameObject KNNWindow;
-	public static  bool KNNMode;
-	public static bool KNNMove;
 	public static string K;
 	public static bool Weighted;
 
@@ -217,7 +215,7 @@ public class ScatterplotDimensions : MonoBehaviour
 		pointList.Add(newDataPoint);
 
 		ThisInstans.teleportCamera = true;
-		KNNMode = true;
+		KNN.KNNMode = true;
 		ThisInstans.PlottData();
 		Blink(KNN.kPoints);
 		ThisInstans.KNNWindow.SetActive(true);

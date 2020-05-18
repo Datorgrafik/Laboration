@@ -7,26 +7,23 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class KNN
+public static class KNN
 {
     #region Attributes
 
     public static List<string> attributes;
     public static List<int> kPoints;
-    public int kValue;
-    public bool trueOrFalse;
+    public static int kValue;
+    public static bool trueOrFalse;
+
+    public static bool KNNMode = false;
+    public static bool KNNMove = false;
 
     #endregion
 
     #region Methods
 
-    public KNN(double[] unknown, string k, bool weightedOrNot)
-    {
-        kValue = Convert.ToInt32(k);
-        trueOrFalse = weightedOrNot;
-    }
-
-    public object ClassifyReg(double[] unknown, List<Dictionary<string, object>> trainData)
+    public static object ClassifyReg(double[] unknown, List<Dictionary<string, object>> trainData)
     {
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
 
@@ -36,14 +33,14 @@ public class KNN
             return VoteReg(info, trainData);
     }
 
-    public object ClassifyClass(double[] unknown, List<Dictionary<string, object>> trainData)
+    public static object ClassifyClass(double[] unknown, List<Dictionary<string, object>> trainData)
     {
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
 
         return Vote(info, trainData);
     }
 
-    public IndexAndDistance[] SortedDistanceArray(double[] unknown, List<Dictionary<string, object>> trainData)
+    public static IndexAndDistance[] SortedDistanceArray(double[] unknown, List<Dictionary<string, object>> trainData)
     {
         attributes = new List<string>(trainData[0].Keys);
 
@@ -64,7 +61,7 @@ public class KNN
         return info;
     }
 
-    public object Vote(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
+    public static object Vote(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
     {
         kPoints = new List<int>();
         Dictionary<string, double> votes = new Dictionary<string, double>(); // One cell per class
@@ -101,7 +98,7 @@ public class KNN
         return Maxvotes;
     }
 
-    public object VoteReg(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
+    public static object VoteReg(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
     {
         kPoints = new List<int>();
         double sum = 0.0;
@@ -117,7 +114,7 @@ public class KNN
         return sum / kValue;
     }
 
-    public double Distance(double[] unknown, Dictionary<string, object> data)
+    public static double Distance(double[] unknown, Dictionary<string, object> data)
     {
         double sum = 0.0;
 
@@ -127,7 +124,7 @@ public class KNN
         return Math.Sqrt(sum);
     }
 
-    public object WeightReg(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
+    public static object WeightReg(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
     {
         double sumWeight = 0.0;
         double sumWeightXReg = 0.0;

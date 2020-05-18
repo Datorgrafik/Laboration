@@ -65,8 +65,6 @@ public class ScatterPlotMatrix : MonoBehaviour
     private string selectedRow = "";
     private string selectedColumn = "";
 	public bool teleportCamera = false;
-	public static bool KNNMode = false;
-	public static bool KNNMove = false;
 	public GameObject KNNWindow;
 	public Color colorOff;
 
@@ -105,10 +103,10 @@ public class ScatterPlotMatrix : MonoBehaviour
 	}
 	private void Update()
 	{
-		if (KNNMode && KNNMove)
+		if (KNN.KNNMode && KNN.KNNMove)
 		{
 			ChangeDataPoint(K, Weighted);
-			KNNMove = false;
+			KNN.KNNMove = false;
 		}
 	}
 
@@ -223,7 +221,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 							else
 								dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
 
-							if (KNNMode && i == pointList.Count() - 1)
+							if (KNN.KNNMode && i == pointList.Count() - 1)
 							{
 								dataPoint.GetComponent<Renderer>().material.color = Color.white;
 								dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
@@ -319,7 +317,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 		pointList.Add(newDataPoint);
 
 		ThisInstans.teleportCamera = true;
-		KNNMode = true;
+		KNN.KNNMode = true;
 		ThisInstans.PlottData();
 		Blink(KNN.kPoints);
 		ThisInstans.KNNWindow.SetActive(true);

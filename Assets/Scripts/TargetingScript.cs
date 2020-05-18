@@ -20,7 +20,7 @@ public class TargetingScript : MonoBehaviour
 	void Update()
 	{
 		//Left mouse click. If object is clicked, target it.
-		if (Input.GetMouseButtonDown(0) && !DataPlotter.KNNMode && !ScatterPlotMatrix.KNNMode && !ScatterplotDimensions.KNNMode && !ParallelCoordinatePlotter.KNNMode)
+		if (Input.GetMouseButtonDown(0) && !KNN.KNNMode)
 		{
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -47,7 +47,7 @@ public class TargetingScript : MonoBehaviour
 
 		#region Temporary Fix for PCP
 		// Temporary try to fix for PCP (will not look like this forever)
-		if (ParallelCoordinatePlotter.KNNMode && Input.GetMouseButtonDown(0))
+		if (KNN.KNNMode && Input.GetMouseButtonDown(0) && SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -57,8 +57,6 @@ public class TargetingScript : MonoBehaviour
 			{
 				if (hit.collider.CompareTag("DataBall"))
 				{
-					if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-					{
 						// The latest added datapoint should always be the last one in the list, so this should work
 						if (hit.collider.gameObject.GetComponent<StoreIndexInDataBall>().Index.ToString()
 							.Equals((ParallelCoordinatePlotter.ThisInstans.pointList.Count - 1).ToString()))
@@ -67,7 +65,6 @@ public class TargetingScript : MonoBehaviour
 							SelectDataBall(hit);
 							break;
 						}
-					}
 				}
 			}
 			// Deselect target 

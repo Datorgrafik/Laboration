@@ -20,29 +20,30 @@ public class LeaveKNNMode : MonoBehaviour
 	{
 		KNNWindow.SetActive(false);
 		KNN.kPoints.Clear();
+		KNN.KNNMode = false;
 
 		if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
 		{
-			ScatterPlotMatrix.KNNMode = false;
 			ScatterPlotMatrix.ThisInstans.PlottData();
 			NewData.interactable = true;
+			ScatterPlotMatrix.ThisInstans.teleportCamera = false;
 		}
+	
 		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
 		{
-			ScatterplotDimensions.KNNMode = false;
 			ScatterplotDimensions.ThisInstans.PlottData();
 			NewData.interactable = true;
+			ScatterplotDimensions.ThisInstans.teleportCamera = false;
 		}
+
 		else if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-		{
-			ParallelCoordinatePlotter.KNNMode = false;
 			ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
-		}
+
 		else
 		{
-			DataPlotter.KNNMode = false;
 			DataPlotter.ThisInstans.PlottData();
 			NewData.interactable = true;
+			DataPlotter.ThisInstans.teleportCamera = false;
 		}
 	}
 }

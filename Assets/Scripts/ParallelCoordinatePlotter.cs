@@ -128,7 +128,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		GetDistinctTargetFeatures();
 
-		InstantiateTargetFeatureList();
+		if (targetFeatures.Count() <= 10)
+			InstantiateTargetFeatureList();
 
 		DrawBackgroundGrid();
 
@@ -278,7 +279,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 			int index = targetFeatures.IndexOf(targetFeature.ToString());
 			// Set correct color
-			targetColor = SetColors(targetFeatures, index);
+			targetColor = ColorManager.ChangeColor(index);
 
 			// Set color and text
 			targetFeaturePoint.GetComponentInChildren<Renderer>().material.color = targetColor;
@@ -302,14 +303,17 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		for (var i = 0; i < pointList.Count; i++)
 		{
 			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
-			
-			// Set correct color
-			targetColor = SetColors(targetFeatures, index);
 
 			// Get original value
 			string valueString = pointList[i][columnName].ToString();
 			// Set normalized Y-value
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
+
+			// Set correct color
+			if (targetFeatures.Count() <= 10)
+				targetColor = ColorManager.ChangeColor(index);
+			else
+				targetColor = new Color(xPos, y, 0, 1.0f);
 
 			InstantiateAndRenderDatapoints(xPos, i, y, columnPos);
 
@@ -386,32 +390,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			xPos = 1.4f;
 
 		return xPos;
-	}
-
-	private Color SetColors(List<string> targetFeatures, int index)
-	{
-		Color targetColor;
-		float colorValue = 1 / (index + 1);
-
-		if (targetFeatures.Count() <= 10)
-		{
-			return new Color(colorList[index].r / 255,
-							colorList[index].g / 255,
-							colorList[index].b / 255, 1.0f);
-		}
-		else
-		{
-			if (index % 3 == 0)
-				targetColor = new Color(0, colorValue, 0);
-			else if (index % 3 == 1)
-				targetColor = new Color(0, 0, colorValue);
-			else if (index % 3 == 2)
-				targetColor = new Color(colorValue, 0, 0);
-			else
-				targetColor = Color.black;
-
-			return targetColor;
-		}
 	}
 
 	public void ReorderColumns()

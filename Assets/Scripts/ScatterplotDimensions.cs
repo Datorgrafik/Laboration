@@ -52,11 +52,7 @@ public class ScatterplotDimensions : MonoBehaviour
 		columnListDropDown.RemoveAt(columnList.Count() - 1);
 		columnListDropDown.RemoveAt(0);
 
-		Dimensions = columnList.Count - 2;
-		if (Dimensions > 5)
-			Dimensions = 5;
-
-		for (int i = 0; i < Dimensions; i++)
+		for (int i = 0; i < dropDownList.Length - 1; i++)
 		{
 			dropDownList[i].AddOptions(columnListDropDown);
 			dropDownList[i].value = i;
@@ -68,9 +64,9 @@ public class ScatterplotDimensions : MonoBehaviour
 
 	public void PlottData()
 	{
-		float[] Max = new float[Dimensions];
-		float[] Min = new float[Dimensions];
-		string[] nameList = new string[Dimensions];
+		float[] Max = new float[dropDownList.Length - 1];
+		float[] Min = new float[dropDownList.Length - 1];
+		string[] nameList = new string[dropDownList.Length - 1];
 
 		if (TargetingScript.selectedTarget != null)
 			selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
@@ -81,7 +77,7 @@ public class ScatterplotDimensions : MonoBehaviour
 		foreach (var axisValue in GameObject.FindGameObjectsWithTag("3D_Axis_ValueText"))
 			Destroy(axisValue);
 
-		for (int i = 0; i < Dimensions; i++)
+		for (int i = 0; i < dropDownList.Length - 1; i++)
 		{
 			nameList[i] = columnList[dropDownList[i].value + 1];
 			textList[i].text = nameList[i];
@@ -143,10 +139,10 @@ public class ScatterplotDimensions : MonoBehaviour
 		for (var i = 0; i < pointList.Count; i++)
 		{
 			GameObject dataPoint;
-			float[] floatList = new float[Dimensions];
+			float[] floatList = new float[dropDownList.Length - 1];
 
 			//Normalisering
-			for (int j = 0; j < Dimensions; j++)
+			for (int j = 0; j < dropDownList.Length - 1; j++)
 				floatList[j] = (float.Parse(pointList[i][nameList[j]].ToString(), CultureInfo.InvariantCulture) - Min[j]) / (Max[j] - Min[j]);
 
 			if (targetFeatures.Count == 0 || !targetFeatures.Contains(pointList[i][columnList[columnList.Count - 1]].ToString()))
@@ -162,12 +158,8 @@ public class ScatterplotDimensions : MonoBehaviour
 	private GameObject AssignDataBallAttributes_Instantiate(int i, float[] floatList)
 	{
 		GameObject dataPoint = Instantiate(PointPrefab, new Vector3(floatList[0], floatList[1], floatList[2]) * plotScale, Quaternion.identity);
-
-		if (Dimensions > 3)
-			dataPoint.GetComponent<Renderer>().material.color = new Color(1, floatList[3], 0, 1.0f);
-
-		if (Dimensions > 4)
-			dataPoint.transform.localScale += new Vector3(floatList[4] / 2, floatList[4] / 2, floatList[4] / 2);
+		dataPoint.GetComponent<Renderer>().material.color = new Color(1, floatList[3], 0, 1.0f);
+		dataPoint.transform.localScale += new Vector3(floatList[4] / 2, floatList[4] / 2, floatList[4] / 2);
 
 		dataPoint.transform.name = pointList[i][columnList[0]] + " " + pointList[i][columnList[columnList.Count() - 1]];
 		dataPoint.transform.parent = PointHolder.transform;

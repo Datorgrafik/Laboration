@@ -8,6 +8,8 @@ public class StoreIndexInDataBall : MonoBehaviour
 	public string TargetFeature { get; set; }
     public string Column { get; set; }
     public string Row { get; set; }
+    public string Feature3 { get; set; }
+    public string Feature4 { get; set; }
 
     #endregion
 }

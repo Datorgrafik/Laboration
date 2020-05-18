@@ -25,8 +25,10 @@ public class ScatterPlotMatrix : MonoBehaviour
 	// Full column names
 	public static string feature1Name;
 	public static string feature2Name;
+    public static string feature3Name;
+    public static string feature4Name;
 
-	public float plotScale = 10;
+    public float plotScale = 10;
 	public GameObject PointPrefab;
 	public GameObject LineSeparatorPrefab;
 
@@ -133,10 +135,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 			{
 				try
 				{
-					feature1Name = featureList[columnDropdownList[j].value];
-					feature2Name = featureList[columnDropdownList[k].value];
+					feature1Name = featureList[columnDropdownList[0].value];
+					feature2Name = featureList[columnDropdownList[1].value];
+                    feature3Name = featureList[columnDropdownList[2].value];
+                    feature4Name = featureList[columnDropdownList[3].value];
 
-					if (j == k)
+                    if (j == k)
 					{
 						GameObject summonPlane = Instantiate(planePointBackground,
 									new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
@@ -191,10 +195,13 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
-							dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[j];
-							dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[k];
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Column = feature1Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Row = feature2Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4Name;
 
-							if (!pointList[i].ContainsKey("DataBall"))
+
+                            if (!pointList[i].ContainsKey("DataBall"))
 								pointList[i].Add("DataBall", dataPoint);
 							else
 								pointList[i]["DataBall"] = dataPoint;

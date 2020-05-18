@@ -60,8 +60,6 @@ public class DataPlotter : MonoBehaviour
 	public static DataClass dataClass;
 	private int selectedIndex = -1;
 	public bool teleportCamera = false;
-	public static bool KNNMode = false;
-	public static bool KNNMove = false;
 	public GameObject KNNWindow;
 
 	public static string K;
@@ -118,10 +116,10 @@ public class DataPlotter : MonoBehaviour
 	}
 	private void Update()
 	{
-		if (KNNMode && KNNMove)
+		if (KNN.KNNMode && KNN.KNNMove)
 		{
 			ChangeDataPoint(K, Weighted);
-			KNNMove = false;
+			KNN.KNNMove = false;
 		}
 	}
 
@@ -359,7 +357,7 @@ public class DataPlotter : MonoBehaviour
 		PlottData();
 	}
 
-	static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
+	public static void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
 	{
 		K = k;
 		Weighted = weightedOrNot;
@@ -387,11 +385,11 @@ public class DataPlotter : MonoBehaviour
 
 		ThisInstans.PlottData();
 		Blink(KNN.kPoints);
-		KNNMode = true;
+		KNN.KNNMode = true;
 		ThisInstans.KNNWindow.SetActive(true);
 	}
 
-	static public void ChangeDataPoint(string k, bool weightedOrNot)
+	public static void ChangeDataPoint(string k, bool weightedOrNot)
 	{
 		Dictionary<string, object> KnnPoint = pointList.Last();
 		pointList.Remove(KnnPoint);

@@ -25,8 +25,10 @@ public class ScatterPlotMatrix : MonoBehaviour
 	// Full column names
 	public static string feature1Name;
 	public static string feature2Name;
-    public static string feature3Name;
-    public static string feature4Name;
+    public static string feature1;
+    public static string feature2;
+    public static string feature3;
+    public static string feature4;
 
     public float plotScale = 10;
 	public GameObject PointPrefab;
@@ -144,10 +146,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 			{
 				try
 				{
-					feature1Name = featureList[columnDropdownList[0].value];
-					feature2Name = featureList[columnDropdownList[1].value];
-                    feature3Name = featureList[columnDropdownList[2].value];
-                    feature4Name = featureList[columnDropdownList[3].value];
+                    feature1Name = featureList[columnDropdownList[j].value];
+                    feature2Name = featureList[columnDropdownList[k].value];
+                    feature1 = featureList[columnDropdownList[0].value];
+					feature2 = featureList[columnDropdownList[1].value];
+                    feature3 = featureList[columnDropdownList[2].value];
+                    feature4 = featureList[columnDropdownList[3].value];
 
                     if (j == k)
 					{
@@ -205,12 +209,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
 
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature1 = feature1Name;
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature2 = feature2Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature1 = feature1;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature2 = feature2;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[columnDropdownList[j].value];
                             dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[columnDropdownList[k].value];
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3Name;
-                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4;
 
 
                             if (!pointList[i].ContainsKey("DataBall"))

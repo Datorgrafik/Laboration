@@ -41,7 +41,7 @@ public class ChangeTargetFeature : MonoBehaviour
 	public void OnClick()
 	{
 		// Ändra targetfeature
-		selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature = DataPlotter.ThisInstans.targetFeatures[changeTargetFeature.GetComponent<Dropdown>().value];
+		selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature = CSVläsare.targetFeatures[changeTargetFeature.GetComponent<Dropdown>().value];
         // Lägg in den nya feature i pointlist och spara
         if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
@@ -56,7 +56,7 @@ public class ChangeTargetFeature : MonoBehaviour
         else
         {
             DataPlotter.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
-            DataPlotter.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
+            ColorManager.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
         }
 		TargetingScript.colorOff = selTarget.GetComponent<Renderer>().material.color;
 		colorOfTargetFeature.GetComponent<Image>().color = selTarget.GetComponent<Renderer>().material.color;

@@ -5143,15 +5143,18 @@ MonoBehaviour:
   inputX: {fileID: 1471375931}
   inputY: {fileID: 1471375930}
   inputZ: {fileID: 2119956934}
-  "input\xC5": {fileID: 1067226789}
+  inputA: {fileID: 1067226789}
+  inputB: {fileID: 0}
   Xvalue: {fileID: 1471375929}
   Yvalue: {fileID: 1471375928}
   Zvalue: {fileID: 1866927738}
-  "\xC5value": {fileID: 380584841}
+  Avalue: {fileID: 380584841}
+  Bvalue: {fileID: 0}
   Xname: {fileID: 1471375927}
   Yname: {fileID: 1471375926}
   Zname: {fileID: 242106199}
-  "\xC5name": {fileID: 1339535152}
+  Aname: {fileID: 1339535152}
+  Bname: {fileID: 0}
   ChangeX: {fileID: 1471375925}
 --- !u!114 &1139572242
 MonoBehaviour:

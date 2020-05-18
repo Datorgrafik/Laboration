@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,8 +12,9 @@ public class Regression : DataClass
 
 	public override object Knn(double[] unknown, string k, bool weightedOrNot)
 	{
-		KNN knn = new KNN(unknown, k, weightedOrNot);
-		return knn.ClassifyReg(unknown, CSV);
+		KNN.kValue = Convert.ToInt32(k);
+		KNN.trueOrFalse = weightedOrNot;
+		return KNN.ClassifyReg(unknown, CSV);
 	}
 
 	#endregion

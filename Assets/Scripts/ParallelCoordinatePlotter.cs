@@ -81,8 +81,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	bool weighted;
 
 	// KNN Attributes
-	public static bool KNNMode = false;
-	public static bool KNNMove = false;
 	public GameObject KNNWindow;
 
 	public static ParallelCoordinatePlotter ThisInstans;
@@ -158,10 +156,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			EditPanel.SetActive(false);
 
 		// Codeblock for KNN
-		if (KNNMode && KNNMove)
+		if (KNN.KNNMode && KNN.KNNMove)
 		{
 			ChangeDataPoint(kValue, weighted);
-			KNNMove = false;
+			KNN.KNNMove = false;
 		}
 	}
 
@@ -472,7 +470,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Add onClick listener to cancelButton
 		saveAndCancelButtons.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(CancelButton);
 
-		// While newDataPanel shows, newDataButton is none-Interactable
+		// When newDataPanel shows, newDataButton is none-Interactable
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = false;
 	}
 
@@ -525,7 +523,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		ReorderColumns();
 
 		Blink(KNN.kPoints);
-		KNNMode = true;
+		KNN.KNNMode = true;
 		KNNWindow.SetActive(true);
 
 		// Target the last DataBall (column4) within the newly added instance
@@ -596,7 +594,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			ChangePanelColumnInputfield.text = string.Empty;
 		}
 
-		KNNMove = true;
+		KNN.KNNMove = true;
 
 		// ReRenders the BackgroundGrid and updates the Y-Axis numbers for the new plot
 		DrawBackgroundGrid();

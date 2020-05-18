@@ -46,7 +46,12 @@ public class PauseMenu : MonoBehaviour
 	public void LoadMenu()
 	{
 		SceneManager.LoadScene("MainMenu");
-        Resume();
+
+		// Reset KNN-Mode to false when leaving to MainMenu
+		KNN.KNNMode = false;
+
+		// Resume the pause that was activated in previous scene
+		Resume();
 	}
 
 	public void QuitApplication()

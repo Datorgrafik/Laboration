@@ -25,8 +25,10 @@ public class ScatterPlotMatrix : MonoBehaviour
 	// Full column names
 	public static string feature1Name;
 	public static string feature2Name;
+    public static string feature3Name;
+    public static string feature4Name;
 
-	public float plotScale = 10;
+    public float plotScale = 10;
 	public GameObject PointPrefab;
 	public GameObject LineSeparatorPrefab;
 
@@ -60,6 +62,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 	public static DataClass dataClass;
 	private int selectedIndex = -1;
+    private string selectedRow = "";
+    private string selectedColumn = "";
 	public bool teleportCamera = false;
 	public static bool KNNMode = false;
 	public static bool KNNMove = false;
@@ -124,7 +128,16 @@ public class ScatterPlotMatrix : MonoBehaviour
 
 	public void PlottData()
 	{
-		ResetDataPlot();
+        if (TargetingScript.selectedTarget != null)
+        {
+            selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            selectedRow = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
+            selectedColumn = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
+        }
+        Debug.Log(selectedRow);
+        Debug.Log(selectedColumn);
+
+        ResetDataPlot();
 		GetDistinctTargetFeatures();
 
 		for (int j = 0; j < 4; j++)
@@ -133,10 +146,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 			{
 				try
 				{
-					feature1Name = featureList[columnDropdownList[j].value];
-					feature2Name = featureList[columnDropdownList[k].value];
+					feature1Name = featureList[columnDropdownList[0].value];
+					feature2Name = featureList[columnDropdownList[1].value];
+                    feature3Name = featureList[columnDropdownList[2].value];
+                    feature4Name = featureList[columnDropdownList[3].value];
 
-					if (j == k)
+                    if (j == k)
 					{
 						GameObject summonPlane = Instantiate(planePointBackground,
 									new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale,
@@ -147,7 +162,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 														new Vector3(k * 1.2F + 1, j * 1.2F + 0.3F, -0.01f) * plotScale,
 														Quaternion.identity);
 
-						textField.text = feature2Name;
+						textField.text = featureList[columnDropdownList[j].value];
 					}
 					else if(k < j)
 					{
@@ -191,10 +206,13 @@ public class ScatterPlotMatrix : MonoBehaviour
 							dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 							dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature =
 								pointList[i][columnList[columnList.Count - 1]].ToString();
-							dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[j];
-							dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[k];
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Column = featureList[columnDropdownList[j].value];
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[columnDropdownList[k].value];
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3Name;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4Name;
 
-							if (!pointList[i].ContainsKey("DataBall"))
+
+                            if (!pointList[i].ContainsKey("DataBall"))
 								pointList[i].Add("DataBall", dataPoint);
 							else
 								pointList[i]["DataBall"] = dataPoint;
@@ -210,7 +228,16 @@ public class ScatterPlotMatrix : MonoBehaviour
 								dataPoint.GetComponent<Renderer>().material.color = Color.white;
 								dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
 							}
-						}
+                            //Reselect target if one was selected before.
+                            if (selectedIndex == i && dataPoint.GetComponent<StoreIndexInDataBall>().Column == selectedColumn && dataPoint.GetComponent<StoreIndexInDataBall>().Row == selectedRow)
+                            {
+                                TargetingScript.selectedTarget = dataPoint;
+                                TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+                                TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+                                TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
+                                selectedIndex = -1;
+                            }
+                        }
 					}
 				}
 				catch (Exception) { }
@@ -219,7 +246,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 					if (KNN.kPoints.Count > 0)
 						Blink(KNN.kPoints);
 			}
-		}
+        }
 
 		if (ThisInstans.teleportCamera)
 		{

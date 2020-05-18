@@ -26,16 +26,11 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject PointHolder;
 
 	// AddNewData Attributes
-	[SerializeField]
-	private GameObject newDataPanel;
-	[SerializeField]
-	private GameObject newDataContainer;
-	[SerializeField]
-	private GameObject kAndWeightedPrefab;
-	[SerializeField]
-	private GameObject newDataInputFieldPrefab;
-	[SerializeField]
-	private GameObject saveAndCancelButtonsPrefab;
+	public GameObject newDataPanel;
+	public GameObject newDataContainer;
+	public GameObject kAndWeightedPrefab;
+	public GameObject newDataInputFieldPrefab;
+	public GameObject saveAndCancelButtonsPrefab;
 
 	public static DataClass dataClass;
 

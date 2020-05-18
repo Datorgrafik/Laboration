@@ -11,7 +11,8 @@ public class CSVläsare : MonoBehaviour
     
 	public static List<string> columnList;
     public static List<string> targetFeatures;
-
+    public static DataClass dataClass;
+    public static List<Dictionary<string, object>> pointList;
 
 
     // Define delimiters, regular expression craziness
@@ -20,7 +21,7 @@ public class CSVläsare : MonoBehaviour
 	static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 	static char[] TRIM_CHARS = { '\"' };
 
-	public static DataClass Read(string file)
+	public static void Read(string file)
 	{
 		//Declare dictionary list
 		var list = new List<Dictionary<string, object>>();
@@ -65,24 +66,24 @@ public class CSVläsare : MonoBehaviour
 			list.Add(entry);
 		}
 
-		float r;
-		DataClass dataClass;
+        pointList = list;
+
+        float r;
 		columnList = new List<string>(list[0].Keys);
 
 		if (float.TryParse(list[list.Count - 1][columnList[columnList.Count - 1]].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out r))
-			dataClass = new Regression(list);
+			dataClass = new Regression(pointList);
 		else
-			dataClass = new Classification(list);
+			dataClass = new Classification(pointList);
 
         targetFeatures = new List<string>();
+      
 
         for (int i = 0; i < list.Count; i++)
             targetFeatures.Add(list[i][columnList[columnList.Count - 1]].ToString());
 
         // Only keep distinct targetFeatures
         targetFeatures = targetFeatures.Distinct().ToList();
-
-        return dataClass;
 
 	}
 }

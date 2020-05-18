@@ -10,12 +10,12 @@ using UnityEngine.Animations;
 
 public class DataPlotter : MonoBehaviour
 {
-	#region Attributes
+    #region Attributes
 
-	public static List<Dictionary<string, object>> pointList;
+    public static List<Dictionary<string, object>> pointList;
 
-	// Indices for columns to be assigned
-	public int columnX = 1;
+    // Indices for columns to be assigned
+    public int columnX = 1;
 	public int columnY = 2;
 	public int columnZ = 3;
 
@@ -62,9 +62,6 @@ public class DataPlotter : MonoBehaviour
 	public bool teleportCamera = false;
 	public GameObject KNNWindow;
 
-	public static string K;
-	public static bool Weighted;
-
 	#endregion
 
 	#region Methods
@@ -72,13 +69,14 @@ public class DataPlotter : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		// Set pointlist to results of function Reader with argument inputfile
-		dataClass = CSVläsare.Read(MainMenu.fileData);
-		pointList = dataClass.CSV;
+        // Set pointlist to results of function Reader with argument inputfile
+        CSVläsare.Read(MainMenu.fileData);
 		ThisInstans = this;
         targetFeatures = CSVläsare.targetFeatures;
+        pointList = CSVläsare.pointList;
+
         // Declare list of strings, fill with keys (column names)
-        columnList = new List<string>(pointList[1].Keys);
+        columnList = CSVläsare.columnList;
         List<string> features = columnList.GetRange(1, columnList.Count - 2);
 
 		// Assign column name from columnList to Name variables
@@ -103,7 +101,7 @@ public class DataPlotter : MonoBehaviour
 	{
 		if (KNN.KNNMode && KNN.KNNMove)
 		{
-			ChangeDataPoint(K, Weighted);
+			NewDataPoint.ChangeDataPoint();
 			KNN.KNNMove = false;
 		}
 	}
@@ -188,9 +186,9 @@ public class DataPlotter : MonoBehaviour
 			}
 
 			if (!pointList[i].ContainsKey("DataBall"))
-				pointList[i].Add("DataBall", dataPoint);
+                pointList[i].Add("DataBall", dataPoint);
 			else
-				pointList[i]["DataBall"] = dataPoint;
+                pointList[i]["DataBall"] = dataPoint;
 
 			//Store values in dataPoint
 			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
@@ -335,54 +333,6 @@ public class DataPlotter : MonoBehaviour
 	public void DropdownValueChanged()
 	{
 		PlottData();
-	}
-
-	public static void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
-	{
-		K = k;
-		Weighted = weightedOrNot;
-
-		Dictionary<string, object> last = pointList.Last();
-
-		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
-		{
-			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
-		};
-
-		for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
-			newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
-
-		double[] unknown = new double[newPoint.Count];
-
-		for (int i = 0; i < newPoint.Count; ++i)
-			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
-
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
-		pointList.Add(newDataPoint);
-
-		ThisInstans.teleportCamera = true;
-
-		ThisInstans.PlottData();
-		ColorManager.Blink(KNN.kPoints, pointList);
-		KNN.KNNMode = true;
-		ThisInstans.KNNWindow.SetActive(true);
-	}
-
-	public static void ChangeDataPoint(string k, bool weightedOrNot)
-	{
-		Dictionary<string, object> KnnPoint = pointList.Last();
-		pointList.Remove(KnnPoint);
-
-		double[] unknown = new double[KnnPoint.Count - 3];
-
-		for (int i = 0; i < KnnPoint.Count - 3; ++i)
-			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
-
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		KnnPoint[ThisInstans.columnList.Last()] = predict;
-		pointList.Add(KnnPoint);
-		ThisInstans.PlottData();
 	}
 
 	#endregion

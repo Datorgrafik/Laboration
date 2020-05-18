@@ -105,7 +105,7 @@ public class EditPosition : MonoBehaviour
                 ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1] = newValue;
 
             else
-                DataPlotter.pointList[index][DataPlotter.xName] = newValue;
+                CSVläsare.pointList[index][DataPlotter.xName] = newValue;
 
 			inputX.text = string.Empty;
         }
@@ -123,7 +123,7 @@ public class EditPosition : MonoBehaviour
                 ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2] = newValue;
 
             else
-                DataPlotter.pointList[index][DataPlotter.yName] = newValue;
+                CSVläsare.pointList[index][DataPlotter.yName] = newValue;
 
 			inputY.text = string.Empty;
         }
@@ -143,7 +143,7 @@ public class EditPosition : MonoBehaviour
                     ScatterplotDimensions.pointList[index][ScatterplotDimensions.feature3Name] = newValue;
 
                 else
-                    DataPlotter.pointList[index][DataPlotter.zName] = newValue;
+                    CSVläsare.pointList[index][DataPlotter.zName] = newValue;
 
 				inputZ.text = string.Empty;
 			}

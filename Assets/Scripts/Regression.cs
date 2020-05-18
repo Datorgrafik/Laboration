@@ -10,11 +10,9 @@ public class Regression : DataClass
 	public Regression(List<Dictionary<string, object>> data)
 	: base(data) { }
 
-	public override object Knn(double[] unknown, string k, bool weightedOrNot)
+	public override object Knn(double[] unknown)
 	{
-		KNN.kValue = Convert.ToInt32(k);
-		KNN.trueOrFalse = weightedOrNot;
-		return KNN.ClassifyReg(unknown, CSV);
+		return KNN.ClassifyReg(unknown, CSVläsare.pointList);
 	}
 
 	#endregion

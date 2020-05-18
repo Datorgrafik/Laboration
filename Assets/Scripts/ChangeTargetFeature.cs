@@ -52,7 +52,7 @@ public class ChangeTargetFeature : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
                 ScatterPlotMatrix.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][ScatterPlotMatrix.ThisInstans.columnList[ScatterPlotMatrix.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
             else
-                DataPlotter.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
+                CSVläsare.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][DataPlotter.ThisInstans.columnList[DataPlotter.ThisInstans.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
 
             ColorManager.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
             TargetingScript.colorOff = selTarget.GetComponent<Renderer>().material.color;

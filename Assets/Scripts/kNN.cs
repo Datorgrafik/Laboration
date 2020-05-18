@@ -12,10 +12,17 @@ public static class KNN
     #region Attributes
 
     public static List<string> attributes;
+
+    // k datapoints index the Knn uses for pred
     public static List<int> kPoints;
+
+    // the k value that the KNN uses
     public static int kValue;
+
+    // if the KNN uses weights or not 
     public static bool trueOrFalse;
 
+    // flags to determine when to enter/leave KNNmode and when the new datapoint is moved to be predicted again
     public static bool KNNMode = false;
     public static bool KNNMove = false;
 
@@ -23,23 +30,30 @@ public static class KNN
 
     #region Methods
 
+    // KNN for regression problems
     public static object ClassifyReg(double[] unknown, List<Dictionary<string, object>> trainData)
     {
+        // list of datapoints index  and distance to new datapoint
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
 
         if (trueOrFalse)
+            // weighted KNN
             return WeightReg(info, trainData);
         else
+            // Not weighted KNN
             return VoteReg(info, trainData);
     }
 
+    // KNN for classificatin problems
     public static object ClassifyClass(double[] unknown, List<Dictionary<string, object>> trainData)
     {
+        // list of datapoints index  and distance to new datapoint
         IndexAndDistance[] info = SortedDistanceArray(unknown, trainData);
 
         return Vote(info, trainData);
     }
 
+    // Calculates the distance to new datapoint and sorts the list 
     public static IndexAndDistance[] SortedDistanceArray(double[] unknown, List<Dictionary<string, object>> trainData)
     {
         attributes = new List<string>(trainData[0].Keys);
@@ -61,9 +75,12 @@ public static class KNN
         return info;
     }
 
+    // caluclates the class for the k nearest neigbor to the new point to determine what the prediction is
     public static object Vote(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
     {
         kPoints = new List<int>();
+
+        // Dictionary with classes and how many votes on each
         Dictionary<string, double> votes = new Dictionary<string, double>(); // One cell per class
 
         for (int i = 0; i < kValue; ++i)
@@ -98,15 +115,22 @@ public static class KNN
         return Maxvotes;
     }
 
+    // caluclates the target value for the new point by using k  nearest neigbor 
     public static object VoteReg(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
     {
         kPoints = new List<int>();
         double sum = 0.0;
+        double c;
 
         for (int i = 0; i < kValue; ++i)
         {
             int idx = info[i].idx;
-            double c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 1]], CultureInfo.InvariantCulture);
+            // Special cast because of how PCP works
+            if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+                c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 5]], CultureInfo.InvariantCulture);
+            else
+                c = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 2]], CultureInfo.InvariantCulture);
+
             sum += c;
             kPoints.Add(Convert.ToInt32(trainData[idx-1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
@@ -114,6 +138,7 @@ public static class KNN
         return sum / kValue;
     }
 
+    // calculates the distance
     public static double Distance(double[] unknown, Dictionary<string, object> data)
     {
         double sum = 0.0;
@@ -123,7 +148,7 @@ public static class KNN
 
         return Math.Sqrt(sum);
     }
-
+    //Calculates the weigthed value for the new datapoint
     public static object WeightReg(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
     {
         double sumWeight = 0.0;
@@ -135,7 +160,14 @@ public static class KNN
             int idx = info[i].idx;
             double weight = (1 / Math.Pow(info[i].dist, 2));
             sumWeight += weight;
-            double reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 2]], CultureInfo.InvariantCulture);
+            double reg;
+
+            // Special cast because of how PCP works
+            if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+                reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 5]], CultureInfo.InvariantCulture);
+            else
+                reg = Convert.ToDouble(trainData[idx][attributes[attributes.Count - 2]], CultureInfo.InvariantCulture);
+
             sumWeightXReg += weight * reg;
             kPoints.Add(Convert.ToInt32(trainData[idx-1][trainData[0].Keys.First()], CultureInfo.InvariantCulture));
         }
@@ -147,7 +179,7 @@ public static class KNN
 }
 
 
-// Program class
+// Program class to use flr sorting the list by distance to the new datapoint
 public class IndexAndDistance : IComparable<IndexAndDistance>
 {
     public int idx;  // Index of a training item

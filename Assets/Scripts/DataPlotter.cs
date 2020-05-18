@@ -143,8 +143,8 @@ public class DataPlotter : MonoBehaviour
 
 		DestroyDataBallsAndAxisValues();
 
-		xName = columnList[xList.value];
-		yName = columnList[yList.value];
+		xName = columnList[xList.value+1];
+		yName = columnList[yList.value+1];
 
 		xAxisText.text = xName;
 		yAxisText.text = yName;
@@ -162,7 +162,7 @@ public class DataPlotter : MonoBehaviour
 		// If renderMode is 3D
 		if (MainMenu.renderMode == 1)
 		{
-			zName = columnList[zList.value];
+			zName = columnList[zList.value+1];
 			zAxisText.text = zName;
 			zMax = CalculationHelpers.FindMaxValue(zName, pointList);
 			zMin = CalculationHelpers.FindMinValue(zName, pointList);

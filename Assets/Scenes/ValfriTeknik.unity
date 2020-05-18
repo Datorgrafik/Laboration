@@ -5630,8 +5630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbebf200a3a23b42890e41637642624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeaveKNN: {fileID: 6512798675117439154, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
-    type: 3}
+  LeaveKNN: {fileID: 1496020238}
   KNNWindow: {fileID: 6512798675392476227, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
     type: 3}
   NewData: {fileID: 998012275}
@@ -7752,6 +7751,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1496020238 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6512798675117439154, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
+    type: 3}
+  m_PrefabInstance: {fileID: 1124535357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1513011395
 GameObject:
   m_ObjectHideFlags: 0

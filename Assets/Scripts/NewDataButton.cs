@@ -159,7 +159,7 @@ public class NewDataButton : MonoBehaviour
 
         KNN.kValue = Convert.ToInt32(kValue);
 
-        NewDataPoint.ChangeDataPoint();
+         NewDataPoint.ChangeDataPoint();
 
     }
     #endregion

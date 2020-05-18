@@ -77,7 +77,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Set pointlist to results of function Reader with argument inputfile
 		CSVläsare.Read(MainMenu.fileData);
-		pointList = dataClass.CSV;
+        pointList = CSVläsare.pointList;
+        dataClass = CSVläsare.dataClass;
 
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
@@ -139,7 +140,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Codeblock for KNN
 		if (KNN.KNNMode && KNN.KNNMove)
 		{
-			ChangeDataPoint(kValue, weighted);
+			ChangeDataPoint();
 			KNN.KNNMove = false;
 		}
 	}
@@ -456,6 +457,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 	private void AddDataPoints(List<string> newDataInputList, string kValue, bool weighted)
 	{
+        // sätter k och viktad i knn man även sättas i savebutton? ändrat av Elin!
+        KNN.kValue = Convert.ToInt32(kValue);
+        KNN.trueOrFalse = weighted;
+
 		Dictionary<string, object> last = pointList.Last();
 
 		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
@@ -471,8 +476,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		for (int i = 0; i < newDataInputList.Count; ++i)
 			unknown[i] = (Convert.ToDouble(newDataInputList[i], CultureInfo.InvariantCulture));
 
-		//var predict = dataClass.Knn(unknown, kValue, weighted);
-		//newDataPoint.Add(columnList[columnList.Count - 1], predict);
+		var predict = dataClass.Knn(unknown);
+		newDataPoint.Add(columnList[columnList.Count - 1], predict);
 
 		pointList.Add(newDataPoint);
 
@@ -492,7 +497,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 	}
 
-	public void ChangeDataPoint(string k, bool weightedOrNot)
+	public void ChangeDataPoint()
 	{
 		Dictionary<string, object> KnnPoint = pointList.Last();
 		pointList.Remove(KnnPoint);
@@ -502,8 +507,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		for (int i = 0; i < KnnPoint.Count - 6; ++i)
 			unknown[i] = (Convert.ToDouble(KnnPoint[columnList[i + 1]], CultureInfo.InvariantCulture));
 
-		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		//KnnPoint[columnList.Last()] = predict;
+		var predict = dataClass.Knn(unknown);
+		KnnPoint[columnList.Last()] = predict;
 		pointList.Add(KnnPoint);
 		ReorderColumns();
 

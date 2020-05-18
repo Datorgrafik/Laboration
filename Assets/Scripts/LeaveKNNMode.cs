@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,15 +11,17 @@ public class LeaveKNNMode : MonoBehaviour
 	public Button LeaveKNN;
 	public GameObject KNNWindow;
 	public Button NewData;
+    public InputField KUpdate;
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
 		LeaveKNN.onClick.AddListener(Leave);
 	}
 
 	public void Leave()
 	{
+        
 		KNNWindow.SetActive(false);
 		KNN.kPoints.Clear();
 		KNN.KNNMode = false;
@@ -48,5 +52,21 @@ public class LeaveKNNMode : MonoBehaviour
 		}
 
 	}
+
+    public void UpdateK()
+    {
+       string kValue = KUpdate.GetComponent<InputField>().text;
+
+        if (Convert.ToInt32(kValue) < 1)
+            kValue = "1";
+
+        if (Convert.ToInt32(kValue) > CSVläsare.pointList.Count())
+            kValue = CSVläsare.pointList.Count().ToString();
+
+        KNN.kValue = Convert.ToInt32(kValue);
+
+        ParallelCoordinatePlotter.ThisInstans.ChangeDataPoint();
+
+    }
 }
 	

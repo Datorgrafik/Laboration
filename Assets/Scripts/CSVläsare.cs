@@ -8,17 +8,20 @@ using System.Linq;
 
 public class CSVläsare : MonoBehaviour
 {
-    
+	#region Attributes
+
 	public static List<string> columnList;
-    public static List<string> targetFeatures;
+	public static List<string> targetFeatures;
 
-
-
-    // Define delimiters, regular expression craziness
-    static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+	// Define delimiters, regular expression craziness
+	static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
 	// Define line delimiters, regular experession craziness
 	static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 	static char[] TRIM_CHARS = { '\"' };
+
+	#endregion
+
+	#region Methods
 
 	public static DataClass Read(string file)
 	{
@@ -35,7 +38,7 @@ public class CSVläsare : MonoBehaviour
 		{
 			//Split lines according to SPLIT_RE, store in var (usually string array)
 			var values = Regex.Split(lines[i], SPLIT_RE);
-			
+
 			// Skip to end of loop (continue) if value is 0 length OR first value is empty
 			if (values.Length == 0 || values[0] == "")
 				continue;
@@ -74,15 +77,16 @@ public class CSVläsare : MonoBehaviour
 		else
 			dataClass = new Classification(list);
 
-        targetFeatures = new List<string>();
+		targetFeatures = new List<string>();
 
-        for (int i = 0; i < list.Count; i++)
-            targetFeatures.Add(list[i][columnList[columnList.Count - 1]].ToString());
+		for (int i = 0; i < list.Count; i++)
+			targetFeatures.Add(list[i][columnList[columnList.Count - 1]].ToString());
 
-        // Only keep distinct targetFeatures
-        targetFeatures = targetFeatures.Distinct().ToList();
+		// Only keep distinct targetFeatures
+		targetFeatures = targetFeatures.Distinct().ToList();
 
-        return dataClass;
-
+		return dataClass;
 	}
+
+	#endregion
 }

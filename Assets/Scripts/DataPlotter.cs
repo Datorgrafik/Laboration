@@ -24,12 +24,9 @@ public class DataPlotter : MonoBehaviour
 	public static string yName;
 	public static string zName;
 
-	[SerializeField]
-	private TMP_Text xAxisText;
-	[SerializeField]
-	private TMP_Text yAxisText;
-	[SerializeField]
-	private TMP_Text zAxisText;
+	public TMP_Text xAxisText;
+	public TMP_Text yAxisText;
+	public TMP_Text zAxisText;
 
 	public float plotScale = 10;
 	public GameObject PointPrefab;

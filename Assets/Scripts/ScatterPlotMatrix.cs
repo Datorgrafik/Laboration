@@ -94,7 +94,7 @@ public class ScatterPlotMatrix : MonoBehaviour
 	{
 		if (KNN.KNNMode && KNN.KNNMove)
 		{
-			ChangeDataPoint(K, Weighted);
+			NewDataPoint.ChangeDataPoint();
 			KNN.KNNMove = false;
 		}
 	}
@@ -121,8 +121,6 @@ public class ScatterPlotMatrix : MonoBehaviour
             selectedRow = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row;
             selectedColumn = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column;
         }
-        Debug.Log(selectedRow);
-        Debug.Log(selectedColumn);
 
         ResetDataPlot();
 
@@ -275,52 +273,52 @@ public class ScatterPlotMatrix : MonoBehaviour
 		PlottData();
 	}
 
-	static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
-	{
-		K = k;
-		Weighted = weightedOrNot;
+	//static public void AddDataPoint(List<string> newPoint, string k, bool weightedOrNot)
+	//{
+	//	K = k;
+	//	Weighted = weightedOrNot;
 
-		Dictionary<string, object> last = pointList.Last();
+	//	Dictionary<string, object> last = pointList.Last();
 
-		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
-		{
-			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
-		};
+	//	Dictionary<string, object> newDataPoint = new Dictionary<string, object>
+	//	{
+	//		{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
+	//	};
 
-		for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
-			newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
+	//	for (int i = 0; i < ThisInstans.columnList.Count - 2; i++)
+	//		newDataPoint.Add(ThisInstans.columnList[i + 1], newPoint[i]);
 
-		double[] unknown = new double[newPoint.Count];
+	//	double[] unknown = new double[newPoint.Count];
 
-		for (int i = 0; i < newPoint.Count; ++i)
-			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
+	//	for (int i = 0; i < newPoint.Count; ++i)
+	//		unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
 
-		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		//newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
-		pointList.Add(newDataPoint);
+	//	//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+	//	//newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+	//	pointList.Add(newDataPoint);
 
-		ThisInstans.teleportCamera = true;
-		KNN.KNNMode = true;
-		ThisInstans.PlottData();
-		ThisInstans.KNNWindow.SetActive(true);
-	}
+	//	ThisInstans.teleportCamera = true;
+	//	KNN.KNNMode = true;
+	//	ThisInstans.PlottData();
+	//	ThisInstans.KNNWindow.SetActive(true);
+	//}
 
-	static public void ChangeDataPoint(string k, bool weightedOrNot)
-	{
-		Dictionary<string, object> KnnPoint = pointList.Last();
-		pointList.Remove(KnnPoint);
+	//static public void ChangeDataPoint(string k, bool weightedOrNot)
+	//{
+	//	Dictionary<string, object> KnnPoint = pointList.Last();
+	//	pointList.Remove(KnnPoint);
 
-		double[] unknown = new double[KnnPoint.Count - 3];
+	//	double[] unknown = new double[KnnPoint.Count - 3];
 
-		for (int i = 0; i < KnnPoint.Count - 3; ++i)
-			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
+	//	for (int i = 0; i < KnnPoint.Count - 3; ++i)
+	//		unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
 
-		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		//KnnPoint[ThisInstans.columnList.Last()] = predict;
-		pointList.Add(KnnPoint);
-		ThisInstans.PlottData();
+	//	//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+	//	//KnnPoint[ThisInstans.columnList.Last()] = predict;
+	//	pointList.Add(KnnPoint);
+	//	ThisInstans.PlottData();
 
-	}
+	//}
 
 	#endregion
 }

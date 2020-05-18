@@ -24,17 +24,16 @@ public class LeaveKNNMode : MonoBehaviour
 
 		if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
 		{
-			ScatterPlotMatrix.ThisInstans.PlottData();
-      
-			NewData.interactable = true;
-			ScatterPlotMatrix.ThisInstans.teleportCamera = false;
+            NewData.interactable = true;
+            ScatterPlotMatrix.ThisInstans.teleportCamera = false;
+            ScatterPlotMatrix.ThisInstans.PlottData();     
 		}
 	
 		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
 		{
-			ScatterplotDimensions.ThisInstans.PlottData();
-			NewData.interactable = true;
-			ScatterplotDimensions.ThisInstans.teleportCamera = false;
+            NewData.interactable = true;
+            ScatterplotDimensions.ThisInstans.teleportCamera = false;
+            ScatterplotDimensions.ThisInstans.PlottData();
 		}
 
 		else if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")

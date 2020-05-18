@@ -33,14 +33,12 @@ public class NewDataPoint : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
-            ScatterPlotMatrix.pointList.Add(newDataPoint);
             ScatterPlotMatrix.ThisInstans.KNNWindow.SetActive(true);
             ScatterPlotMatrix.ThisInstans.teleportCamera = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
         }
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
-            ScatterplotDimensions.pointList.Add(newDataPoint);
             ScatterplotDimensions.ThisInstans.KNNWindow.SetActive(true);
             ScatterplotDimensions.ThisInstans.teleportCamera = true;
             ScatterplotDimensions.ThisInstans.PlottData();
@@ -58,26 +56,9 @@ public class NewDataPoint : MonoBehaviour
 
     public static void ChangeDataPoint()
     {
-        Dictionary<string, object> KnnPoint;
-
-        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-        {
-            KnnPoint = ScatterPlotMatrix.pointList.Last();
-            ScatterPlotMatrix.pointList.Remove(KnnPoint);
-        }
-        else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-        {
-            KnnPoint = ScatterplotDimensions.pointList.Last();
-            ScatterplotDimensions.pointList.Remove(KnnPoint);
-        }
-        else
-        {
-            KnnPoint = CSVläsare.pointList.Last();
-            CSVläsare.pointList.Remove(KnnPoint);
-        }
-
-
-
+        Dictionary<string, object> KnnPoint = CSVläsare.pointList.Last();
+        CSVläsare.pointList.Remove(KnnPoint);
+        
         double[] unknown = new double[KnnPoint.Count - 3];
 
         for (int i = 0; i < KnnPoint.Count - 3; ++i)
@@ -85,20 +66,18 @@ public class NewDataPoint : MonoBehaviour
 
         var predict = CSVläsare.dataClass.Knn(unknown);
         KnnPoint[CSVläsare.columnList.Last()] = predict;
+        CSVläsare.pointList.Add(KnnPoint);
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
-            ScatterPlotMatrix.pointList.Add(KnnPoint);
             ScatterPlotMatrix.ThisInstans.PlottData();
         }
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
-            ScatterplotDimensions.pointList.Add(KnnPoint);
             ScatterplotDimensions.ThisInstans.PlottData();
         }
         else
         {
-            CSVläsare.pointList.Add(KnnPoint);
             DataPlotter.ThisInstans.PlottData();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ColorManager : MonoBehaviour
 {
@@ -54,8 +55,20 @@ public class ColorManager : MonoBehaviour
 	{
 		foreach (int data in kPoints)
 		{
-			GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-			ball.GetComponent<Blink>().enabled = true;
+			if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					GameObject ball = (GameObject)pointList[data - 1][$"DataBall{i}"];
+					ball.GetComponent<Blink>().enabled = true;
+				}
+			}
+
+			else
+			{
+				GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
+				ball.GetComponent<Blink>().enabled = true;
+			}
 		}
 	}
 

@@ -13,5 +13,6 @@ public class StoreIndexInDataBall : MonoBehaviour
     public string Feature3 { get; set; }
     public string Feature4 { get; set; }
     public string Feature5{ get; set; }
+
     #endregion
 }

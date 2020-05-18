@@ -25,7 +25,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject TargetFeaturePrefab;
 	public GameObject PointHolder;
 
-	// AddNewData Attributes
+	// AddNewData Attributes & Prefabs
 	public GameObject newDataPanel;
 	public GameObject newDataContainer;
 	public GameObject kAndWeightedPrefab;
@@ -42,21 +42,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private int nFeatures;
 	public float yMax;
 	public float yMin;
-
-	// ColorList
-	private static readonly Color[] colorList = 
-	{ 
-		new Color(52, 152, 219, 1), 
-		new Color(192, 57, 43,1), 
-		new Color(46, 204, 113,1), 
-		new Color(26, 188, 156,1), 
-		new Color(155, 89, 182,1),
-		new Color(52, 73, 94,1), 
-		new Color(241, 196, 15,1), 
-		new Color(230, 126, 34,1), 
-		new Color(189, 195, 199,1), 
-		new Color(149, 165, 166,1)
-	};
 
 	// PlotColumns
 	public List<Dropdown> columnDropdownList = new List<Dropdown>();
@@ -495,7 +480,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		DrawBackgroundGrid();
 		ReorderColumns();
 
-		Blink(KNN.kPoints);
+		ColorManager.Blink(KNN.kPoints, pointList);
 		KNN.KNNMode = true;
 		KNNWindow.SetActive(true);
 
@@ -523,7 +508,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		ReorderColumns();
 
 		if (KNN.kPoints != null && KNN.kPoints.Count > 0)
-			Blink(KNN.kPoints);
+			ColorManager.Blink(KNN.kPoints, pointList);
 	}
 
 	private void CancelButton()
@@ -537,18 +522,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Make newDataButton interactable again
 		GameObject.FindGameObjectWithTag("PCPNewDataButton").GetComponent<Button>().interactable = true;
-	}
-
-	void Blink(List<int> kPoints)
-	{
-		foreach (int data in kPoints)
-		{
-			for (int i = 1; i <= 4; i++)
-			{
-				GameObject ball = (GameObject)pointList[data - 1][$"DataBall{i}"];
-				ball.GetComponent<Blink>().enabled = true;
-			}
-		}
 	}
 
 	#endregion

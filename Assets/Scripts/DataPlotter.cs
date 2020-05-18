@@ -69,13 +69,29 @@ public class DataPlotter : MonoBehaviour
         // Set pointlist to results of function Reader with argument inputfile
         CSVläsare.Read(MainMenu.fileData);
 		ThisInstans = this;
-        targetFeatures = CSVläsare.targetFeatures;
-        pointList = CSVläsare.pointList;
+		targetFeatures = CSVläsare.targetFeatures;
+		pointList = CSVläsare.pointList;
 
-        // Declare list of strings, fill with keys (column names)
-        columnList = CSVläsare.columnList;
-        List<string> features = columnList.GetRange(1, columnList.Count - 2);
+		// Declare list of strings, fill with keys (column names)
+		columnList = CSVläsare.columnList;
+		List<string> features = columnList.GetRange(1, columnList.Count - 2);
 
+		AddDropDownListeners(features);
+
+		PlottData();
+	}
+
+	private void Update()
+	{
+		if (KNN.KNNMode && KNN.KNNMove)
+		{
+			NewDataPoint.ChangeDataPoint();
+			KNN.KNNMove = false;
+		}
+	}
+
+	private void AddDropDownListeners(List<string> features)
+	{
 		// Assign column name from columnList to Name variables
 		xList.AddOptions(features);
 		xList.value = 1;
@@ -90,16 +106,6 @@ public class DataPlotter : MonoBehaviour
 			zList.AddOptions(features);
 			zList.value = 3;
 			zList.onValueChanged.AddListener(delegate { DropdownValueChanged(); });
-		}
-
-		PlottData();
-	}
-	private void Update()
-	{
-		if (KNN.KNNMode && KNN.KNNMove)
-		{
-			NewDataPoint.ChangeDataPoint();
-			KNN.KNNMove = false;
 		}
 	}
 

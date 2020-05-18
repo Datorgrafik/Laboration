@@ -48,10 +48,10 @@ public class ScatterplotDimensions : MonoBehaviour
     // Use this for initialization
     void Start()
 	{
-		dataClass = CSVläsare.Read(MainMenu.fileData);
-		pointList = dataClass.CSV;
+		CSVläsare.Read(MainMenu.fileData);
+        pointList = CSVläsare.pointList;
 
-		ThisInstans = this;
+        ThisInstans = this;
 		columnList = new List<string>(pointList[1].Keys);
 		columnListDropDown = new List<string>(pointList[1].Keys);
 		columnListDropDown.RemoveAt(columnList.Count() - 1);
@@ -118,7 +118,10 @@ public class ScatterplotDimensions : MonoBehaviour
 			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
 			TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 		}
-	}
+        if (KNN.kPoints != null)
+            if (KNN.kPoints.Count > 0)
+                ColorManager.Blink(KNN.kPoints, pointList);
+    }
 
 	private void RenderAxisValues(float[] Max, float[] Min)
 	{
@@ -228,19 +231,20 @@ public class ScatterplotDimensions : MonoBehaviour
 		for (int i = 0; i < newPoint.Count; ++i)
 			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
 
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		//newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 		pointList.Add(newDataPoint);
 
 		ThisInstans.teleportCamera = true;
 		KNN.KNNMode = true;
 		ThisInstans.PlottData();
-		Blink(KNN.kPoints);
 		ThisInstans.KNNWindow.SetActive(true);
 	}
 
 	static public void ChangeDataPoint(string k, bool weightedOrNot)
 	{
+        K = k;
+
 		Dictionary<string, object> KnnPoint = pointList.Last();
 		pointList.Remove(KnnPoint);
 
@@ -249,18 +253,9 @@ public class ScatterplotDimensions : MonoBehaviour
 		for (int i = 0; i < KnnPoint.Count - 3; ++i)
 			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
 
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		KnnPoint[ThisInstans.columnList.Last()] = predict;
+		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		//KnnPoint[ThisInstans.columnList.Last()] = predict;
 		pointList.Add(KnnPoint);
 		ThisInstans.PlottData();
-	}
-
-	static void Blink(List<int> kPoints)
-	{
-		foreach (int data in kPoints)
-		{
-			GameObject ball = (GameObject)pointList[data - 1]["DataBall"];
-			ball.GetComponent<Blink>().enabled = true;
-		}
 	}
 }

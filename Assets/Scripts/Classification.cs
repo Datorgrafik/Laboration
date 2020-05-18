@@ -10,11 +10,9 @@ public class Classification : DataClass
     public Classification(List<Dictionary<string, object>> data)
     : base(data) { }
 
-    public override object Knn(double[] unknown, string k, bool weightedOrNot)
+    public override object Knn(double[] unknown)
     {
-        KNN.kValue = Convert.ToInt32(k);
-        KNN.trueOrFalse = weightedOrNot;
-        return KNN.ClassifyClass(unknown, CSV);
+        return KNN.ClassifyClass(unknown, CSVläsare.pointList);
     }
 
     #endregion

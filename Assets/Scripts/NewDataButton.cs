@@ -22,10 +22,10 @@ public class NewDataButton : MonoBehaviour
 	public Toggle weighted;
 	public static string kValue;
 	public static bool weightedOrNot;
+    public InputField KUpdate;
 
     public DataClass dataClass;
     private Button SaveData;
-    public static List<Dictionary<string, object>> pointList;
 
 
 	#endregion
@@ -35,8 +35,6 @@ public class NewDataButton : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		dataClass = CSVläsare.Read(MainMenu.fileData);
-		pointList = dataClass.CSV;
 		newData.onClick.AddListener(CreateWindow);
 	}
 
@@ -65,7 +63,7 @@ public class NewDataButton : MonoBehaviour
 			InputField inputfield = Instantiate(input, new Vector2(71, ypos), Quaternion.identity) as InputField;
 			inputfield.transform.SetParent(newDataWindow.transform, false);
 			inputfield.name = attributes[i];
-			inputfield.text = CalculationHelpers.FindAverage(attributes[i], pointList);
+			inputfield.text = CalculationHelpers.FindAverage(attributes[i], CSVläsare.pointList);
 
 			ypos -= 20;
 		}
@@ -104,8 +102,8 @@ public class NewDataButton : MonoBehaviour
         if (Convert.ToInt32(kValue) < 1)
             kValue = "1";
 
-        if (Convert.ToInt32(kValue) > pointList.Count())
-            kValue = pointList.Count().ToString();
+        if (Convert.ToInt32(kValue) > CSVläsare.pointList.Count())
+            kValue = CSVläsare.pointList.Count().ToString();
 
 		if (weighted.GetComponent<Toggle>().isOn == true)
 			weightedOrNot = true;
@@ -117,16 +115,12 @@ public class NewDataButton : MonoBehaviour
         foreach (Transform child in newDataWindow.transform)
             Destroy(child.gameObject);
 
+        KUpdate.text = k.text;
 
+        KNN.kValue = Convert.ToInt32(kValue);
+        KNN.trueOrFalse = weightedOrNot;
 
-        if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-            ScatterPlotMatrix.AddDataPoint(dataPoint, kValue, weightedOrNot);
-
-        else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-            ScatterplotDimensions.AddDataPoint(dataPoint, kValue, weightedOrNot);
-        
-        else
-            DataPlotter.AddDataPoint(dataPoint, kValue, weightedOrNot);
+        NewDataPoint.AddDataPoint(dataPoint);
 
 
     }
@@ -152,6 +146,21 @@ public class NewDataButton : MonoBehaviour
         }
         if (!Empty)
             SaveData.interactable = true;
+    }
+    public void UpdateK()
+    {
+        kValue = KUpdate.GetComponent<InputField>().text;
+
+        if (Convert.ToInt32(kValue) < 1)
+            kValue = "1";
+
+        if (Convert.ToInt32(kValue) > CSVläsare.pointList.Count())
+            kValue = CSVläsare.pointList.Count().ToString();
+
+        KNN.kValue = Convert.ToInt32(kValue);
+
+        NewDataPoint.ChangeDataPoint();
+
     }
     #endregion
 }

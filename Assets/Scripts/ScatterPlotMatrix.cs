@@ -69,8 +69,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 	void Start()
 	{
 		// Set pointlist to results of function Reader with argument inputfile
-		dataClass = CSVläsare.Read(MainMenu.fileData);
-		pointList = dataClass.CSV;
+		CSVläsare.Read(MainMenu.fileData);
+        pointList = CSVläsare.pointList;
         targetFeatures = CSVläsare.targetFeatures;
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
@@ -295,8 +295,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 		for (int i = 0; i < newPoint.Count; ++i)
 			unknown[i] = (Convert.ToDouble(newPoint[i], CultureInfo.InvariantCulture));
 
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
+		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		//newDataPoint.Add(ThisInstans.columnList[ThisInstans.columnList.Count - 1], predict);
 		pointList.Add(newDataPoint);
 
 		ThisInstans.teleportCamera = true;
@@ -315,8 +315,8 @@ public class ScatterPlotMatrix : MonoBehaviour
 		for (int i = 0; i < KnnPoint.Count - 3; ++i)
 			unknown[i] = (Convert.ToDouble(KnnPoint[ThisInstans.columnList[i + 1]], CultureInfo.InvariantCulture));
 
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		KnnPoint[ThisInstans.columnList.Last()] = predict;
+		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		//KnnPoint[ThisInstans.columnList.Last()] = predict;
 		pointList.Add(KnnPoint);
 		ThisInstans.PlottData();
 

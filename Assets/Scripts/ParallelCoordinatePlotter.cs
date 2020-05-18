@@ -76,7 +76,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		ThisInstans = this;
 
 		// Set pointlist to results of function Reader with argument inputfile
-		dataClass = CSVläsare.Read(MainMenu.fileData);
+		CSVläsare.Read(MainMenu.fileData);
 		pointList = dataClass.CSV;
 
 		// Declare list of strings, fill with keys (column names)
@@ -471,8 +471,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		for (int i = 0; i < newDataInputList.Count; ++i)
 			unknown[i] = (Convert.ToDouble(newDataInputList[i], CultureInfo.InvariantCulture));
 
-		var predict = dataClass.Knn(unknown, kValue, weighted);
-		newDataPoint.Add(columnList[columnList.Count - 1], predict);
+		//var predict = dataClass.Knn(unknown, kValue, weighted);
+		//newDataPoint.Add(columnList[columnList.Count - 1], predict);
 
 		pointList.Add(newDataPoint);
 
@@ -502,8 +502,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		for (int i = 0; i < KnnPoint.Count - 6; ++i)
 			unknown[i] = (Convert.ToDouble(KnnPoint[columnList[i + 1]], CultureInfo.InvariantCulture));
 
-		var predict = dataClass.Knn(unknown, k, weightedOrNot);
-		KnnPoint[columnList.Last()] = predict;
+		//var predict = dataClass.Knn(unknown, k, weightedOrNot);
+		//KnnPoint[columnList.Last()] = predict;
 		pointList.Add(KnnPoint);
 		ReorderColumns();
 

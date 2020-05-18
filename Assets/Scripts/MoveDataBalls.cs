@@ -105,13 +105,13 @@ public class MoveDataBalls : MonoBehaviour
 			string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
 			newPosition = newPosition.Replace(',', '.');
 			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-			DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
+			CSVläsare.pointList[index][DataPlotter.xName] = newPosition;
 
 			mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
 			newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
 			newPosition = newPosition.Replace(',', '.');
 			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-			DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
+			CSVläsare.pointList[index][DataPlotter.yName] = newPosition;
 
 			if (MainMenu.renderMode == 1)
 			{
@@ -119,7 +119,7 @@ public class MoveDataBalls : MonoBehaviour
 				newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
 				newPosition = newPosition.Replace(',', '.');
 				index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-				DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+				CSVläsare.pointList[index][DataPlotter.zName] = newPosition;
 			}
 
 			if (KNN.KNNMode)

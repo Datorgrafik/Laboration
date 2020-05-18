@@ -32,11 +32,11 @@ public class MoveDataBalls : MonoBehaviour
 			}
 		}
 
-		if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0 && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+
+        if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
-				selectedTarget = TargetingScript.selectedTarget;
 				timeChecker = 0f;
 			}
 			if (Input.GetMouseButton(0))
@@ -50,7 +50,7 @@ public class MoveDataBalls : MonoBehaviour
 
 				if (timeChecker > 0.3F)
 				{
-					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, TargetingScript.selectedTarget.transform.position.z) * -1);
+					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, Camera.main.transform.position.z) * -1);
 
 					if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
 						TargetingScript.selectedTarget.transform.position = new Vector3(TargetingScript.selectedTarget.transform.position.x, mousePosition.y, mousePosition.z);
@@ -58,12 +58,10 @@ public class MoveDataBalls : MonoBehaviour
 						TargetingScript.selectedTarget.transform.position = new Vector3(mousePosition.x, mousePosition.y, mousePosition.z);
 				}
 			}
-
-
-			if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
-				Denormalize();
-		}
-		else if (TargetingScript.selectedTarget != null && SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+            if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
+                Denormalize();
+        }
+		else if (TargetingScript.selectedTarget != null)
 		{
 			if (Input.GetKeyDown(KeyCode.E))
 			{
@@ -75,7 +73,6 @@ public class MoveDataBalls : MonoBehaviour
 				else
 				{
 					grabItem = true;
-					selectedTarget = TargetingScript.selectedTarget;
 				}
 			}
 
@@ -91,9 +88,9 @@ public class MoveDataBalls : MonoBehaviour
 			float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
 			string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
 			newPosition = newPosition.Replace(',', '.');
-			index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-			ParallelCoordinatePlotter.ThisInstans.pointList[index][selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
+			ParallelCoordinatePlotter.ThisInstans.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
 
 			if (ParallelCoordinatePlotter.KNNMode)
 				ParallelCoordinatePlotter.KNNMove = true;
@@ -107,13 +104,13 @@ public class MoveDataBalls : MonoBehaviour
 			float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
 			string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
 			newPosition = newPosition.Replace(',', '.');
-			index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 			DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
 
 			mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
 			newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
 			newPosition = newPosition.Replace(',', '.');
-			index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 			DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
 
 			if (MainMenu.renderMode == 1)
@@ -121,27 +118,27 @@ public class MoveDataBalls : MonoBehaviour
 				mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
 				newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
 				newPosition = newPosition.Replace(',', '.');
-				index = selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+				index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 				DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
 			}
 
-			if (DataPlotter.KNNMode || ScatterPlotMatrix.KNNMode || ScatterplotDimensions.KNNMode)
+			if (SceneManager.GetActiveScene().name == "ValfriTeknik")
 			{
-				if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-				{
+                if(ScatterplotDimensions.KNNMode)
 					ScatterplotDimensions.KNNMove = true;
-					ScatterplotDimensions.ThisInstans.PlottData();
-				}
-				else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-				{
+				ScatterplotDimensions.ThisInstans.PlottData();
+			}
+			else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+			{
+                if(ScatterPlotMatrix.KNNMode)
 					ScatterPlotMatrix.KNNMove = true;
-					ScatterPlotMatrix.ThisInstans.PlottData();
-				}
-				else
-				{
+				ScatterPlotMatrix.ThisInstans.PlottData();
+			}
+			else
+			{
+                if(DataPlotter.KNNMode)
 					DataPlotter.KNNMove = true;
-					DataPlotter.ThisInstans.PlottData();
-				}
+				DataPlotter.ThisInstans.PlottData();
 			}
 		}
 	}

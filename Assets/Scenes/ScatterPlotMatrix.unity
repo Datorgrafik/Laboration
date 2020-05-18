@@ -3368,6 +3368,8 @@ GameObject:
   m_Component:
   - component: {fileID: 840835708}
   - component: {fileID: 840835707}
+  - component: {fileID: 840835710}
+  - component: {fileID: 840835709}
   m_Layer: 0
   m_Name: Scatterplot
   m_TagString: Untagged
@@ -3426,6 +3428,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &840835709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840835706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61758d1f07b30b2419c82e6c6fe11398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &840835710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840835706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7d2a8a74dfdc3429eb4feab2d5a22d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &841216410
 GameObject:
   m_ObjectHideFlags: 0
@@ -7460,15 +7486,13 @@ MonoBehaviour:
 
     UpArrow - Zoom in
 
-    DownArrow
-    - Zoom out
+    DownArrow - Zoom out
 
     Right click - Camera movement
 
     Left click - Target DataBalls
 
-    E
-    - Move targeted Databall'
+    E - Move targeted Databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -274,7 +274,6 @@ public class DataPlotter : MonoBehaviour
 	private static void DestroyDataBallsAndAxisValues()
 	{
 		// Destroy all DataBalls before rendering new plot
-		// Destroy all DataBalls before rendering new plot
 		foreach (GameObject dataValues in GameObject.FindGameObjectsWithTag("DataBall"))
 			Destroy(dataValues);
 

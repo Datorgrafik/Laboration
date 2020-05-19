@@ -32,8 +32,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public GameObject newDataInputFieldPrefab;
 	public GameObject saveAndCancelButtonsPrefab;
 
-	public static DataClass dataClass;
-
 	// Misc
 	public float plotScale = 10;
 	public TMP_Text valuePrefab;
@@ -56,10 +54,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public TMP_InputField ChangePanelColumnInputfield;
 	private string newValue;
 
-	// NewData Attributes
-	string kValue;
-	bool weighted;
-
 	// KNN Attributes
 	public GameObject KNNWindow;
 
@@ -77,8 +71,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		// Set pointlist to results of function Reader with argument inputfile
 		CSVläsare.Read(MainMenu.fileData);
-        pointList = CSVläsare.pointList;
-        dataClass = CSVläsare.dataClass;
+		pointList = CSVläsare.pointList;
 
 		// Declare list of strings, fill with keys (column names)
 		columnList = new List<string>(pointList[1].Keys);
@@ -140,7 +133,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Codeblock for KNN
 		if (KNN.KNNMode && KNN.KNNMove)
 		{
-			ChangeDataPoint();
+			NewDataPoint.ChangeDataPoint();
 			KNN.KNNMove = false;
 		}
 	}
@@ -445,49 +438,16 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			dataInput.GetComponent<TMP_InputField>().text = null;
 		};
 
-		// Get kValue InputField and weighted Toggle
-		kValue = GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text;
-		weighted = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
+		// Get & Set kValue InputField and weighted Toggle for KNN
+		KNN.kValue = Convert.ToInt32(GameObject.FindGameObjectWithTag("PCPkValue").GetComponent<TMP_InputField>().text);
+		KNN.trueOrFalse = GameObject.FindGameObjectWithTag("PCPWeighted").GetComponent<Toggle>().isOn;
 
 		// Run Cancel() to clear and hide the NewData Panel after the values have been stored
 		CancelButton();
 		// Add the new data
-		AddDataPoints(newDataInputList, kValue, weighted);
-	}
-
-	private void AddDataPoints(List<string> newDataInputList, string kValue, bool weighted)
-	{
-        // sätter k och viktad i knn man även sättas i savebutton? ändrat av Elin!
-        KNN.kValue = Convert.ToInt32(kValue);
-        KNN.trueOrFalse = weighted;
-
-		Dictionary<string, object> last = pointList.Last();
-
-		Dictionary<string, object> newDataPoint = new Dictionary<string, object>
-		{
-			{ last.Keys.First().ToString(), (Convert.ToInt32(last[last.Keys.First()], CultureInfo.InvariantCulture)) + 1 }
-		};
-
-		for (int i = 0; i < columnList.Count - 2; i++)
-			newDataPoint.Add(columnList[i + 1], newDataInputList[i]);
-
-		double[] unknown = new double[newDataInputList.Count];
-
-		for (int i = 0; i < newDataInputList.Count; ++i)
-			unknown[i] = (Convert.ToDouble(newDataInputList[i], CultureInfo.InvariantCulture));
-
-		var predict = dataClass.Knn(unknown);
-		newDataPoint.Add(columnList[columnList.Count - 1], predict);
-
-		pointList.Add(newDataPoint);
-
-		// Render the dataPlot again with newly added data
-		DrawBackgroundGrid();
-		ReorderColumns();
+		NewDataPoint.AddDataPoint(newDataInputList);
 
 		ColorManager.Blink(KNN.kPoints, pointList);
-		KNN.KNNMode = true;
-		KNNWindow.SetActive(true);
 
 		// Target the last DataBall (column4) within the newly added instance
 		GameObject newBall = (GameObject)pointList.Last()["DataBall4"] as GameObject;
@@ -495,25 +455,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
 		TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
 		TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
-	}
-
-	public void ChangeDataPoint()
-	{
-		Dictionary<string, object> KnnPoint = pointList.Last();
-		pointList.Remove(KnnPoint);
-
-		double[] unknown = new double[KnnPoint.Count - 6];
-
-		for (int i = 0; i < KnnPoint.Count - 6; ++i)
-			unknown[i] = (Convert.ToDouble(KnnPoint[columnList[i + 1]], CultureInfo.InvariantCulture));
-
-		var predict = dataClass.Knn(unknown);
-		KnnPoint[columnList.Last()] = predict;
-		pointList.Add(KnnPoint);
-		ReorderColumns();
-
-		if (KNN.kPoints != null && KNN.kPoints.Count > 0)
-			ColorManager.Blink(KNN.kPoints, pointList);
 	}
 
 	private void CancelButton()

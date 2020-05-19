@@ -10,6 +10,8 @@ public class NewDataPoint : MonoBehaviour
 {
     public static void AddDataPoint(List<string> newPoint)
     {
+        KNN.KNNMode = true;
+
         Dictionary<string, object> last = CSVläsare.pointList.Last();
 
         Dictionary<string, object> newDataPoint = new Dictionary<string, object>
@@ -53,8 +55,6 @@ public class NewDataPoint : MonoBehaviour
             DataPlotter.ThisInstans.KNNWindow.SetActive(true);
             DataPlotter.ThisInstans.PlottData();
         }
-
-        KNN.KNNMode = true;
     }
 
     public static void ChangeDataPoint()

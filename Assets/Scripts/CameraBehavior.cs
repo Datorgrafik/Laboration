@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraBehavior : MonoBehaviour 
 {
@@ -60,13 +61,15 @@ public class CameraBehavior : MonoBehaviour
 	public static void RefocusCamera(List<Dictionary<string, object>> pointList)
 	{
 		GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
-		if (MainMenu.renderMode == 1)
-			Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
-		else
-			Camera.main.transform.position = new Vector3(newBall.transform.position.x, newBall.transform.position.y, newBall.transform.position.z - 8f);
+        if (SceneManager.GetActiveScene().name != "ScatterPlotMatrix")
+        {
+            if (MainMenu.renderMode == 1)
+                Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+            else
+                Camera.main.transform.position = new Vector3(newBall.transform.position.x, newBall.transform.position.y, newBall.transform.position.z - 8f);
 
-		Camera.main.transform.LookAt(newBall.transform);
-
+            Camera.main.transform.LookAt(newBall.transform);
+        }
 		if (TargetingScript.selectedTarget != null)
 		{
 			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;

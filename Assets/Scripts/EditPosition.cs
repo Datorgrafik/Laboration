@@ -98,14 +98,7 @@ public class EditPosition : MonoBehaviour
             newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-            if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature1] = newValue;
-            
-            else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-                ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1] = newValue;
-
-            else
-                CSVläsare.pointList[index][DataPlotter.xName] = newValue;
+            CSVläsare.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1] = newValue;
 
 			inputX.text = string.Empty;
         }
@@ -116,14 +109,7 @@ public class EditPosition : MonoBehaviour
             newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-            if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature2] = newValue;
-
-            else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-                ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2] = newValue;
-
-            else
-                CSVläsare.pointList[index][DataPlotter.yName] = newValue;
+             CSVläsare.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2] = newValue;
 
 			inputY.text = string.Empty;
         }
@@ -136,14 +122,7 @@ public class EditPosition : MonoBehaviour
                 newValue = newValue.Replace(',', '.');
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-                if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                    ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature3] = newValue;
-
-                else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-                    ScatterplotDimensions.pointList[index][ScatterplotDimensions.feature3Name] = newValue;
-
-                else
-                    CSVläsare.pointList[index][DataPlotter.zName] = newValue;
+                CSVläsare.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3] = newValue;
 
 				inputZ.text = string.Empty;
 			}
@@ -155,10 +134,7 @@ public class EditPosition : MonoBehaviour
             newValue = newValue.Replace(',', '.');
             int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-            if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-                ScatterPlotMatrix.pointList[index][ScatterPlotMatrix.feature4] = newValue;
-            else
-               ScatterplotDimensions.pointList[index][ScatterplotDimensions.feature4Name] = newValue;
+            CSVläsare.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4] = newValue;
 
             inputA.text = string.Empty;
         }

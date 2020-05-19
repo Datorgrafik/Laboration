@@ -45,7 +45,6 @@ public class MoveDataBalls : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("DataBall") && hit.transform.gameObject.GetComponent<StoreIndexInDataBall>().Index == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index)
                     {
-                        Debug.Log("Hej?");
                         timeChecker = 0f;
                         checkTime = true;
                         break;

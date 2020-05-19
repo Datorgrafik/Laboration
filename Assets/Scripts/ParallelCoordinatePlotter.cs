@@ -18,6 +18,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	public List<string> columnList;
 	public List<string> featureList;
 	private List<string> targetFeatures = new List<string>();
+	private Color[,] targetColorList;
 
 	// GameObjects
 	public GameObject PointPrefab;
@@ -40,6 +41,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private int nFeatures;
 	public float yMax;
 	public float yMin;
+	private GameObject dataPoint;
 
 	// PlotColumns
 	public List<Dropdown> columnDropdownList = new List<Dropdown>();
@@ -104,6 +106,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		if (targetFeatures.Count() <= 10)
 			InstantiateTargetFeatureList();
+		else
+			targetColorList = new Color[4, pointList.Count];
 
 		DrawBackgroundGrid();
 
@@ -284,10 +288,15 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			float y = (float.Parse(valueString, CultureInfo.InvariantCulture) - yMin) / (yMax - yMin);
 
 			// Set correct color
-			if (targetFeatures.Count() <= 10)
+			// Classification
+			if (targetFeatures.Count <= 10)
 				targetColor = ColorManager.ChangeColor(index);
+			// Regression
 			else
+			{
 				targetColor = new Color(xPos, y, 0, 1.0f);
+				targetColorList[columnPos - 1, i] = targetColor;
+			}
 
 			InstantiateAndRenderDatapoints(xPos, i, y, columnPos);
 
@@ -298,7 +307,7 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 	private void InstantiateAndRenderDatapoints(float xPos, int i, float y, int columnPos)
 	{
 		// Create clone
-		GameObject dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
+		dataPoint = Instantiate(PointPrefab, new Vector3(xPos, y, 0) * plotScale, Quaternion.identity);
 		// Set color
 		dataPoint.GetComponent<Renderer>().material.color = targetColor;
 		// Set new scale
@@ -345,9 +354,36 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		}
 
 		// Set line color
-		lineRenderer.material.color = targetColor;
+		if (targetFeatures.Count <= 10)
+			lineRenderer.material.color = targetColor;
 		// Set line position
-		lineRenderer.SetPosition((columnPos - 1), new Vector3(xPos, y, -0.001f) * plotScale);
+		lineRenderer.SetPosition(columnPos - 1, new Vector3(xPos, y, -0.001f) * plotScale);
+
+		// Change the colorGradient for each part of the lineRenderer in Regression
+		if ((columnPos == nFeatures || columnPos == 4) && targetFeatures.Count > 10)
+		{
+			Gradient gradient = new Gradient();
+
+			gradient.SetKeys
+			(
+				new GradientColorKey[]
+				{
+					new GradientColorKey(targetColorList[0, i], 0f),
+					new GradientColorKey(targetColorList[1, i], 0.33f),
+					new GradientColorKey(targetColorList[2, i], 0.66f),
+					new GradientColorKey(targetColorList[3, i], 1f)
+				},
+				new GradientAlphaKey[]
+				{
+					new GradientAlphaKey(1f, 0f),
+					new GradientAlphaKey(1f, 0.33f),
+					new GradientAlphaKey(1f, 0.66f),
+					new GradientAlphaKey(1f, 1f)
+				}
+			);
+
+			lineRenderer.colorGradient = gradient;
+		}
 	}
 
 	private float SetColumnPosition(int columnPos)
@@ -371,6 +407,10 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		// Destroy Datapoints
 		foreach (var databall in GameObject.FindGameObjectsWithTag("DataBall"))
 			Destroy(databall);
+
+		// Resize the list to fit possible new instances
+		if (targetFeatures.Count() > 10)
+			targetColorList = new Color[4, pointList.Count];
 
 		// Plot data for the selected columns
 		for (int i = 0; i < nFeatures; i++)

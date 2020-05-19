@@ -195,9 +195,13 @@ public class DataPlotter : MonoBehaviour
 			//Store values in dataPoint
 			dataPoint.GetComponent<StoreIndexInDataBall>().Index = i;
 			dataPoint.GetComponent<StoreIndexInDataBall>().TargetFeature = pointList[i][columnList[columnList.Count - 1]].ToString();
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature1 = xName;
+            dataPoint.GetComponent<StoreIndexInDataBall>().Feature2 = yName;
+            if(zName != null)
+                dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = zName;
 
-			//Assign color to dataPoint
-			int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
+            //Assign color to dataPoint
+            int index = targetFeatures.IndexOf(pointList[i][columnList[columnList.Count - 1]].ToString());
 			if (targetFeatures.Count() <= 10)
 				ColorManager.ChangeColor(dataPoint, index);
 			else

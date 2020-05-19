@@ -42,6 +42,7 @@ public class ChangeTargetFeature : MonoBehaviour
 	{
 		// Ändra targetfeature
 		selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature = CSVläsare.targetFeatures[changeTargetFeature.GetComponent<Dropdown>().value];
+
         // Lägg in den nya feature i pointlist och spara
 
         CSVläsare.pointList[selTarget.GetComponent<StoreIndexInDataBall>().Index][CSVläsare.columnList[CSVläsare.columnList.Count - 1]] = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;           
@@ -50,6 +51,7 @@ public class ChangeTargetFeature : MonoBehaviour
             ColorManager.ChangeColor(selTarget, changeTargetFeature.GetComponent<Dropdown>().value);
             TargetingScript.colorOff = selTarget.GetComponent<Renderer>().material.color;
         colorOfTargetFeature.GetComponent<Image>().color = selTarget.GetComponent<Renderer>().material.color;
+
 		targetFeatureText.text = selTarget.GetComponent<StoreIndexInDataBall>().TargetFeature;
 	}
 

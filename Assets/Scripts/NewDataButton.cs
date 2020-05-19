@@ -147,20 +147,5 @@ public class NewDataButton : MonoBehaviour
         if (!Empty)
             SaveData.interactable = true;
     }
-    public void UpdateK()
-    {
-        kValue = KUpdate.GetComponent<InputField>().text;
-
-        if (Convert.ToInt32(kValue) < 1)
-            kValue = "1";
-
-        if (Convert.ToInt32(kValue) > CSVläsare.pointList.Count())
-            kValue = CSVläsare.pointList.Count().ToString();
-
-        KNN.kValue = Convert.ToInt32(kValue);
-
-         NewDataPoint.ChangeDataPoint();
-
-    }
     #endregion
 }

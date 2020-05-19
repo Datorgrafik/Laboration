@@ -75,7 +75,7 @@ public static class KNN
 		return info;
 	}
 
-	// Caluclates the class for the k nearest neigbor to the new point to determine what the prediction is
+	// Calculates the class for the k nearest neigbor to the new point to determine what the prediction is
 	public static object Vote(IndexAndDistance[] info, List<Dictionary<string, object>> trainData)
 	{
 		kPoints = new List<int>();

@@ -213,11 +213,6 @@ public class ScatterPlotMatrix : MonoBehaviour
 							else
 								dataPoint.GetComponent<Renderer>().material.color = new Color(x, y, y, 1.0f);
 
-							if (KNN.KNNMode && i == pointList.Count() - 1)
-							{
-								dataPoint.GetComponent<Renderer>().material.color = Color.white;
-								dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
-							}
 							//Reselect target if one was selected before.
 							if (selectedIndex == i && dataPoint.GetComponent<StoreIndexInDataBall>().Column == selectedColumn && dataPoint.GetComponent<StoreIndexInDataBall>().Row == selectedRow)
 							{
@@ -227,7 +222,12 @@ public class ScatterPlotMatrix : MonoBehaviour
 								TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 								selectedIndex = -1;
 							}
-						}
+                            if (KNN.KNNMode && i == pointList.Count() - 1)
+                            {
+                                dataPoint.GetComponent<Renderer>().material.color = Color.white;
+                                dataPoint.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+                            }
+                        }
 					}
 				}
 				catch (Exception) { }

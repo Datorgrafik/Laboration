@@ -45,6 +45,7 @@ public class TargetingScript : MonoBehaviour
 			}
 		}
 
+
 		#region Temporary Fix for PCP
 		// Temporary try to fix for PCP (will not look like this forever)
 		if (KNN.KNNMode && Input.GetMouseButtonDown(0) && SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
@@ -75,6 +76,22 @@ public class TargetingScript : MonoBehaviour
 				selectedTarget = null;
 			}
 		}
+
+        //Allowing all the kNN targets to be moved in ScatterPlotMatrix
+        if(KNN.KNNMode && Input.GetMouseButtonDown(0) && SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
+            foreach (RaycastHit hit in Physics.RaycastAll(ray))
+            {
+                if (hit.collider.CompareTag("DataBall") && hit.transform.gameObject.GetComponent<StoreIndexInDataBall>().Index == selectedTarget.GetComponent<StoreIndexInDataBall>().Index)
+                {
+                    SelectDataBall(hit);
+                    break;
+                }
+            }
+        }
 		#endregion
 
 	}

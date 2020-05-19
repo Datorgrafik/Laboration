@@ -13,14 +13,14 @@ public class CameraBehavior : MonoBehaviour
 
 	#region Methods
 
-	// Update is called once per frame
-	void Update()
+	// FixedUpdate to update a certain amount of times per second
+	void FixedUpdate()
 	{
 		//Camera direction
 		if (Input.GetMouseButton(1) && MainMenu.renderMode == 1)
 		{
-			float mouseX = Input.GetAxis("Mouse X") * 4;
-			float mouseY = -(Input.GetAxis("Mouse Y") * 4);
+			float mouseX = Input.GetAxis("Mouse X") * 16;
+			float mouseY = -(Input.GetAxis("Mouse Y") * 16);
 
 			transform.Rotate(0, mouseX, 0, Space.World);
 			transform.Rotate(mouseY, 0, 0, Space.Self);

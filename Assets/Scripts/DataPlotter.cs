@@ -54,7 +54,6 @@ public class DataPlotter : MonoBehaviour
 	public float zMin;
 
 	public static DataPlotter ThisInstans;
-	public static DataClass dataClass;
 	private int selectedIndex = -1;
 	public GameObject KNNWindow;
 

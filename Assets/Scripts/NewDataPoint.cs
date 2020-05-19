@@ -29,12 +29,19 @@ public class NewDataPoint : MonoBehaviour
         newDataPoint.Add(CSVläsare.columnList[CSVläsare.columnList.Count - 1], predict);
         CSVläsare.pointList.Add(newDataPoint);
 
-        CameraBehavior.teleportCamera = true;
-
+        if (SceneManager.GetActiveScene().name != "ParallelCoordinatePlot")
+            CameraBehavior.teleportCamera = true;
+        
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
             ScatterPlotMatrix.ThisInstans.KNNWindow.SetActive(true);
             ScatterPlotMatrix.ThisInstans.PlottData();
+        }
+        else if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+        {
+            ParallelCoordinatePlotter.ThisInstans.KNNWindow.SetActive(true);
+            ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
+            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
         }
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
@@ -52,12 +59,20 @@ public class NewDataPoint : MonoBehaviour
 
     public static void ChangeDataPoint()
     {
+        int countBalancer;
+
+        //TODO: 'countBalancer' skulle kanske kunna vara en input-parameter istället. (Johannes)
+        if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+            countBalancer = 6;
+        else
+            countBalancer = 3;
+
         Dictionary<string, object> KnnPoint = CSVläsare.pointList.Last();
         CSVläsare.pointList.Remove(KnnPoint);
         
-        double[] unknown = new double[KnnPoint.Count - 3];
+        double[] unknown = new double[KnnPoint.Count - countBalancer];
 
-        for (int i = 0; i < KnnPoint.Count - 3; ++i)
+        for (int i = 0; i < KnnPoint.Count - countBalancer; ++i)
             unknown[i] = (Convert.ToDouble(KnnPoint[CSVläsare.columnList[i + 1]], CultureInfo.InvariantCulture));
 
         var predict = CSVläsare.dataClass.Knn(unknown);
@@ -66,6 +81,13 @@ public class NewDataPoint : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
             ScatterPlotMatrix.ThisInstans.PlottData();
+
+        else if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+        {
+            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+            if (KNN.kPoints != null && KNN.kPoints.Count > 0) //TODO: Skall flyttas. (Johannes)
+                ColorManager.Blink(KNN.kPoints, CSVläsare.pointList);
+        }
 
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
             ScatterplotDimensions.ThisInstans.PlottData();

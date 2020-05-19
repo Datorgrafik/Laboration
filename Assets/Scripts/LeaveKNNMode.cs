@@ -60,7 +60,7 @@ public class LeaveKNNMode : MonoBehaviour
 
         KNN.kValue = Convert.ToInt32(kValue);
 
-        ParallelCoordinatePlotter.ThisInstans.ChangeDataPoint();
+        NewDataPoint.ChangeDataPoint();
     }
 }
 	

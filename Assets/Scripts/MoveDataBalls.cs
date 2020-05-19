@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -83,58 +84,92 @@ public class MoveDataBalls : MonoBehaviour
 
 	private void Denormalize()
 	{
-		if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
-		{
-			float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
-			string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
-			newPosition = newPosition.Replace(',', '.');
-			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+        if (KNN.KNNMode)
+            KNN.KNNMove = true;
 
-			ParallelCoordinatePlotter.ThisInstans.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
+        if (SceneManager.GetActiveScene().name == "ParallelCoordinatePlot")
+        {
+            float mellanskillnad = ParallelCoordinatePlotter.ThisInstans.yMax - ParallelCoordinatePlotter.ThisInstans.yMin;
+            string newPosition = (ParallelCoordinatePlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
 
-			if (KNN.KNNMode)
-				KNN.KNNMove = true;
+            ParallelCoordinatePlotter.ThisInstans.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().TargetFeature] = newPosition;
 
-			ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
-			ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
-		}
+            if (KNN.KNNMode)
+                KNN.KNNMove = true;
 
-		else
-		{
-			float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
-			string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
-			newPosition = newPosition.Replace(',', '.');
-			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-			CSVläsare.pointList[index][DataPlotter.xName] = newPosition;
+            ParallelCoordinatePlotter.ThisInstans.DrawBackgroundGrid();
+            ParallelCoordinatePlotter.ThisInstans.ReorderColumns();
+        }
+        else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                float mellanskillnad = ScatterplotDimensions.Max[i] - ScatterplotDimensions.Min[i];
+                string newPosition = "";
 
-			mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
-			newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
-			newPosition = newPosition.Replace(',', '.');
-			index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-			CSVläsare.pointList[index][DataPlotter.yName] = newPosition;
+                if (i == 0)
+                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+                else if (i == 1)
+                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+                else if (i == 2)
+                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
 
-			if (MainMenu.renderMode == 1)
-			{
-				mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
-				newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
-				newPosition = newPosition.Replace(',', '.');
-				index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-				CSVläsare.pointList[index][DataPlotter.zName] = newPosition;
-			}
+                newPosition = newPosition.Replace(',', '.');
+                index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+                ScatterplotDimensions.pointList[index][ScatterplotDimensions.nameList[i]] = newPosition;
+            }
+            ScatterplotDimensions.ThisInstans.PlottData();
 
-			if (KNN.KNNMode)
-				KNN.KNNMove = true;
 
-			if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-				ScatterplotDimensions.ThisInstans.PlottData();
+        }
+        else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+        {
+            float MinColumn = CalculationHelpers.FindMinValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column, ScatterPlotMatrix.pointList);
+            float MaxColumn = CalculationHelpers.FindMaxValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column, ScatterPlotMatrix.pointList);
+            float mellanskillnad = MaxColumn - MinColumn;
+            string newPosition = (MinColumn + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column] = newPosition;
 
-			else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-				ScatterPlotMatrix.ThisInstans.PlottData();
+            float MinRow = CalculationHelpers.FindMinValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row, ScatterPlotMatrix.pointList);
+            float MaxRow = CalculationHelpers.FindMaxValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row, ScatterPlotMatrix.pointList);
+            mellanskillnad = MaxRow - MinRow;
+            newPosition = (MinRow + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newPosition;
 
-			else
-				DataPlotter.ThisInstans.PlottData();
-		}
-	}
+            ScatterPlotMatrix.ThisInstans.PlottData();
+        }
+        else
+        {
+            float mellanskillnad = DataPlotter.ThisInstans.xMax - DataPlotter.ThisInstans.xMin;
+            string newPosition = (DataPlotter.ThisInstans.xMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            DataPlotter.pointList[index][DataPlotter.xName] = newPosition;
+
+            mellanskillnad = DataPlotter.ThisInstans.yMax - DataPlotter.ThisInstans.yMin;
+            newPosition = (DataPlotter.ThisInstans.yMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+            newPosition = newPosition.Replace(',', '.');
+            index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+            DataPlotter.pointList[index][DataPlotter.yName] = newPosition;
+
+            if (MainMenu.renderMode == 1)
+            {
+                mellanskillnad = DataPlotter.ThisInstans.zMax - DataPlotter.ThisInstans.zMin;
+                newPosition = (DataPlotter.ThisInstans.zMin + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+                newPosition = newPosition.Replace(',', '.');
+                index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+                DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
+            }
+            DataPlotter.ThisInstans.PlottData();
+
+        }
+    }
 
 	#endregion
 }

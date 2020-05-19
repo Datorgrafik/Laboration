@@ -5631,9 +5631,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LeaveKNN: {fileID: 1496020238}
-  KNNWindow: {fileID: 6512798675392476227, guid: 2e5c85e5a923eeb4d8797c7bdca30923,
-    type: 3}
+  KNNWindow: {fileID: 1310921936}
   NewData: {fileID: 998012275}
+  KUpdate: {fileID: 1124535358}
 --- !u!114 &1090632226
 MonoBehaviour:
   m_ObjectHideFlags: 0

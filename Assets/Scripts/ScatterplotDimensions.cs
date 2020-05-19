@@ -39,11 +39,16 @@ public class ScatterplotDimensions : MonoBehaviour
 	public static bool Weighted;
     List<string> columnListDropDown;
 
+    //names of the 5 features used in the plot
     public static string feature1Name;
     public static string feature2Name;
     public static string feature3Name;
     public static string feature4Name;
     public static string feature5Name;
+
+    public static float[] Min;
+    public static float[] Max;
+    public static string[] nameList;
 
     // Use this for initialization
     void Start()
@@ -76,9 +81,9 @@ public class ScatterplotDimensions : MonoBehaviour
     }
     public void PlottData()
 	{
-		float[] Max = new float[dropDownList.Length - 1];
-		float[] Min = new float[dropDownList.Length - 1];
-		string[] nameList = new string[dropDownList.Length - 1];
+		 Max = new float[dropDownList.Length - 1];
+		 Min = new float[dropDownList.Length - 1];
+		 nameList = new string[dropDownList.Length - 1];
 
 		if (TargetingScript.selectedTarget != null)
 			selectedIndex = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;

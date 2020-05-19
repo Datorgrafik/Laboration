@@ -8,10 +8,16 @@ using System.Linq;
 
 public class CSVläsare : MonoBehaviour
 {
-
+    // List of id, feature and targetfeature
 	public static List<string> columnList;
+
+    // List of target features
 	public static List<string> targetFeatures;
+
+    // class of the datser reg or classification
 	public static DataClass dataClass;
+
+    // List of all datapoints
 	public static List<Dictionary<string, object>> pointList;
 
 
@@ -69,6 +75,7 @@ public class CSVläsare : MonoBehaviour
 		pointList = list;
 
 		float r;
+
 		columnList = new List<string>(list[0].Keys);
 
 		if (float.TryParse(list[list.Count - 1][columnList[columnList.Count - 1]].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out r))

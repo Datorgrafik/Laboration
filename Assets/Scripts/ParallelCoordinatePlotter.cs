@@ -85,8 +85,6 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 		featureList.RemoveAt(0);
 		nFeatures = featureList.Count;
 
-		targetColorList = new Color[4,pointList.Count];
-
 		// Set correct number of vertices in LinePrefab depending on dataset
 		if (nFeatures <= 4)
 			LinePrefab.GetComponent<LineRenderer>().positionCount = nFeatures;
@@ -108,6 +106,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 
 		if (targetFeatures.Count() <= 10)
 			InstantiateTargetFeatureList();
+		else
+			targetColorList = new Color[4, pointList.Count];
 
 		DrawBackgroundGrid();
 
@@ -409,7 +409,8 @@ public class ParallelCoordinatePlotter : MonoBehaviour
 			Destroy(databall);
 
 		// Resize the list to fit possible new instances
-		targetColorList = new Color[4, pointList.Count];
+		if (targetFeatures.Count() > 10)
+			targetColorList = new Color[4, pointList.Count];
 
 		// Plot data for the selected columns
 		for (int i = 0; i < nFeatures; i++)

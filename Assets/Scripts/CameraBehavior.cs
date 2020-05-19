@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class CameraBehavior : MonoBehaviour 
 {
 	#region Attributs
 
 	public float speed;
+	public static bool teleportCamera = false;
 
 	#endregion
 
@@ -52,6 +55,28 @@ public class CameraBehavior : MonoBehaviour
 			transform.position = transform.position + Camera.main.transform.right * speed * -1;
 		else if (Input.GetKey(KeyCode.D))
 			transform.position = transform.position + Camera.main.transform.right * speed;
+	}
+
+	public static void RefocusCamera(List<Dictionary<string, object>> pointList)
+	{
+		GameObject newBall = (GameObject)pointList.Last()["DataBall"] as GameObject;
+		if (MainMenu.renderMode == 1)
+			Camera.main.transform.position = new Vector3(newBall.transform.position.x + 2.5f, newBall.transform.position.y + 1.5f, newBall.transform.position.z - 2.5f);
+		else
+			Camera.main.transform.position = new Vector3(newBall.transform.position.x, newBall.transform.position.y, newBall.transform.position.z - 8f);
+
+		Camera.main.transform.LookAt(newBall.transform);
+
+		if (TargetingScript.selectedTarget != null)
+		{
+			TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = TargetingScript.colorOff;
+			TargetingScript.selectedTarget.transform.localScale += new Vector3(-0.01f, -0.01f, -0.01f);
+		}
+
+		TargetingScript.selectedTarget = newBall;
+		TargetingScript.colorOff = TargetingScript.selectedTarget.GetComponent<Renderer>().material.color;
+		TargetingScript.selectedTarget.GetComponent<Renderer>().material.color = Color.white;
+		TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 	}
 
 	#endregion

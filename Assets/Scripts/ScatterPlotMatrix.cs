@@ -199,6 +199,8 @@ public class ScatterPlotMatrix : MonoBehaviour
                             dataPoint.GetComponent<StoreIndexInDataBall>().Row = featureList[columnDropdownList[k].value];
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature3 = feature3;
                             dataPoint.GetComponent<StoreIndexInDataBall>().Feature4 = feature4;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder = new Vector3(k * 1.2F + 0.5F, j * 1.2F + 0.5F, 0) * plotScale;
+                            dataPoint.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder += new Vector3(-5, -5, 0);
 
 
                             if (!pointList[i].ContainsKey("DataBall"))

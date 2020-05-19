@@ -118,7 +118,6 @@ public class MoveDataBalls : MonoBehaviour
             }
             ScatterplotDimensions.ThisInstans.PlottData();
 
-
         }
         else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {

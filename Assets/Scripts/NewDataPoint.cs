@@ -34,7 +34,7 @@ public class NewDataPoint : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
             ScatterPlotMatrix.ThisInstans.KNNWindow.SetActive(true);
-            ScatterPlotMatrix.ThisInstans.teleportCamera = true;
+            CameraBehavior.teleportCamera = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
         }
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
@@ -45,7 +45,7 @@ public class NewDataPoint : MonoBehaviour
         }
         else
         {
-            DataPlotter.ThisInstans.teleportCamera = true;
+            CameraBehavior.teleportCamera = true;
             DataPlotter.ThisInstans.KNNWindow.SetActive(true);
             DataPlotter.ThisInstans.PlottData();
         }

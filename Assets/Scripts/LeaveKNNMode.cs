@@ -21,22 +21,20 @@ public class LeaveKNNMode : MonoBehaviour
 
 	public void Leave()
 	{
-        
 		KNNWindow.SetActive(false);
 		KNN.kPoints.Clear();
 		KNN.KNNMode = false;
+		CameraBehavior.teleportCamera = false;
 
 		if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
 		{
             NewData.interactable = true;
-            ScatterPlotMatrix.ThisInstans.teleportCamera = false;
             ScatterPlotMatrix.ThisInstans.PlottData();     
 		}
 	
 		else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
 		{
             NewData.interactable = true;
-            ScatterplotDimensions.ThisInstans.teleportCamera = false;
             ScatterplotDimensions.ThisInstans.PlottData();
 		}
 
@@ -46,11 +44,8 @@ public class LeaveKNNMode : MonoBehaviour
 		else
 		{
 			DataPlotter.ThisInstans.PlottData();
-            DataPlotter.ThisInstans.teleportCamera = false;
 			NewData.interactable = true;
-			DataPlotter.ThisInstans.teleportCamera = false;
 		}
-
 	}
 
     public void UpdateK()
@@ -66,7 +61,6 @@ public class LeaveKNNMode : MonoBehaviour
         KNN.kValue = Convert.ToInt32(kValue);
 
         ParallelCoordinatePlotter.ThisInstans.ChangeDataPoint();
-
     }
 }
 	

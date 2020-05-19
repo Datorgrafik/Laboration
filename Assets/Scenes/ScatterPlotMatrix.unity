@@ -7514,7 +7514,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -155, y: 4}
+  m_AnchoredPosition: {x: -137, y: -1}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1847657520
@@ -7544,12 +7544,10 @@ MonoBehaviour:
     DownArrow
     - Zoom out
 
-    Right click - Camera movement
-
     Left click - Target DataBalls
 
-    E
-    - Move targeted Databall'
+    Left click and move mouse
+    - Move targeted databall'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7618,10 +7616,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 150.31763}
   m_textInfo:
     textComponent: {fileID: 1847657520}
-    characterCount: 155
+    characterCount: 149
     spriteCount: 0
-    spaceCount: 31
-    wordCount: 32
+    spaceCount: 30
+    wordCount: 31
     linkCount: 0
     lineCount: 7
     pageCount: 1

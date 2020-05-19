@@ -184,6 +184,7 @@ public class EditPosition : MonoBehaviour
             DataPlotter.ThisInstans.PlottData();
     }
 
+    //Uppdatera edit position fältet i realtid
     private void Denormalize()
     {
         if (SceneManager.GetActiveScene().name == "ValfriTeknik")

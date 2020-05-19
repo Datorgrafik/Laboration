@@ -211,7 +211,7 @@ public class DataPlotter : MonoBehaviour
 				TargetingScript.selectedTarget.transform.localScale += new Vector3(+0.01f, +0.01f, +0.01f);
 				selectedIndex = -1;
 			}
-		}
+        }
 
 		// Focus camera on new dataPoint
 		if (CameraBehavior.teleportCamera)

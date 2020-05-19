@@ -15,6 +15,7 @@ public class MoveDataBalls : MonoBehaviour
 	private EventSystem eventSys;
 
 	private float timeChecker = 0f;
+    private bool checkTime = false;
 	private int index;
 
 	#endregion
@@ -36,7 +37,21 @@ public class MoveDataBalls : MonoBehaviour
         if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0)
 		{
 			if (Input.GetMouseButtonDown(0))
-				timeChecker = 0f;
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
+                foreach (RaycastHit hit in Physics.RaycastAll(ray))
+                {
+                    if (hit.collider.CompareTag("DataBall") && hit.transform.gameObject.GetComponent<StoreIndexInDataBall>().Index == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index)
+                    {
+                        Debug.Log("Hej?");
+                        timeChecker = 0f;
+                        checkTime = true;
+                        break;
+                    }
+                }
+            }
 
 			if (Input.GetMouseButton(0))
 			{
@@ -47,7 +62,7 @@ public class MoveDataBalls : MonoBehaviour
 
 				timeChecker += Time.unscaledDeltaTime;
 
-				if (timeChecker > 0.3F)
+				if (timeChecker > 0.3F && checkTime)
 				{
 					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, Camera.main.transform.position.z) * -1);
 
@@ -58,7 +73,10 @@ public class MoveDataBalls : MonoBehaviour
 				}
 			}
             if (Input.GetMouseButtonUp(0) && timeChecker > 0.3F)
+            {
                 Denormalize();
+                checkTime = false;
+            }
         }
 		else if (TargetingScript.selectedTarget != null)
 		{

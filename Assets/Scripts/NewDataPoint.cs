@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class NewDataPoint : MonoBehaviour
 {
-
-
     public static void AddDataPoint(List<string> newPoint)
     {
         Dictionary<string, object> last = CSVläsare.pointList.Last();
@@ -31,27 +29,25 @@ public class NewDataPoint : MonoBehaviour
         newDataPoint.Add(CSVläsare.columnList[CSVläsare.columnList.Count - 1], predict);
         CSVläsare.pointList.Add(newDataPoint);
 
+        CameraBehavior.teleportCamera = true;
+
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
             ScatterPlotMatrix.ThisInstans.KNNWindow.SetActive(true);
-            ScatterPlotMatrix.ThisInstans.teleportCamera = true;
             ScatterPlotMatrix.ThisInstans.PlottData();
         }
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
             ScatterplotDimensions.ThisInstans.KNNWindow.SetActive(true);
-            ScatterplotDimensions.ThisInstans.teleportCamera = true;
             ScatterplotDimensions.ThisInstans.PlottData();
         }
         else
         {
-            DataPlotter.ThisInstans.teleportCamera = true;
             DataPlotter.ThisInstans.KNNWindow.SetActive(true);
             DataPlotter.ThisInstans.PlottData();
         }
 
         KNN.KNNMode = true;
-        
     }
 
     public static void ChangeDataPoint()
@@ -69,16 +65,12 @@ public class NewDataPoint : MonoBehaviour
         CSVläsare.pointList.Add(KnnPoint);
 
         if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
-        {
             ScatterPlotMatrix.ThisInstans.PlottData();
-        }
+
         else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
-        {
             ScatterplotDimensions.ThisInstans.PlottData();
-        }
+
         else
-        {
             DataPlotter.ThisInstans.PlottData();
-        }
     }
 }

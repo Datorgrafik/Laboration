@@ -33,13 +33,11 @@ public class MoveDataBalls : MonoBehaviour
 			}
 		}
 
-
         if (TargetingScript.selectedTarget != null && MainMenu.renderMode == 0)
 		{
 			if (Input.GetMouseButtonDown(0))
-			{
 				timeChecker = 0f;
-			}
+
 			if (Input.GetMouseButton(0))
 			{
 				eventSys = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -72,9 +70,7 @@ public class MoveDataBalls : MonoBehaviour
 					Denormalize();
 				}
 				else
-				{
 					grabItem = true;
-				}
 			}
 
 			if (grabItem == true)
@@ -166,8 +162,8 @@ public class MoveDataBalls : MonoBehaviour
                 index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
                 DataPlotter.pointList[index][DataPlotter.zName] = newPosition;
             }
-            DataPlotter.ThisInstans.PlottData();
 
+            DataPlotter.ThisInstans.PlottData();
         }
     }
 

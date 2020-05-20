@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Globalization;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -45,11 +47,6 @@ public class EditPosition : MonoBehaviour
                 Yname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2;
                 Zname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3;
                 Aname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4;
-                int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-                Xvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1].ToString();
-                Yvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2].ToString();
-                Zvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3].ToString();
-                Avalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4].ToString();
                 Denormalize();
             }
             else if (SceneManager.GetActiveScene().name == "ValfriTeknik")
@@ -60,9 +57,6 @@ public class EditPosition : MonoBehaviour
                 Aname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4;
                 Bname.text = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature5;
                 int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
-                Xvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1].ToString();
-                Yvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2].ToString();
-                Zvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3].ToString();
                 Avalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4].ToString();
                 Bvalue.text = ScatterplotDimensions.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature5].ToString();
                 Denormalize();
@@ -164,6 +158,8 @@ public class EditPosition : MonoBehaviour
     //Uppdatera edit position fältet i realtid
     private void Denormalize()
     {
+        int index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
+
         if (SceneManager.GetActiveScene().name == "ValfriTeknik")
         {
             for (int i = 0; i < 3; i++)
@@ -171,49 +167,67 @@ public class EditPosition : MonoBehaviour
                 float mellanskillnad = ScatterplotDimensions.Max[i] - ScatterplotDimensions.Min[i];
 
                 if (i == 0)
-                    Xvalue.text = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString("0.0");
+                    Xvalue.text = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString("0.0").Replace('.', ',');
                 else if (i == 1)
-                    Yvalue.text = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString("0.0");
+                    Yvalue.text = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString("0.0").Replace('.', ',');
                 else if (i == 2)
-                     Zvalue.text = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString("0.0");
+                    Zvalue.text = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString("0.0").Replace('.', ',');
             }
 
+
         }
-        else if(SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
+        else if (SceneManager.GetActiveScene().name == "ScatterPlotMatrix")
         {
             float MinColumn = CalculationHelpers.FindMinValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column, ScatterPlotMatrix.pointList);
             float MaxColumn = CalculationHelpers.FindMaxValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column, ScatterPlotMatrix.pointList);
             float mellanskillnad = MaxColumn - MinColumn;
 
-            if(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1)
-                Xvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
-
-            else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2)
-                Yvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
-
-            else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3)
-                Zvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
-
-            else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4)
-                Avalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
 
             float MinRow = CalculationHelpers.FindMinValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row, ScatterPlotMatrix.pointList);
             float MaxRow = CalculationHelpers.FindMaxValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row, ScatterPlotMatrix.pointList);
-            mellanskillnad = MaxRow - MinRow;
+            float mellanskillnadRow = MaxRow - MinRow;
 
-            if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1)
+
+            if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1)
+                Xvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
+
+            else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1)
                 Xvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.y - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.y)) / 10).ToString("0.0");
+            else
+            {
+  
+                Xvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1].ToString().Replace('.', ',');
+            }
+
+            if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2)
+                Yvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
 
             else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2)
                 Yvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.y - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.y)) / 10).ToString("0.0");
 
+            else
+                Yvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature2].ToString().Replace('.', ','); 
+
+
+
+            if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3)
+                Zvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
+
             else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature3)
                 Zvalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.y - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.y)) / 10).ToString("0.0");
+            else
+                Zvalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature1].ToString().Replace('.', ',');
+
+
+            if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4)
+                Avalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
 
             else if (TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row == TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4)
                 Avalue.text = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.y - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.y)) / 10).ToString("0.0");
+            else
+                Avalue.text = ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Feature4].ToString().Replace('.', ','); 
+    
 
-            
         }
         else
         {

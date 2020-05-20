@@ -123,11 +123,11 @@ public class MoveDataBalls : MonoBehaviour
                 string newPosition = "";
 
                 if (i == 0)
-                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString();
+                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.x) / 10).ToString("0.0");
                 else if (i == 1)
-                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString();
+                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.y) / 10).ToString("0.0");
                 else if (i == 2)
-                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString();
+                    newPosition = (ScatterplotDimensions.Min[i] + (mellanskillnad * TargetingScript.selectedTarget.transform.position.z) / 10).ToString("0.0");
 
                 newPosition = newPosition.Replace(',', '.');
                 index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
@@ -142,7 +142,7 @@ public class MoveDataBalls : MonoBehaviour
             float MaxColumn = CalculationHelpers.FindMaxValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Column, ScatterPlotMatrix.pointList);
             float mellanskillnad = MaxColumn - MinColumn;
 
-            string newPosition = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString();
+            string newPosition = (MinColumn + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.x - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.x)) / 10).ToString("0.0");
 
             newPosition = newPosition.Replace(',', '.');
             index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
@@ -152,7 +152,7 @@ public class MoveDataBalls : MonoBehaviour
             float MaxRow = CalculationHelpers.FindMaxValue(TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row, ScatterPlotMatrix.pointList);
             mellanskillnad = MaxRow - MinRow;
 
-            newPosition = (MinRow + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.y - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.y)) / 10).ToString();
+            newPosition = (MinRow + (mellanskillnad * (TargetingScript.selectedTarget.transform.position.y - TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().ScatterPlotMatrixPositionFinder.y)) / 10).ToString("0.0");
             newPosition = newPosition.Replace(',', '.');
             index = TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Index;
             ScatterPlotMatrix.pointList[index][TargetingScript.selectedTarget.GetComponent<StoreIndexInDataBall>().Row] = newPosition;
